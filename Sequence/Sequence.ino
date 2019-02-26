@@ -1,21 +1,4 @@
-// Play Mode
-//
-/* UPDATE LOG 
- *  
- * Randy Baldwin
- * 1/29/19
- * Cleaned up some typos
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- */
-
-
+// Sequence Mode
 
 //This program will turn on the LED Strips for the hihat, kick and snare
 // and use piezo vibration sensors to detect when the drum or cymbal

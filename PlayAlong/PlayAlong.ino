@@ -47,6 +47,7 @@ int hihat = 28;  //setting pin 28 to 'hihat' sound
 int hhkick = 31; //setting pin 31 to 'hihat' and 'kick' sound
 int hhsnare = 32;//setting pin 32 to 'hihat' and 'snare' sound
 int tempo = 200;  //316 = 190bpm; Inc = slower; Dec = faster (LIMIT: 83ms to 475ms)
+
 void setup() {
   Serial.begin(9600);   //use serial port
 
@@ -129,8 +130,16 @@ void RESET(){
 
 void loop() {
 
-  /*
+  
+  /*****ROCK BEAT*****/
+  /* 
    * 1) hhkick
+   *      i.  turn on lights
+   *          play sounds
+   *          vibration sensors ready
+   *          
+   *      ii. 
+   *      
    *      
    * 
    * 2) hihat
@@ -280,5 +289,3 @@ void reggaetonBeat(){
   digitalWrite(pin2, LOW);
   delay(5);
 }*/
-
-

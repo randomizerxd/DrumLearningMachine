@@ -1,14 +1,17 @@
 
+//INITIALIZING PINS AND VARIABLES
 int kick = 29;   //setting pin 29 to 'kick' sound
 int snare = 30;  //setting pin 30 to 'snare' sound
 int hihat = 28;  //setting pin 28 to 'hihat' sound
 int hhkick = 31; //setting pin 31 to 'hihat' and 'kick' sound
 int hhsnare = 32;//setting pin 32 to 'hihat' and 'snare' sound
 int tempo = 200;  //316 = 190bpm; Inc = slower; Dec = faster (LIMIT: 83ms to 475ms)
+
+
 void setup() {
-  // put your setup code here, to run once:
+  //setup code here, to run once:
   Serial.begin(9600);   //use serial port
-  
+  //Files on Audio FX SoundBoard
   //T00 = hihat
   //T01 = snare
   //T02 = kick
@@ -18,8 +21,20 @@ void setup() {
   pinMode(hihat, OUTPUT);
   pinMode(hhkick, OUTPUT);
   pinMode(hhsnare, OUTPUT);
+}
+
+void loop() {
+  
+  //rockBeat();
+  discoBeat();
+  //reggaetonBeat();
 
 }
+
+
+/*****************************************************/
+/*                     FUNCTIONS                     */
+/*****************************************************/
 
   //Initializing pins to 5V so they do NOT play sound
 void RESET(){
@@ -31,68 +46,32 @@ void RESET(){
   //When values are set to 0, the sound will be played
 }
 
-void loop() {
-  
-  //rockBeat();
-  //discoBeat();
-  reggaetonBeat();
-
+  //Play part of Drumset
+void playSound(int part, int tempo){
+  digitalWrite(part, LOW);  //starts playback of file
+  delay(250);               //plays file for the appropriate amount of time
+  RESET();                  //stops playback of file
+  delay(tempo);             //moves on to next file for the appropriate tempo
 }
+
 
 /******************************************************/
 /*        FUNCTIONS FOR THE DIFFERENT BEATS           */
 /******************************************************/
 
-//               DEFAULT/TEST                         //
-
-void demo(){  
-  digitalWrite(hhkick, LOW);
-  //doubleWrite(hhkick, hihat);
-  delay(250);
-  RESET();
-  delay(tempo);
-  
-  digitalWrite(hihat, LOW);
-  delay(250);
-  RESET();
-  delay(tempo);
-  
-  digitalWrite(hhsnare, LOW);
-  //doubleWrite(hhsnare, hihat);
-  delay(250);
-  RESET();
-  delay(tempo);
-  
-  digitalWrite(hihat, LOW);
-  delay (250);
-  RESET();
-  delay(tempo);
-}
 
 /******************************************************/
 /*                     ROCK BEAT                      */
 /******************************************************/
 
 void rockBeat(){  
-  digitalWrite(hhkick, LOW);
-  delay(250);
-  RESET();
-  delay(tempo);
+  playSound(hhkick, tempo);
   
-  digitalWrite(hihat, LOW);
-  delay(250);
-  RESET();
-  delay(tempo);
+  playSound(hihat, tempo);
   
-  digitalWrite(hhsnare, LOW);
-  delay(250);
-  RESET();
-  delay(tempo);
+  playSound(hhsnare, tempo);
   
-  digitalWrite(hihat, LOW);
-  delay (250);
-  RESET();
-  delay(tempo);
+  playSound(hihat, tempo);
 }
 
 /******************************************************/
@@ -100,32 +79,21 @@ void rockBeat(){
 /******************************************************/
 
 void discoBeat(){  
-  digitalWrite(kick, LOW);
-  delay(250);
-  RESET();
-  delay(tempo);
+  playSound(kick, tempo);
   
-  digitalWrite(hihat, LOW);
-  delay(250);
-  RESET();
-  delay(tempo);
+  playSound(hihat, tempo);
   
-  digitalWrite(snare, LOW);
-  delay(250);
-  RESET();
-  delay(tempo);
+  playSound(snare, tempo);
   
-  digitalWrite(hihat, LOW);
-  delay (250);
-  RESET();
-  delay(tempo);
+  playSound(hihat, tempo);
 }
+
 
 /******************************************************/
 /*                  REGGAETON BEAT                    */
 /******************************************************/
 
-void reggaetonBeat(){
+/*void reggaetonBeat(){
   int hlftempo = tempo/2;
   int hlftempadd = hlftempo + tempo;
     
@@ -153,21 +121,35 @@ void reggaetonBeat(){
   delay(tempo);
   //delay(500);
 }
+*/
 
 
+//               DEFAULT/TEST                         //
 
+void demo(){  
+  playSound(hhkick, tempo);
+  /*digitalWrite(hhkick, LOW);
+  //doubleWrite(hhkick, hihat);
+  delay(250);
+  RESET();
+  delay(tempo);*/
+  
+  playSound(hihat, tempo);
+  /*digitalWrite(hihat, LOW);
+  delay(250);
+  RESET();
+  delay(tempo);*/
+  
+  playSound(hhsnare, tempo);
+  /*digitalWrite(hhsnare, LOW);
+  //doubleWrite(hhsnare, hihat);
+  delay(250);
+  RESET();
+  delay(tempo);*/
 
-
-
-/******************************************************/
-/*               EXTRA TESTING CODE                   */
-/******************************************************/
-
-/*void doubleWrite(int pin1, int pin2){
-  digitalWrite(pin1, LOW);
-  delay(5);
-  digitalWrite(pin2, LOW);
-  delay(5);
-}*/
-
-
+  playSound(hihat, tempo);
+  /*digitalWrite(hihat, LOW);
+  delay (250);
+  RESET();
+  delay(tempo);*/
+}

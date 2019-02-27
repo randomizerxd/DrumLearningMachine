@@ -1,5 +1,3 @@
-
-
 /******************************************************/
 /*                     VARIABLES                      */
 /******************************************************/
@@ -130,15 +128,28 @@ void RESET(){
 
 void loop() {
 
+  /* BLUETOOTH
+   *  i.  receive tempo in bpm
+   *  ii. convert to ms (60 / #bpm) * 1000
+   * 
+   * 
+   */
+
+
   
   /*****ROCK BEAT*****/
-  /* 
+  /*
    * 1) hhkick
-   *      i.  turn on lights
-   *          play sounds
-   *          vibration sensors ready
+   *      i.  turn light red
+   *          vibration sensor ready
    *          
-   *      ii. 
+   *      ii.  increment totalCount
+   *          
+   *      iii. if (part is hit at correct time)
+   *            then  a. userCount += 1
+   *                  b. turn light green
+   *            
+   *      iv. turn off light
    *      
    *      
    * 

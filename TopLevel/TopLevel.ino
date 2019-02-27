@@ -275,7 +275,8 @@ void BluetoothSettings()
       }
       if (count == 2)
       {
-        TempoReceived = Received;
+        //needed so FX board doesn't loop sound
+        TempoReceived = Received - 250;
       }
       if (count == 1)
       {
@@ -299,4 +300,3 @@ void Bluetooth_CheckBackButton()
 
     }
 }
-

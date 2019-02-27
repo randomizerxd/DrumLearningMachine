@@ -47,7 +47,7 @@ void RESET(){
 }
 
   //Play part of Drumset
-void playSound(int part, int tempo){
+void playSound(int part){
   digitalWrite(part, LOW);  //starts playback of file
   delay(250);               //plays file for the appropriate amount of time
   RESET();                  //stops playback of file
@@ -65,13 +65,13 @@ void playSound(int part, int tempo){
 /******************************************************/
 
 void rockBeat(){  
-  playSound(hhkick, tempo);
+  playSound(hhkick);
   
-  playSound(hihat, tempo);
+  playSound(hihat);
   
-  playSound(hhsnare, tempo);
+  playSound(hhsnare);
   
-  playSound(hihat, tempo);
+  playSound(hihat);
 }
 
 /******************************************************/
@@ -79,13 +79,13 @@ void rockBeat(){
 /******************************************************/
 
 void discoBeat(){  
-  playSound(kick, tempo);
+  playSound(kick);
   
-  playSound(hihat, tempo);
+  playSound(hihat);
   
-  playSound(snare, tempo);
+  playSound(snare);
   
-  playSound(hihat, tempo);
+  playSound(hihat);
 }
 
 
@@ -127,27 +127,27 @@ void discoBeat(){
 //               DEFAULT/TEST                         //
 
 void demo(){  
-  playSound(hhkick, tempo);
+  playSound(hhkick);
   /*digitalWrite(hhkick, LOW);
   //doubleWrite(hhkick, hihat);
   delay(250);
   RESET();
   delay(tempo);*/
   
-  playSound(hihat, tempo);
+  playSound(hihat);
   /*digitalWrite(hihat, LOW);
   delay(250);
   RESET();
   delay(tempo);*/
   
-  playSound(hhsnare, tempo);
+  playSound(hhsnare);
   /*digitalWrite(hhsnare, LOW);
   //doubleWrite(hhsnare, hihat);
   delay(250);
   RESET();
   delay(tempo);*/
 
-  playSound(hihat, tempo);
+  playSound(hihat);
   /*digitalWrite(hihat, LOW);
   delay (250);
   RESET();

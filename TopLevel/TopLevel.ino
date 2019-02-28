@@ -1,12 +1,14 @@
-//Set variables for BluetoothSettings  
+/***Set variables for BluetoothSettings***/  
 int Received=0;
 int ModeReceived = 0;
-int TempoReceived = 0; //in bpm
+int TempoReceived = 0; //tempo in bpm
 int BeatReceived = 0;
 int Back = 0;
 int count = 3;
 
-//Sequence Mode variables
+int tempo = 0; //tempo in ms ... 'tempo = 60000 / TempoReceived;'
+int adj_tempo = 0; //tempo adjusted for 250ms delay ... 'adj_tempo = tempo - 250;'
+
 /***Piezo Vibration Sensor Pin Numbers***/ 
 const int hihatSensorPin = A5;
 const int snareSensorPin = A4;
@@ -52,54 +54,10 @@ const int threshold = 200;
 void setup() {
   Serial.begin(9600);
 
-  ////Sequence Mode setup pins 
-  pinMode(hihatGREENPin, OUTPUT);
-  pinMode(hihatREDPin, OUTPUT);
-  pinMode(hihatBLUEPin, OUTPUT);
-  
-  pinMode(snareGREENPin, OUTPUT);
-  pinMode(snareREDPin, OUTPUT);
-  pinMode(snareBLUEPin, OUTPUT);
-  
-  pinMode(kickGREENPin, OUTPUT);
-  pinMode(kickREDPin, OUTPUT);
-  pinMode(kickBLUEPin, OUTPUT);
-  
-  pinMode(crashGREENPin, OUTPUT);
-  pinMode(crashREDPin, OUTPUT);
-  pinMode(crashBLUEPin, OUTPUT);
-  
-  pinMode(tomGREENPin, OUTPUT);
-  pinMode(tomREDPin, OUTPUT);
-  pinMode(tomBLUEPin, OUTPUT);
-  
-  
-  pinMode(hihatSensorPin, INPUT);
-  pinMode(snareSensorPin, INPUT);
-  pinMode(kickSensorPin, INPUT);
-  pinMode(crashSensorPin, INPUT);
-  pinMode(tomSensorPin, INPUT);
+  setupLEDpins();
+  setupVibrationSensorPins();
+  initializeLEDstrips()
 
-  //Initialize all LED strips to OFF
-  analogWrite(hihatGREENPin, 0);
-  analogWrite(hihatREDPin, 0);
-  analogWrite(hihatBLUEPin, 0);
-  
-  analogWrite(snareGREENPin, 0);
-  analogWrite(snareREDPin, 0);
-  analogWrite(snareBLUEPin, 0);
-  
-  analogWrite(kickGREENPin, 0);
-  analogWrite(kickREDPin, 0);
-  analogWrite(kickBLUEPin, 0);
-  
-  analogWrite(crashGREENPin, 0);
-  analogWrite(crashREDPin, 0);
-  analogWrite(crashBLUEPin, 0);
-  
-  analogWrite(tomGREENPin, 0);
-  analogWrite(tomREDPin, 0);
-  analogWrite(tomBLUEPin, 0);
   ////Receive settings from App thru Bluetooth
   BluetoothSettings(); 
 }
@@ -145,6 +103,61 @@ void loop() {
   }  
 }
 
+/*********************************************************************/
+/**************************Setup Functions****************************/
+/*********************************************************************/
+void setupLEDpins() {
+  pinMode(hihatGREENPin, OUTPUT);
+  pinMode(hihatREDPin,   OUTPUT);
+  pinMode(hihatBLUEPin,  OUTPUT);
+  
+  pinMode(snareGREENPin, OUTPUT);
+  pinMode(snareREDPin,   OUTPUT);
+  pinMode(snareBLUEPin,  OUTPUT);
+  
+  pinMode(kickGREENPin, OUTPUT);
+  pinMode(kickREDPin,   OUTPUT);
+  pinMode(kickBLUEPin,  OUTPUT);
+  
+  pinMode(crashGREENPin, OUTPUT);
+  pinMode(crashREDPin,   OUTPUT);
+  pinMode(crashBLUEPin,  OUTPUT);
+  
+  pinMode(tomGREENPin, OUTPUT);
+  pinMode(tomREDPin,   OUTPUT);
+  pinMode(tomBLUEPin,  OUTPUT);
+}
+
+void setupVibrationSensorPins() {
+  pinMode(hihatSensorPin, INPUT);
+  pinMode(snareSensorPin, INPUT);
+  pinMode(kickSensorPin,  INPUT);
+  pinMode(crashSensorPin, INPUT);
+  pinMode(tomSensorPin,   INPUT);
+}
+
+void initializeLEDstrips() {
+  //Initialize all LED strips to OFF
+  analogWrite(hihatGREENPin, 0);
+  analogWrite(hihatREDPin, 0);
+  analogWrite(hihatBLUEPin, 0);
+  
+  analogWrite(snareGREENPin, 0);
+  analogWrite(snareREDPin, 0);
+  analogWrite(snareBLUEPin, 0);
+  
+  analogWrite(kickGREENPin, 0);
+  analogWrite(kickREDPin, 0);
+  analogWrite(kickBLUEPin, 0);
+  
+  analogWrite(crashGREENPin, 0);
+  analogWrite(crashREDPin, 0);
+  analogWrite(crashBLUEPin, 0);
+  
+  analogWrite(tomGREENPin, 0);
+  analogWrite(tomREDPin, 0);
+  analogWrite(tomBLUEPin, 0);
+}
 /*********************************************************************/
 /**************************Demo Functions*****************************/
 /*********************************************************************/
@@ -258,7 +271,9 @@ int doubleAnalogRead(int pin) {
 /***********************PlayAlong Functions***************************/
 /*********************************************************************/
 
-
+/*********************************************************************/
+/***********************Bluetooth Functions***************************/
+/*********************************************************************/
 //Receive settings from App thru Bluetooth
 void BluetoothSettings()
 {

@@ -1,7 +1,7 @@
 //Set variables for BluetoothSettings  
 int Received=0;
 int ModeReceived = 0;
-int TempoReceived = 0;
+int TempoReceived = 0; //in bpm
 int BeatReceived = 0;
 int Back = 0;
 int count = 3;
@@ -276,7 +276,7 @@ void BluetoothSettings()
       if (count == 2)
       {
         //needed so FX board doesn't loop sound
-        TempoReceived = Received - 250;
+        TempoReceived = Received;
       }
       if (count == 1)
       {

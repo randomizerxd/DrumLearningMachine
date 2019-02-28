@@ -98,16 +98,14 @@ void loop() {
 
   /* BLUETOOTH
    *  i.  receive tempo in bpm
-   *  ii. convert to ms (60 / #bpm) * 1000
-   *        range:  40bpm -> 90bpm
-   *                667ms -> 1500ms
-   * 
-   * 
-   */  
-  /*****ROCK BEAT*****/
-  /*
-   * 1) hhkick
-   *      i.  turn light red
+   *  ii. convert to ms 
+   *        one beat (delay) in ms = (60 / #bpm) * 1000
+   *        bpm = (60 / #ms) * 1000
+   *        range:  40bpm -> 176bpm
+   *                341ms -> 1500ms
+   */
+   
+  /*      i.  turn light red
    *          vibration sensor ready
    *          
    *      ii.  increment totalCount
@@ -118,13 +116,6 @@ void loop() {
    *            
    *      iv. turn off light
    *      
-   *      
-   * 
-   * 2) hihat
-   * 
-   * 3) hhsnare
-   * 
-   * 4) hihat
    */
   
   //rockBeat();

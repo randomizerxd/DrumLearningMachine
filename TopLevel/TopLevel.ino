@@ -4,6 +4,24 @@ int ModeReceived = 0;
 int TempoReceived = 0; //tempo in bpm
 int BeatReceived = 0;
 int Back = 0;
+/* 
+ *  Bluetooth protocol:
+ *  App sends data to Arduino via bluetooth
+ *  We have rules in place for the information sent.
+ *  The app sends one byte of data for each setting.
+ *  The first screen sends data in the following order:
+ *    1) Beat 2) Tempo 3) Mode
+ *  i.  The Beat value received from the app will be:
+ *    1, 2, 3, and so on..
+ *  ii. The Tempo value received from the app will be:
+ *    40bpm -> 176 bpm
+ *  iii. The Mode value received from the app will be:
+ *    
+ *  
+ *  The second screen currently contains a 'back' button and volume control buttons (up and down)
+ *  
+ *  
+ */
 int count = 3;
 
 int tempo = 0; //tempo in ms ... 'tempo = 60000 / TempoReceived;'
@@ -71,13 +89,13 @@ void loop() {
   }
   else
   {
-    ////Choose mode (Demo = 7, Sequence = 8, PlayAlong = 9)
-    if (ModeReceived == 7) //Demo
+    ////Choose mode (Demo = 101, Sequence = 102, PlayAlong = 103)
+    if (ModeReceived == 101) //Demo
     {
        
     }
     else 
-    if (ModeReceived == 8) //Sequence
+    if (ModeReceived == 102) //Sequence
     {
       if (BeatReceived == 1)
       {
@@ -95,7 +113,7 @@ void loop() {
       }
     }
     else 
-    if (ModeReceived == 9) // PlayAlong
+    if (ModeReceived == 103) // PlayAlong
     {
       
     }
@@ -290,7 +308,6 @@ void BluetoothSettings()
       }
       if (count == 2)
       {
-        //needed so FX board doesn't loop sound
         TempoReceived = Received;
       }
       if (count == 1)

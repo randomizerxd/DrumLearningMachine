@@ -78,7 +78,7 @@ void setup() {
 
   setupLEDpins();
   setupVibrationSensorPins();
-  initializeLEDstrips()
+  initializeLEDstrips();
 
   ////Receive settings from App thru Bluetooth
   BluetoothSettings(); 

@@ -1,5 +1,6 @@
 // TopLevel
 // Board: DUE
+
 /***Set variables for BluetoothSettings***/  
 int Received=0;
 int ModeReceived = 0;
@@ -8,25 +9,7 @@ int BeatReceived = 0;
 int Back = 0;
 /* 
  *  Bluetooth protocol:
- *  App sends data to Arduino via bluetooth
- *  We have rules in place for the information sent.
- *  The app sends one byte of data for each setting.
- *  The first screen contains settings to select the beat, tempo and mode
- *  The first screen sends data in the following order:
- *    1) Beat 2) Tempo 3) Mode
- *  i.   The Beat value received from the app will be:
- *    1, 2, 3, and so on..
- *  ii.  The Tempo value received from the app will be:
- *    40bpm -> 176 bpm
- *  iii. The Mode value received from the app will be:
- *    101 for Demo, 102 for Sequence, and 103 for PlayAlong
- *  
- *  The second screen currently contains a 'back' button and volume control buttons (up and down) for the Demo mode only
- *  The second screen sends data in the following manner:
- *    i.   Send a 201 when the Back button has been pushed
- *    ii.  Send a 211 when the Volume Down button has been pushed
- *    iii. Send a 212 when the Volume Up button has been pushed
- *  
+ *    See README.md
  */
 int count = 3;
 

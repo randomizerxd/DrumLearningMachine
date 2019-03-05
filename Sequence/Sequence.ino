@@ -1,4 +1,5 @@
 // Sequence Mode
+// Board: DUE
 
 //This program will turn on the LED Strips for the hihat, kick and snare
 // and use piezo vibration sensors to detect when the drum or cymbal

@@ -41,57 +41,9 @@ int tomSensorReading   = LOW;
 void setup() {
   Serial.begin(9600);   //use serial port
 
-    //Setup pins 
-  pinMode(hihatGREENPin, OUTPUT);
-  pinMode(hihatREDPin, OUTPUT);
-  pinMode(hihatBLUEPin, OUTPUT);
-  
-  pinMode(snareGREENPin, OUTPUT);
-  pinMode(snareREDPin, OUTPUT);
-  pinMode(snareBLUEPin, OUTPUT);
-  
-  pinMode(kickGREENPin, OUTPUT);
-  pinMode(kickREDPin, OUTPUT);
-  pinMode(kickBLUEPin, OUTPUT);
-  
-  pinMode(crashGREENPin, OUTPUT);
-  pinMode(crashREDPin, OUTPUT);
-  pinMode(crashBLUEPin, OUTPUT);
-  
-  pinMode(tomGREENPin, OUTPUT);
-  pinMode(tomREDPin, OUTPUT);
-  pinMode(tomBLUEPin, OUTPUT);
-  
-  
-  pinMode(hihatSensorPin, INPUT);
-  pinMode(snareSensorPin, INPUT);
-  pinMode(kickSensorPin, INPUT);
-  pinMode(crashSensorPin, INPUT);
-  pinMode(tomSensorPin, INPUT);
-
-
-
-
-  //Initialize all LED strips to OFF
-  analogWrite(hihatGREENPin, 0);
-  analogWrite(hihatREDPin, 0);
-  analogWrite(hihatBLUEPin, 0);
-  
-  analogWrite(snareGREENPin, 0);
-  analogWrite(snareREDPin, 0);
-  analogWrite(snareBLUEPin, 0);
-  
-  analogWrite(kickGREENPin, 0);
-  analogWrite(kickREDPin, 0);
-  analogWrite(kickBLUEPin, 0);
-  
-  analogWrite(crashGREENPin, 0);
-  analogWrite(crashREDPin, 0);
-  analogWrite(crashBLUEPin, 0);
-  
-  analogWrite(tomGREENPin, 0);
-  analogWrite(tomREDPin, 0);
-  analogWrite(tomBLUEPin, 0);
+  setupLEDpins();
+  setupVibrationSensorPins();
+  initializeLEDstrips();
 }
 
 void loop() {
@@ -121,4 +73,60 @@ void loop() {
   //rockBeat();
   //discoBeat();
   //reggaetonBeat();
+}
+
+/*********************************************************************/
+/**************************Setup Functions****************************/
+/*********************************************************************/
+void setupLEDpins() {
+  pinMode(hihatGREENPin, OUTPUT);
+  pinMode(hihatREDPin,   OUTPUT);
+  pinMode(hihatBLUEPin,  OUTPUT);
+  
+  pinMode(snareGREENPin, OUTPUT);
+  pinMode(snareREDPin,   OUTPUT);
+  pinMode(snareBLUEPin,  OUTPUT);
+  
+  pinMode(kickGREENPin, OUTPUT);
+  pinMode(kickREDPin,   OUTPUT);
+  pinMode(kickBLUEPin,  OUTPUT);
+  
+  pinMode(crashGREENPin, OUTPUT);
+  pinMode(crashREDPin,   OUTPUT);
+  pinMode(crashBLUEPin,  OUTPUT);
+  
+  pinMode(tomGREENPin, OUTPUT);
+  pinMode(tomREDPin,   OUTPUT);
+  pinMode(tomBLUEPin,  OUTPUT);
+}
+
+void setupVibrationSensorPins() {
+  pinMode(hihatSensorPin, INPUT);
+  pinMode(snareSensorPin, INPUT);
+  pinMode(kickSensorPin,  INPUT);
+  pinMode(crashSensorPin, INPUT);
+  pinMode(tomSensorPin,   INPUT);
+}
+
+void initializeLEDstrips() {
+  //Initialize all LED strips to OFF
+  analogWrite(hihatGREENPin, 0);
+  analogWrite(hihatREDPin, 0);
+  analogWrite(hihatBLUEPin, 0);
+  
+  analogWrite(snareGREENPin, 0);
+  analogWrite(snareREDPin, 0);
+  analogWrite(snareBLUEPin, 0);
+  
+  analogWrite(kickGREENPin, 0);
+  analogWrite(kickREDPin, 0);
+  analogWrite(kickBLUEPin, 0);
+  
+  analogWrite(crashGREENPin, 0);
+  analogWrite(crashREDPin, 0);
+  analogWrite(crashBLUEPin, 0);
+  
+  analogWrite(tomGREENPin, 0);
+  analogWrite(tomREDPin, 0);
+  analogWrite(tomBLUEPin, 0);
 }

@@ -46,33 +46,54 @@ int tomSensorReading   = LOW;
 const int threshold = 100; 
 
 void setup() {
+  Serial.begin(9600);
+
+  setupLEDpins();
+  setupVibrationSensorPins();
+  initializeLEDstrips(); 
+}
+
+void loop() {
+  hihat_kick();
+  hihat();
+  hihat_snare();
+  hihat();
+  }
+
+/*********************************************************************/
+/**************************Setup Functions****************************/
+/*********************************************************************/
+void setupLEDpins() {
   pinMode(hihatGREENPin, OUTPUT);
-  pinMode(hihatREDPin, OUTPUT);
-  pinMode(hihatBLUEPin, OUTPUT);
+  pinMode(hihatREDPin,   OUTPUT);
+  pinMode(hihatBLUEPin,  OUTPUT);
   
   pinMode(snareGREENPin, OUTPUT);
-  pinMode(snareREDPin, OUTPUT);
-  pinMode(snareBLUEPin, OUTPUT);
+  pinMode(snareREDPin,   OUTPUT);
+  pinMode(snareBLUEPin,  OUTPUT);
   
   pinMode(kickGREENPin, OUTPUT);
-  pinMode(kickREDPin, OUTPUT);
-  pinMode(kickBLUEPin, OUTPUT);
+  pinMode(kickREDPin,   OUTPUT);
+  pinMode(kickBLUEPin,  OUTPUT);
   
   pinMode(crashGREENPin, OUTPUT);
-  pinMode(crashREDPin, OUTPUT);
-  pinMode(crashBLUEPin, OUTPUT);
+  pinMode(crashREDPin,   OUTPUT);
+  pinMode(crashBLUEPin,  OUTPUT);
   
   pinMode(tomGREENPin, OUTPUT);
-  pinMode(tomREDPin, OUTPUT);
-  pinMode(tomBLUEPin, OUTPUT);
-  
-  
+  pinMode(tomREDPin,   OUTPUT);
+  pinMode(tomBLUEPin,  OUTPUT);
+}
+
+void setupVibrationSensorPins() {
   pinMode(hihatSensorPin, INPUT);
   pinMode(snareSensorPin, INPUT);
-  pinMode(kickSensorPin, INPUT);
+  pinMode(kickSensorPin,  INPUT);
   pinMode(crashSensorPin, INPUT);
-  pinMode(tomSensorPin, INPUT);
+  pinMode(tomSensorPin,   INPUT);
+}
 
+void initializeLEDstrips() {
   //Initialize all LED strips to OFF
   analogWrite(hihatGREENPin, 0);
   analogWrite(hihatREDPin, 0);
@@ -93,18 +114,7 @@ void setup() {
   analogWrite(tomGREENPin, 0);
   analogWrite(tomREDPin, 0);
   analogWrite(tomBLUEPin, 0);
-
-  Serial.begin(9600);
-  
 }
-
-void loop() {
-  hihat_kick();
-  hihat();
-  hihat_snare();
-  hihat();
-  }
-
 
 void hihat() {
   analogWrite(hihatREDPin, 255);

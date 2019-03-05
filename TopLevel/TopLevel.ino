@@ -209,7 +209,7 @@ void hihat_kick() {
   analogWrite(kickREDPin, 255);
   while( ((hihatSensorReading = analogRead(hihatSensorPin)) < threshold) && 
   ((kickSensorReading = analogRead(kickSensorPin)) < threshold) ) { 
-  }                                         //While hihat && kick below threshold, do nothing
+  } //While hihat && kick below threshold, do nothing
   if(((hihatSensorReading) > threshold) && ((kickSensorReading) > threshold)) {
     hitConfirmation(hihatGREENPin, hihatREDPin);
     hitConfirmation(kickGREENPin, kickREDPin);

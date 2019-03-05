@@ -1,3 +1,6 @@
+// TopLevel
+// Board: chipKIT Max32
+
 /***Set variables for BluetoothSettings***/  
 int Received=0;
 int ModeReceived = 0;

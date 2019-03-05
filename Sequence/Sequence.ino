@@ -16,25 +16,25 @@ const int tomSensorPin   = A1;
 //Use PWM and analog pins//
 //From left to right on the breadboard
 
-const int hihatGREENPin = 10;
-const int hihatREDPin   = 9;
-const int hihatBLUEPin  = 6;
+const int hihatGREENPin = 13;
+const int hihatREDPin   = 12;
+const int hihatBLUEPin  = 11;
 
-const int snareGREENPin = 5;
-const int snareREDPin   = 3;
-const int snareBLUEPin  = A6;
+const int snareGREENPin = 10;
+const int snareREDPin   = 9;
+const int snareBLUEPin  = 8;
 
-const int kickGREENPin  = A7;
-const int kickREDPin    = A8;
-const int kickBLUEPin   = A9;
+const int kickGREENPin  = 7;
+const int kickREDPin    = 6;
+const int kickBLUEPin   = 5;
 
-const int crashGREENPin = A10;
-const int crashREDPin   = A11;
-const int crashBLUEPin  = A12;
+const int crashGREENPin = 4;
+const int crashREDPin   = 3;
+const int crashBLUEPin  = 2;
 
-const int tomGREENPin   = A13;
-const int tomREDPin     = A14;
-const int tomBLUEPin    = A15;
+const int tomGREENPin   = A9;
+const int tomREDPin     = A10;
+const int tomBLUEPin    = A11;
 
 
 /***Variables to store the value read from the sensor pin***/

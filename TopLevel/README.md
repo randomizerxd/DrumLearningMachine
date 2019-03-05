@@ -1,7 +1,7 @@
 # TopLevel
 This is a combination of all three modes
 ## Mode
-### Sequence
+### 1. Sequence
 #### Equipment
 - LED light strips
 - vibration sensors
@@ -9,7 +9,7 @@ This is a combination of all three modes
 - ~~Audio FX Soundboard~~
 - ~~Speaker~~
 
-### Demo
+### 2. Demo
 #### Equipment
 - LED light strips
 - ~~vibration sensors~~
@@ -17,7 +17,7 @@ This is a combination of all three modes
 - Audio FX Soundboard
 - Speaker
 
-### Play Along
+### 3. Play Along
 #### Equipment
 - LED light strips
 - vibration sensors

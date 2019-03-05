@@ -1,5 +1,7 @@
 # DrumLearningMachine
 Arduino code for EGCP470/1 senior project
+## Board
+- **chipKIT Max32**
 ## Bluetooth Protocol
 - The app sends data to the Arduino via bluetooth
 - The app sends one byte of data for each setting

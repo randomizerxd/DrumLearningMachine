@@ -47,18 +47,20 @@ int tomSensorReading   = LOW;
 const int threshold = 100; 
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
 
   setupLEDpins();
   setupVibrationSensorPins();
   initializeLEDstrips(); 
+
+  hihat_snare();
 }
 
 void loop() {
-  hihat_kick();
-  hihat();
-  hihat_snare();
-  hihat();
+  //hihat_kick();
+  //hihat();
+  //hihat_snare();
+  //hihat();
   }
 
 /*********************************************************************/
@@ -167,17 +169,14 @@ void hihat_kick() {
 void hihat_snare() {
   analogWrite(hihatREDPin, 255);
   analogWrite(snareREDPin, 255);
-  while( ((hihatSensorReading = doubleAnalogRead(hihatSensorPin)) < threshold) && ((snareSensorReading = doubleAnalogRead(snareSensorPin)) < threshold) ) {  
+  while( ((hihatSensorReading = analogRead(hihatSensorPin)) < threshold) && ((snareSensorReading = analogRead(snareSensorPin)) < threshold) ) {  
     Serial.print(hihatSensorReading);
     Serial.print(" ");
     Serial.println(snareSensorReading);
   }
-  Serial.print("hihatSensorReading : ");
-  Serial.print(hihatSensorReading);
-  Serial.print("...");
-  Serial.print("snareSensorReading : ");
-  Serial.print(snareSensorReading);
-  Serial.println();
+  
+  averageAnalogRead();
+  
   if( ( (hihatSensorReading) > threshold) && ( (snareSensorReading) > threshold) ) {
     hitConfirmation(hihatGREENPin, hihatREDPin);
     hitConfirmation(snareGREENPin, snareREDPin);
@@ -224,6 +223,43 @@ int doubleAnalogRead(int pin) {
   delayMicroseconds(6000);
 
   return reading;  
+}
+
+int averageAnalogRead() {
+  int n = 100;
+  long t0, t;
+  float hihatSensorReading_Average = 0;
+  float snareSensorReading_Average = 0;
+  
+  Serial.println("hihatSensorReading | snareSensorReading");
+  Serial.print(hihatSensorReading);
+  Serial.print(" | ");
+  Serial.println(snareSensorReading);
+
+  t0 = micros();
+  for (int i = 0; i < n; i++) {
+    hihatSensorReading = analogRead(hihatSensorPin);
+    snareSensorReading = analogRead(snareSensorPin);
+    hihatSensorReading_Average = hihatSensorReading_Average + hihatSensorReading;
+    snareSensorReading_Average = snareSensorReading_Average + snareSensorReading;
+    /*
+    Serial.print(hihatSensorReading);
+    Serial.print(" | ");
+    Serial.println(snareSensorReading);
+    */
+  }
+  hihatSensorReading_Average = hihatSensorReading_Average / n;
+  snareSensorReading_Average = snareSensorReading_Average / n;
+  //time it takes to finish the for loop
+  t = micros() - t0;
+  Serial.print("hihat_Average: ");
+  Serial.println(hihatSensorReading_Average);
+  Serial.print("snare_Average: ");
+  Serial.println(snareSensorReading_Average);
+  Serial.print("t: ");
+  Serial.println(t);
+
+  
 }
 
 

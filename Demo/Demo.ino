@@ -9,12 +9,12 @@ int hhsnare   = 32;        //set pin 32 to 'hihat' and 'snare' sound
 int volUp     = 34;        //set pin 34 to volume-up
 int volDown   = 35;        //set pin 35 to volume-down
 
-int tempo     = 500;       //316 = 190bpm; Inc = slower; Dec = faster (LIMIT: 350ms to 1500ms)
+int tempo     = 400;       //316 = 190bpm; Inc = slower; Dec = faster (LIMIT: 350ms to 1500ms)
 int adj_tempo = tempo-250; //adjusted tempo to take into account the file delay
 
 void setup() {
   //setup code here, to run once:
-  Serial.begin(9600);   //use serial port
+  Serial.begin(115200);   //use serial port
   //Files on Audio FX SoundBoard
   //T00 = hihat
   //T01 = snare

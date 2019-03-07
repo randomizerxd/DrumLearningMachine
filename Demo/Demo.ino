@@ -1,20 +1,22 @@
 
 //INITIALIZING PINS AND VARIABLES
-int hihat     = 28;        //set pin 28 to 'hihat' sound
-int kick      = 29;        //set pin 29 to 'kick' sound
-int snare     = 30;        //set pin 30 to 'snare' sound
-int hhkick    = 31;        //set pin 31 to 'hihat' and 'kick' sound
-int hhsnare   = 32;        //set pin 32 to 'hihat' and 'snare' sound
+short hihat     = 28;            //set pin 28 to 'hihat' sound
+short kick      = 29;            //set pin 29 to 'kick' sound
+short snare     = 30;            //set pin 30 to 'snare' sound
+short hhkick    = 31;            //set pin 31 to 'hihat' and 'kick' sound
+short hhsnare   = 32;            //set pin 32 to 'hihat' and 'snare' sound
 
-int volUp     = 34;        //set pin 34 to volume-up
-int volDown   = 35;        //set pin 35 to volume-down
+short volUp     = 34;            //set pin 34 to volume-up
+short volDown   = 35;            //set pin 35 to volume-down
 
-int tempo     = 500;       //316 = 190bpm; Inc = slower; Dec = faster (LIMIT: 350ms to 1500ms)
-int adj_tempo = tempo-250; //adjusted tempo to take into account the file delay
+short tempo     = 400;           //316 = 190bpm; Inc = slower; Dec = faster (LIMIT: 350ms to 1500ms)
+short adj_tempo = tempo-250;     //adjusted tempo to take shorto account the file delay
+short eightTempo  = adj_tempo/2; //tempo used for beats with and
+short sixTempo  = andTempo/2;    //tempo used for beats with sixteenth notes
 
 void setup() {
   //setup code here, to run once:
-  Serial.begin(9600);   //use serial port
+  Serial.begin(115200);   //use serial port
   //Files on Audio FX SoundBoard
   //T00 = hihat
   //T01 = snare
@@ -32,7 +34,9 @@ void loop() {
 
   rockYou();    //we will - we will - rock you TA - BUM BUM TA
   //rockBeat();
+  //rockV2Beat();
   //discoBeat();
+  //bossaNova();
 
 }
 
@@ -52,18 +56,32 @@ void RESET(){
 }
 
   //Play part of Drumset
-void playSound(int part){
+void play4Sound(short part){
   digitalWrite(part, LOW);  //starts playback of file
   delay(250);               //plays file for the appropriate amount of time
   RESET();                  //stops playback of file
   delay(adj_tempo);         //moves on to next file for the appropriate tempo
 }
 
+play8Sound(short part){
+  digitalWrite(part, LOW);  //starts playback of file
+  delay(250);               //plays file for the appropriate amount of time
+  RESET();                  //stops playback of file
+  delay(eightTempo);        //moves on to next file for the appropriate tempo  
+}
+
+play16Sound(short part){
+  digitalWrite(part, LOW);  //starts playback of file
+  delay(250);               //plays file for the appropriate amount of time
+  RESET();                  //stops playback of file
+  delay(sixTempo);         //moves on to next file for the appropriate tempo  
+}
+
   //Volume Control
-void VolumeCtr(int button){
+void VolumeCtr(short button){
   //Values that come through the app
-  int downButton = 0; //(-)
-  int upButton   = 1; //(+)
+  short downButton = 0; //(-)
+  short upButton   = 1; //(+)
   
   if (button == downButton)
     volDown = LOW;
@@ -79,7 +97,10 @@ void VolumeCtr(int button){
 
 /******************************************************/
 /*                     ROCK BEAT                      */
-/******************************************************/
+/*                   1   2   3   4                    */
+/*                   x---x---x---x                    */
+/*                   o-------v----                    */
+/******************************************************/   
 
 void rockBeat(){  
   playSound(hhkick);
@@ -92,7 +113,35 @@ void rockBeat(){
 }
 
 /******************************************************/
+/*                    ROCK V2 BEAT                    */
+/*                   1   2   3   4                    */
+/*                   x---x---x---x                    */
+/*                   o--(o)--v----                    */
+/******************************************************/
+
+void rockV2Beat(){  
+  playSound(hhkick);
+  
+  playSound(hihat);
+  
+  playSound(hhsnare);
+  
+  playSound(hihat);
+//Second loop
+  playSound(hhkick);
+  
+  playSound(hhkick);
+  
+  playSound(hhsnare);
+  
+  playSound(hihat);
+}
+
+/******************************************************/
 /*                    DISCO BEAT                      */
+/*                   1   2   3   4                    */
+/*                   ----x-------x                    */
+/*                   o-------v----                    */
 /******************************************************/
 
 void discoBeat(){
@@ -107,6 +156,9 @@ void discoBeat(){
 
 /******************************************************/
 /*                   ROCK-YOU BEAT                    */
+/*                   1 a 2 a 3 a 4                    */
+/*                   ----v-------v                    */
+/*                   o-o-----o-o--                    */
 /******************************************************/
 
 void rockYou(){  
@@ -119,13 +171,26 @@ void rockYou(){
   playSound(0);
 }
 
+
+//               DEFAULT/TEST                         //
+
+void demo(){  
+  playSound(hhkick);
+  
+  playSound(hihat);
+  
+  playSound(hhsnare);
+
+  playSound(hihat);
+}
+
 /******************************************************/
 /*                  REGGAETON BEAT                    */
 /******************************************************/
 
 /*void reggaetonBeat(){
-  int hlftempo = tempo/2;
-  int hlftempadd = hlftempo + tempo;
+  short hlftempo = tempo/2;
+  short hlftempadd = hlftempo + tempo;
     
   digitalWrite(hhkick, LOW);
   delay(250);
@@ -152,34 +217,3 @@ void rockYou(){
   //delay(500);
 }
 */
-
-
-//               DEFAULT/TEST                         //
-
-void demo(){  
-  playSound(hhkick);
-  /*digitalWrite(hhkick, LOW);
-  //doubleWrite(hhkick, hihat);
-  delay(250);
-  RESET();
-  delay(tempo);*/
-  
-  playSound(hihat);
-  /*digitalWrite(hihat, LOW);
-  delay(250);
-  RESET();
-  delay(tempo);*/
-  
-  playSound(hhsnare);
-  /*digitalWrite(hhsnare, LOW);
-  //doubleWrite(hhsnare, hihat);
-  delay(250);
-  RESET();
-  delay(tempo);*/
-
-  playSound(hihat);
-  /*digitalWrite(hihat, LOW);
-  delay (250);
-  RESET();
-  delay(tempo);*/
-}

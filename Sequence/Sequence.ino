@@ -225,13 +225,16 @@ short doubleAnalogRead(short pin) {
   return reading;  
 }
 
-short averageAnalogRead() {
-  short n = 100;
-  
-  long t0, t;
+void averageAnalogRead() {
+  short n = 500;  //amount of times to read from both hihat and snare
+  long t0;        //initial value of t
+  long t;         //stores the amount of time it takes to finish the for loop
+  short n_hihat = n;    //used to average. n_hihat <= n. It will be decremented when sensor readings don't exceed the threshold
+  short n_snare = n;    //used to average. n_snare <= n. It will be decremented when sensor readings don't exceed the threshold
   float hihatSensorReading_Average = 0;
   float snareSensorReading_Average = 0;
-  
+
+  Serial.println("Analog reading exceeded threshold");
   Serial.println("hihatSensorReading | snareSensorReading");
   Serial.print(hihatSensorReading);
   Serial.print(" | ");
@@ -241,17 +244,39 @@ short averageAnalogRead() {
   for (short i = 0; i < n; i++) {
     hihatSensorReading = analogRead(hihatSensorPin);
     snareSensorReading = analogRead(snareSensorPin);
-   // if ( hihatSensorReading > 
+   if ( hihatSensorReading > threshold ) {
     hihatSensorReading_Average = hihatSensorReading_Average + hihatSensorReading;
+   }
+   else {
+    n_hihat--;
+   }
+   if ( snareSensorReading > threshold ) {
     snareSensorReading_Average = snareSensorReading_Average + snareSensorReading;
+   }
+   else {
+    n_snare--;
+   }
     /*
     Serial.print(hihatSensorReading);
     Serial.print(" | ");
     Serial.println(snareSensorReading);
     */
   }
-  hihatSensorReading_Average = hihatSensorReading_Average / n;
-  snareSensorReading_Average = snareSensorReading_Average / n;
+  
+  Serial.print(n_hihat);
+  Serial.print(" / ");
+  Serial.print(n);
+  Serial.print(" readings over ");
+  Serial.println(threshold);
+  
+  Serial.print(n_snare);
+  Serial.print(" / ");
+  Serial.print(n);
+  Serial.print(" readings over ");
+  Serial.println(threshold);
+  hihatSensorReading_Average = hihatSensorReading_Average / n_hihat;
+  snareSensorReading_Average = snareSensorReading_Average / n_snare;
+  
   //time it takes to finish the for loop
   t = micros() - t0;
   Serial.print("hihat_Average: ");
@@ -259,9 +284,8 @@ short averageAnalogRead() {
   Serial.print("snare_Average: ");
   Serial.println(snareSensorReading_Average);
   Serial.print("t: ");
-  Serial.println(t);
-
-  
+  Serial.print(t);
+  Serial.println(" microseconds");
 }
 
 

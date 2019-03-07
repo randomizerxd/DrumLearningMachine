@@ -1,16 +1,18 @@
 
 //INITIALIZING PINS AND VARIABLES
-short hihat     = 28;        //set pin 28 to 'hihat' sound
-short kick      = 29;        //set pin 29 to 'kick' sound
-short snare     = 30;        //set pin 30 to 'snare' sound
-short hhkick    = 31;        //set pin 31 to 'hihat' and 'kick' sound
-short hhsnare   = 32;        //set pin 32 to 'hihat' and 'snare' sound
+short hihat     = 28;            //set pin 28 to 'hihat' sound
+short kick      = 29;            //set pin 29 to 'kick' sound
+short snare     = 30;            //set pin 30 to 'snare' sound
+short hhkick    = 31;            //set pin 31 to 'hihat' and 'kick' sound
+short hhsnare   = 32;            //set pin 32 to 'hihat' and 'snare' sound
 
-short volUp     = 34;        //set pin 34 to volume-up
-short volDown   = 35;        //set pin 35 to volume-down
+short volUp     = 34;            //set pin 34 to volume-up
+short volDown   = 35;            //set pin 35 to volume-down
 
-short tempo     = 400;       //316 = 190bpm; Inc = slower; Dec = faster (LIMIT: 350ms to 1500ms)
-short adj_tempo = tempo-250; //adjusted tempo to take shorto account the file delay
+short tempo     = 400;           //316 = 190bpm; Inc = slower; Dec = faster (LIMIT: 350ms to 1500ms)
+short adj_tempo = tempo-250;     //adjusted tempo to take shorto account the file delay
+short eightTempo  = adj_tempo/2; //tempo used for beats with and
+short sixTempo  = andTempo/2;    //tempo used for beats with sixteenth notes
 
 void setup() {
   //setup code here, to run once:
@@ -34,6 +36,7 @@ void loop() {
   //rockBeat();
   //rockV2Beat();
   //discoBeat();
+  //bossaNova();
 
 }
 
@@ -53,11 +56,25 @@ void RESET(){
 }
 
   //Play part of Drumset
-void playSound(short part){
+void play4Sound(short part){
   digitalWrite(part, LOW);  //starts playback of file
   delay(250);               //plays file for the appropriate amount of time
   RESET();                  //stops playback of file
   delay(adj_tempo);         //moves on to next file for the appropriate tempo
+}
+
+play8Sound(short part){
+  digitalWrite(part, LOW);  //starts playback of file
+  delay(250);               //plays file for the appropriate amount of time
+  RESET();                  //stops playback of file
+  delay(eightTempo);        //moves on to next file for the appropriate tempo  
+}
+
+play16Sound(short part){
+  digitalWrite(part, LOW);  //starts playback of file
+  delay(250);               //plays file for the appropriate amount of time
+  RESET();                  //stops playback of file
+  delay(sixTempo);         //moves on to next file for the appropriate tempo  
 }
 
   //Volume Control

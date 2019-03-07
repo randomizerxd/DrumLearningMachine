@@ -154,6 +154,19 @@ void rockYou(){
   playSound(0);
 }
 
+
+//               DEFAULT/TEST                         //
+
+void demo(){  
+  playSound(hhkick);
+  
+  playSound(hihat);
+  
+  playSound(hhsnare);
+
+  playSound(hihat);
+}
+
 /******************************************************/
 /*                  REGGAETON BEAT                    */
 /******************************************************/
@@ -187,34 +200,3 @@ void rockYou(){
   //delay(500);
 }
 */
-
-
-//               DEFAULT/TEST                         //
-
-void demo(){  
-  playSound(hhkick);
-  /*digitalWrite(hhkick, LOW);
-  //doubleWrite(hhkick, hihat);
-  delay(250);
-  RESET();
-  delay(tempo);*/
-  
-  playSound(hihat);
-  /*digitalWrite(hihat, LOW);
-  delay(250);
-  RESET();
-  delay(tempo);*/
-  
-  playSound(hhsnare);
-  /*digitalWrite(hhsnare, LOW);
-  //doubleWrite(hhsnare, hihat);
-  delay(250);
-  RESET();
-  delay(tempo);*/
-
-  playSound(hihat);
-  /*digitalWrite(hihat, LOW);
-  delay (250);
-  RESET();
-  delay(tempo);*/
-}

@@ -2,11 +2,11 @@
 // Board: chipKIT Max32
 
 /***Set variables for BluetoothSettings***/  
-int Received=0;
-int ModeReceived = 0;
-int TempoReceived = 0; //tempo in bpm
-int BeatReceived = 0;
-int Back = 0;
+short Received=0;
+short ModeReceived = 0;
+short TempoReceived = 0; //tempo in bpm
+short BeatReceived = 0;
+short Back = 0;
 /* 
  *  Bluetooth protocol:
  *  App sends data to Arduino via bluetooth
@@ -29,55 +29,55 @@ int Back = 0;
  *    iii. Send a 212 when the Volume Up button has been pushed
  *  
  */
-int count = 3;
+short count = 3;
 
 int tempo = 0; //tempo in ms ... 'tempo = 60000 / TempoReceived;'
 int adj_tempo = 0; //tempo adjusted for 250ms delay ... 'adj_tempo = tempo - 250;'
 
 /***Piezo Vibration Sensor Pin Numbers***/ 
-const int hihatSensorPin = A5;
-const int snareSensorPin = A4;
-const int kickSensorPin  = A3;
-const int crashSensorPin = A2;
-const int tomSensorPin   = A1;
+const short hihatSensorPin = A5;
+const short snareSensorPin = A4;
+const short kickSensorPin  = A3;
+const short crashSensorPin = A2;
+const short tomSensorPin   = A1;
 
 /***LED Strip Pin Numbers***/
 //Use PWM and analog pins//
 //From left to right on the breadboard
 
-const int hihatGREENPin = 10;
-const int hihatREDPin   = 9;
-const int hihatBLUEPin  = 6;
+const short hihatGREENPin = 10;
+const short hihatREDPin   = 9;
+const short hihatBLUEPin  = 6;
 
-const int snareGREENPin = 5;
-const int snareREDPin   = 3;
-const int snareBLUEPin  = A6;
+const short snareGREENPin = 5;
+const short snareREDPin   = 3;
+const short snareBLUEPin  = A6;
 
-const int kickGREENPin  = A7;
-const int kickREDPin    = A8;
-const int kickBLUEPin   = A9;
+const short kickGREENPin  = A7;
+const short kickREDPin    = A8;
+const short kickBLUEPin   = A9;
 
-const int crashGREENPin = A10;
-const int crashREDPin   = A11;
-const int crashBLUEPin  = A12;
+const short crashGREENPin = A10;
+const short crashREDPin   = A11;
+const short crashBLUEPin  = A12;
 
-const int tomGREENPin   = A13;
-const int tomREDPin     = A14;
-const int tomBLUEPin    = A15;
+const short tomGREENPin   = A13;
+const short tomREDPin     = A14;
+const short tomBLUEPin    = A15;
 
 
 /***Variables to store the value read from the sensor pin***/
-int hihatSensorReading = LOW;
-int snareSensorReading = LOW;
-int kickSensorReading  = LOW;
-int crashSensorReading = LOW;
-int tomSensorReading   = LOW;
+short hihatSensorReading = LOW;
+short snareSensorReading = LOW;
+short kickSensorReading  = LOW;
+short crashSensorReading = LOW;
+short tomSensorReading   = LOW;
 
-const int threshold = 200;
+const short threshold = 200;
 
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
 
   setupLEDpins();
   setupVibrationSensorPins();
@@ -275,15 +275,15 @@ void hihat_snare() {
   delay(1000); 
 }
 
-void hitConfirmation(int greenPin, int redPin) {
+void hitConfirmation(short greenPin, short redPin) {
     analogWrite(redPin, 0);
     analogWrite(greenPin, 255);
     delay(125);
     analogWrite(greenPin, 0);
 }
 
-int doubleAnalogRead(int pin) {
-  int reading = 0;
+short doubleAnalogRead(short pin) {
+  short reading = 0;
   reading = analogRead(pin);
   delayMicroseconds(6000);
   reading = analogRead(pin);

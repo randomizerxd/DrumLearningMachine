@@ -1,16 +1,16 @@
 
 //INITIALIZING PINS AND VARIABLES
-int hihat     = 28;        //set pin 28 to 'hihat' sound
-int kick      = 29;        //set pin 29 to 'kick' sound
-int snare     = 30;        //set pin 30 to 'snare' sound
-int hhkick    = 31;        //set pin 31 to 'hihat' and 'kick' sound
-int hhsnare   = 32;        //set pin 32 to 'hihat' and 'snare' sound
+short hihat     = 28;        //set pin 28 to 'hihat' sound
+short kick      = 29;        //set pin 29 to 'kick' sound
+short snare     = 30;        //set pin 30 to 'snare' sound
+short hhkick    = 31;        //set pin 31 to 'hihat' and 'kick' sound
+short hhsnare   = 32;        //set pin 32 to 'hihat' and 'snare' sound
 
-int volUp     = 34;        //set pin 34 to volume-up
-int volDown   = 35;        //set pin 35 to volume-down
+short volUp     = 34;        //set pin 34 to volume-up
+short volDown   = 35;        //set pin 35 to volume-down
 
-int tempo     = 400;       //316 = 190bpm; Inc = slower; Dec = faster (LIMIT: 350ms to 1500ms)
-int adj_tempo = tempo-250; //adjusted tempo to take into account the file delay
+short tempo     = 400;       //316 = 190bpm; Inc = slower; Dec = faster (LIMIT: 350ms to 1500ms)
+short adj_tempo = tempo-250; //adjusted tempo to take shorto account the file delay
 
 void setup() {
   //setup code here, to run once:
@@ -52,7 +52,7 @@ void RESET(){
 }
 
   //Play part of Drumset
-void playSound(int part){
+void playSound(short part){
   digitalWrite(part, LOW);  //starts playback of file
   delay(250);               //plays file for the appropriate amount of time
   RESET();                  //stops playback of file
@@ -60,10 +60,10 @@ void playSound(int part){
 }
 
   //Volume Control
-void VolumeCtr(int button){
+void VolumeCtr(short button){
   //Values that come through the app
-  int downButton = 0; //(-)
-  int upButton   = 1; //(+)
+  short downButton = 0; //(-)
+  short upButton   = 1; //(+)
   
   if (button == downButton)
     volDown = LOW;
@@ -124,8 +124,8 @@ void rockYou(){
 /******************************************************/
 
 /*void reggaetonBeat(){
-  int hlftempo = tempo/2;
-  int hlftempadd = hlftempo + tempo;
+  short hlftempo = tempo/2;
+  short hlftempadd = hlftempo + tempo;
     
   digitalWrite(hhkick, LOW);
   delay(250);

@@ -256,7 +256,7 @@ void averageAnalogRead() {
    else {
     n_snare--;
    }
-    /*
+    /* 
     Serial.print(hihatSensorReading);
     Serial.print(" | ");
     Serial.println(snareSensorReading);

@@ -32,6 +32,7 @@ void loop() {
 
   rockYou();    //we will - we will - rock you TA - BUM BUM TA
   //rockBeat();
+  //rockV2Beat();
   //discoBeat();
 
 }
@@ -79,7 +80,10 @@ void VolumeCtr(short button){
 
 /******************************************************/
 /*                     ROCK BEAT                      */
-/******************************************************/
+/*                   1   2   3   4                    */
+/*                   x---x---x---x                    */
+/*                   o-------v----                    */
+/******************************************************/   
 
 void rockBeat(){  
   playSound(hhkick);
@@ -92,7 +96,35 @@ void rockBeat(){
 }
 
 /******************************************************/
+/*                    ROCK V2 BEAT                    */
+/*                   1   2   3   4                    */
+/*                   x---x---x---x                    */
+/*                   o--(o)--v----                    */
+/******************************************************/
+
+void rockV2Beat(){  
+  playSound(hhkick);
+  
+  playSound(hihat);
+  
+  playSound(hhsnare);
+  
+  playSound(hihat);
+//Second loop
+  playSound(hhkick);
+  
+  playSound(hhkick);
+  
+  playSound(hhsnare);
+  
+  playSound(hihat);
+}
+
+/******************************************************/
 /*                    DISCO BEAT                      */
+/*                   1   2   3   4                    */
+/*                   ----x-------x                    */
+/*                   o-------v----                    */
 /******************************************************/
 
 void discoBeat(){
@@ -107,6 +139,9 @@ void discoBeat(){
 
 /******************************************************/
 /*                   ROCK-YOU BEAT                    */
+/*                   1 a 2 a 3 a 4                    */
+/*                   ----v-------v                    */
+/*                   o-o-----o-o--                    */
 /******************************************************/
 
 void rockYou(){  

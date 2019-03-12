@@ -127,6 +127,7 @@ void loop() {
       {
         demo(4);  //We Will We Will Rock You
       }
+      Bluetooth_CheckVolumeButton(); //might have to move this somewhere else to have better response time
     }
     else 
     if (ModeReceived == SEQUENCEMODE_CODE) //Sequence
@@ -152,7 +153,6 @@ void loop() {
       
     }
     Bluetooth_CheckBackButton();
-    Bluetooth_CheckVolumeButton();
   }  
 }
 

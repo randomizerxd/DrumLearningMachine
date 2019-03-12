@@ -75,6 +75,16 @@ short tomSensorReading   = LOW;
 
 const short threshold = 200;
 
+short BACK_CODE          = 201;
+short VOLUMEDOWN_CODE    = 211;
+short VOLUMEUP_CODE      = 212;
+short DEMOMODE_CODE      = 101;
+short SEQUENCEMODE_CODE  = 102;
+short PLAYALONGMODE_CODE = 103;
+short BEAT1_CODE         =   1;
+short BEAT2_CODE         =   2;
+short BEAT3_CODE         =   3;
+
 
 void setup() {
   Serial.begin(115200);
@@ -89,42 +99,42 @@ void setup() {
 
 void loop() {
 
-  if (Back == 201)
+  if (Back == BACK_CODE)
   {
     ////Receive settings from App thru Bluetooth
     BluetoothSettings(); 
   }
   else
   {
-    ////Choose mode (Demo = 101, Sequence = 102, PlayAlong = 103)
-    if (ModeReceived == 101) //Demo
+    if (ModeReceived == DEMOMODE_CODE) //Demo
     {
        
     }
     else 
-    if (ModeReceived == 102) //Sequence
+    if (ModeReceived == SEQUENCEMODE_CODE) //Sequence
     {
-      if (BeatReceived == 1)
+      if (BeatReceived == BEAT1_CODE)
       {
         snare();
       }
       else
-      if (BeatReceived == 2)
+      if (BeatReceived == BEAT2_CODE)
       {
         
       }
       else
-      if (BeatReceived == 3)
+      if (BeatReceived == BEAT3_CODE)
       {
         
       }
     }
     else 
-    if (ModeReceived == 103) // PlayAlong
+    if (ModeReceived == PLAYALONGMODE_CODE) // PlayAlong
     {
       
     }
     Bluetooth_CheckBackButton();
+    Bluetooth_CheckVolumeButton();
   }  
 }
 
@@ -282,16 +292,6 @@ void hitConfirmation(short greenPin, short redPin) {
     analogWrite(greenPin, 0);
 }
 
-short doubleAnalogRead(short pin) {
-  short reading = 0;
-  reading = analogRead(pin);
-  delayMicroseconds(6000);
-  reading = analogRead(pin);
-  delayMicroseconds(6000);
-
-  return reading;  
-}
-
 /*********************************************************************/
 /***********************PlayAlong Functions***************************/
 /*********************************************************************/
@@ -332,10 +332,26 @@ void BluetoothSettings()
 void Bluetooth_CheckBackButton()
 {
   //Serial.println("Back Checked");
-  if(Serial.available()>0)
+  if(Serial.available() > 0)
     {
       Back = Serial.read();
-      Serial.println("Back Pressed");
+      Serial.println("Back pressed");
 
+    }
+}
+
+void Bluetooth_CheckVolumeButton()
+{
+  if(Serial.available() > 0)
+    {
+      VolumeControl = Serial.read();
+      if (VolumeControl == VOLUMEDOWN_CODE) 
+      {
+        Serial.println("Volume down pressed");
+      }
+      else if (VolumeControl == VOLUMEUP_CODE)
+      {
+        Serial.println("Volume up pressed");
+      }
     }
 }

@@ -118,7 +118,6 @@ void loop() {
       {
         demo(4);  //We Will We Will Rock You
       }
-      Bluetooth_CheckBackButton();
     }
     else 
     if (ModeReceived == 102) //Sequence

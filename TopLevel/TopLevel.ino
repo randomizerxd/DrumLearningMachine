@@ -31,8 +31,8 @@ short Back = 0;
  */
 short count = 3;
 
-int tempo = 0; //tempo in ms ... 'tempo = 60000 / TempoReceived;'
-int adj_tempo = 0; //tempo adjusted for 250ms delay ... 'adj_tempo = tempo - 250;'
+//short tempo = 0; //tempo in ms ... 'tempo = 60000 / TempoReceived;'
+//short adj_tempo = 0; //tempo adjusted for 250ms delay ... 'adj_tempo = tempo - 250;'
 
 /***Piezo Vibration Sensor Pin Numbers***/ 
 const short hihatSensorPin = A5;
@@ -205,222 +205,225 @@ void initializeLEDstrips() {
 /**************************Demo Functions*****************************/
 /*********************************************************************/
 void demo(short BEAT){
-  //INITIALIZING PINS AND VARIABLES for DEMO
-  short DEMOhihat     = 28;            //set pin 28 to 'hihat' sound
-  short DEMOkick      = 29;            //set pin 29 to 'kick' sound
-  short DEMOsnare     = 30;            //set pin 30 to 'snare' sound
-  short DEMOhhkick    = 31;            //set pin 31 to 'hihat' and 'kick' sound
-  short DEMOhhsnare   = 32;            //set pin 32 to 'hihat' and 'snare' sound
+  DEMOsetup();
+  DEMOloop(BEAT);
+ }
+//INITIALIZING PINS AND VARIABLES for DEMO
+short DEMOhihat     = 28;            //set pin 28 to 'hihat' sound
+short DEMOkick      = 29;            //set pin 29 to 'kick' sound
+short DEMOsnare     = 30;            //set pin 30 to 'snare' sound
+short DEMOhhkick    = 31;            //set pin 31 to 'hihat' and 'kick' sound
+short DEMOhhsnare   = 32;            //set pin 32 to 'hihat' and 'snare' sound
 
-  short volUp     = 34;            //set pin 34 to volume-up
-  short volDown   = 35;            //set pin 35 to volume-down
+short volUp     = 34;            //set pin 34 to volume-up
+short volDown   = 35;            //set pin 35 to volume-down
 
-  //Set tempo equal to the tempo received by the app
-  short tempo     = TempoReceived; //Inc = slower & Dec = faster (LIMIT: 350ms to 1500ms)
-  short adj_tempo = tempo-250;     //adjusted tempo to account the file delay
-  //EXTRA
-  short eightTempo= adj_tempo/2;   //tempo used for beats with and
-  short sixTempo  = andTempo/2;    //tempo used for beats with sixteenth notes
+//Set tempo equal to the tempo received by the app
+short tempo         = TempoReceived; //Inc = slower & Dec = faster (LIMIT: 350ms to 1500ms)
+short adj_tempo     = tempo-250;     //adjusted tempo to account the file delay
+//EXTRA
+short eightTempo= adj_tempo/2;   //tempo used for beats with and
+short sixTempo  = eightTempo/2;    //tempo used for beats with sixteenth notes
 
-  void setup() {
-    //setup code here, to run once:
-    Serial.begin(115200);  //use serial port
-    //Files on Audio FX SoundBoard
-    //T00 = hihat
-    //T01 = snare
-    //T02 = kick
-    //T03 = kick and hihat
-    pinMode(DEMOkick,    OUTPUT);
-    pinMode(DEMOsnare,   OUTPUT);
-    pinMode(DEMOhihat,   OUTPUT);
-    pinMode(DEMOhhkick,  OUTPUT);
-    pinMode(DEMOhhsnare, OUTPUT);
-    RESET(); //clean start, all equal to Vdd so there is no sound
+void DEMOsetup() {
+  //setup code here, to run once:
+  Serial.begin(115200);  //use serial port
+  //Files on Audio FX SoundBoard
+  //T00 = hihat
+  //T01 = snare
+  //T02 = kick
+  //T03 = kick and hihat
+  pinMode(DEMOkick,    OUTPUT);
+  pinMode(DEMOsnare,   OUTPUT);
+  pinMode(DEMOhihat,   OUTPUT);
+  pinMode(DEMOhhkick,  OUTPUT);
+  pinMode(DEMOhhsnare, OUTPUT);
+  RESET(); //clean start, all equal to Vdd so there is no sound
+}
+
+//MAIN LOOP
+void DEMOloop(short BEAT) {
+  //Choose beat depending on what the user chooses
+  if (BEAT == 1){
+    rockBeat();
+  } else
+  if (BEAT == 2){
+    rockV2Beat();
+  } else
+  if (BEAT == 3){
+    discoBeat();
+  } else
+  if (BEAT == 4){
+    rockYou();
   }
-  
-  //MAIN LOOP
-  void loop() {
-    //Choose beat depending on what the user chooses
-    if (BEAT == 1){
-      rockBeat();
-    } else
-    if (BEAT == 2){
-      rockV2Beat();
-    } else
-    if (BEAT == 3){
-      discoBeat();
-    } else
-    if (BEAT == 4){
-      rockYou();
-    }
-  }
+}
 
 
-  /*****************************************************/
-  /*                DEMO_FUNCTIONS                     */
-  /*****************************************************/
+/*****************************************************/
+/*                DEMO_FUNCTIONS                     */
+/*****************************************************/
 
-    //Initializing pins to 5V so they do NOT play sound
-  void RESET(){
-    digitalWrite(DEMOkick,    HIGH);
-    digitalWrite(DEMOsnare,   HIGH);
-    digitalWrite(DEMOhihat,   HIGH);
-    digitalWrite(DEMOhhkick,  HIGH);
-    digitalWrite(DEMOhhsnare, HIGH);
-    //When values are set to 0, the sound will be played
-  }
+  //Initializing pins to 5V so they do NOT play sound
+void RESET(){
+  digitalWrite(DEMOkick,    HIGH);
+  digitalWrite(DEMOsnare,   HIGH);
+  digitalWrite(DEMOhihat,   HIGH);
+  digitalWrite(DEMOhhkick,  HIGH);
+  digitalWrite(DEMOhhsnare, HIGH);
+  //When values are set to 0, the sound will be played
+}
 
-  //Play part of Drumset
-  void playSound(short part){
-    digitalWrite(part, LOW);  //starts playback of file
-    delay(250);               //plays file for the appropriate amount of time
-    RESET();                  //stops playback of file
-    delay(adj_tempo);         //moves on to next file for the appropriate tempo
-  }
-  /***********************************EXTRA************************************/
-    //Extra function for expanding amount of beats
-  play8Sound(short part){
-    digitalWrite(part, LOW);  //starts playback of file
-    delay(250);               //plays file for the appropriate amount of time
-    RESET();                  //stops playback of file
-    delay(eightTempo);        //moves on to next file for the appropriate tempo  
-  }
-  play16Sound(short part){
-    digitalWrite(part, LOW);  //starts playback of file
-    delay(250);               //plays file for the appropriate amount of time
-    RESET();                  //stops playback of file
-    delay(sixTempo);         //moves on to next file for the appropriate tempo  
-  }
-  /***************************************************************************/
+//Play part of Drumset
+void playSound(short part){
+  digitalWrite(part, LOW);  //starts playback of file
+  delay(250);               //plays file for the appropriate amount of time
+  RESET();                  //stops playback of file
+  delay(adj_tempo);         //moves on to next file for the appropriate tempo
+}
+/***********************************EXTRA************************************/
+  //Extra function for expanding amount of beats
+void play8Sound(short part){
+  digitalWrite(part, LOW);  //starts playback of file
+  delay(250);               //plays file for the appropriate amount of time
+  RESET();                  //stops playback of file
+  delay(eightTempo);        //moves on to next file for the appropriate tempo  
+}
+void play16Sound(short part){
+  digitalWrite(part, LOW);  //starts playback of file
+  delay(250);               //plays file for the appropriate amount of time
+  RESET();                  //stops playback of file
+  delay(sixTempo);         //moves on to next file for the appropriate tempo  
+}
+/***************************************************************************/
 
-  //Volume Control
-  void VolumeCtr(short button){
-    //Values that come through the app
-    short downButton = 0; //(-)
-    short upButton   = 1; //(+)
-  
-    if (button == downButton)
-      volDown = LOW;
-    if (button == upButton)
-      volUp   = LOW;  
-  }
+//Volume Control
+void VolumeCtr(short button){
+  //Values that come through the app
+  short downButton = 0; //(-)
+  short upButton   = 1; //(+)
 
-
-  /******************************************************/
-  /*        FUNCTIONS FOR THE DIFFERENT BEATS           */
-  /******************************************************/
+  if (button == downButton)
+    volDown = LOW;
+  if (button == upButton)
+    volUp   = LOW;  
+}
 
 
-  /******************************************************/
-  /*                     ROCK BEAT                      */
-  /*                   1   2   3   4                    */
-  /*                   x---x---x---x                    */
-  /*                   o-------v----                    */
-  /******************************************************/   
+/******************************************************/
+/*        FUNCTIONS FOR THE DIFFERENT BEATS           */
+/******************************************************/
 
-  void rockBeat(){  
-    playSound(DEMOhhkick);
-  
-    playSound(DEMOhihat);
-  
-    playSound(DEMOhhsnare);
-  
-    playSound(DEMOhihat);
-  }
 
-  /******************************************************/
-  /*                    ROCK V2 BEAT                    */
-  /*                   1   2   3   4                    */
-  /*                   x---x---x---x                    */
-  /*                   o--(o)--v----                    */
-  /******************************************************/
+/******************************************************/
+/*                     ROCK BEAT                      */
+/*                   1   2   3   4                    */
+/*                   x---x---x---x                    */
+/*                   o-------v----                    */
+/******************************************************/   
 
-  void rockV2Beat(){  
-    playSound(DEMOhhkick);
-  
-    playSound(DEMOhihat);
-  
-    playSound(DEMOhhsnare);
-  
-    playSound(DEMOhihat);
-  //Second loop
-    playSound(DEMOhhkick);
-  
-    playSound(DEMOhhkick);
-  
-    playSound(DEMOhhsnare);
-  
-    playSound(DEMOhihat);
-  }
+void rockBeat(){  
+  playSound(DEMOhhkick);
 
-  /******************************************************/
-  /*                    DISCO BEAT                      */
-  /*                   1   2   3   4                    */
-  /*                   ----x-------x                    */
-  /*                   o-------v----                    */
-  /******************************************************/
+  playSound(DEMOhihat);
 
-  void discoBeat(){
-    playSound(DEMOkick);
-  
-    playSound(DEMOhihat);
-  
-    playSound(DEMOsnare);
-  
-    playSound(DEMOhihat);
-  }
+  playSound(DEMOhhsnare);
 
-  /******************************************************/
-  /*                   ROCK-YOU BEAT                    */
-  /*                   1 a 2 a 3 a 4                    */
-  /*                   ----v-------v                    */
-  /*                   o-o-----o-o--                    */
-  /******************************************************/
+  playSound(DEMOhihat);
+}
 
-  void rockYou(){  
-    playSound(DEMOkick);
-  
-    playSound(DEMOkick);
-  
-    playSound(DEMOsnare);
-  
-    playSound(0);
-  }
+/******************************************************/
+/*                    ROCK V2 BEAT                    */
+/*                   1   2   3   4                    */
+/*                   x---x---x---x                    */
+/*                   o--(o)--v----                    */
+/******************************************************/
 
-  /******************************************************/
-  /*                  REGGAETON BEAT                    */
-  /******************************************************/
-  //Not working
-  /*void reggaetonBeat(){
-    short hlftempo = tempo/2;
-    short hlftempadd = hlftempo + tempo;
-    
-    digitalWrite(hhkick, LOW);
-    delay(250);
-    RESET();
-    delay(hlftempadd);
-    //delay(750);
+void rockV2Beat(){  
+  playSound(DEMOhhkick);
+
+  playSound(DEMOhihat);
+
+  playSound(DEMOhhsnare);
+
+  playSound(DEMOhihat);
+//Second loop
+  playSound(DEMOhhkick);
+
+  playSound(DEMOhhkick);
+
+  playSound(DEMOhhsnare);
+
+  playSound(DEMOhihat);
+}
+
+/******************************************************/
+/*                    DISCO BEAT                      */
+/*                   1   2   3   4                    */
+/*                   ----x-------x                    */
+/*                   o-------v----                    */
+/******************************************************/
+
+void discoBeat(){
+  playSound(DEMOkick);
+
+  playSound(DEMOhihat);
+
+  playSound(DEMOsnare);
+
+  playSound(DEMOhihat);
+}
+
+/******************************************************/
+/*                   ROCK-YOU BEAT                    */
+/*                   1 a 2 a 3 a 4                    */
+/*                   ----v-------v                    */
+/*                   o-o-----o-o--                    */
+/******************************************************/
+
+void rockYou(){  
+  playSound(DEMOkick);
+
+  playSound(DEMOkick);
+
+  playSound(DEMOsnare);
+
+  playSound(0);
+}
+
+/******************************************************/
+/*                  REGGAETON BEAT                    */
+/******************************************************/
+//Not working
+/*void reggaetonBeat(){
+  short hlftempo = tempo/2;
+  short hlftempadd = hlftempo + tempo;
   
-    digitalWrite(snare, LOW);
-    delay(250);
-    RESET();
-    delay(hlftempo);
-    //delay(250);
-  
-    digitalWrite(hhkick, LOW);
-    delay(250);
-    RESET();
-    delay(tempo);
-    //delay(500);
-  
-    digitalWrite(snare, LOW);
-    delay (250);
-    RESET();
-    delay(tempo);
-    //delay(500);
+  digitalWrite(hhkick, LOW);
+  delay(250);
+  RESET();
+  delay(hlftempadd);
+  //delay(750);
+
+  digitalWrite(snare, LOW);
+  delay(250);
+  RESET();
+  delay(hlftempo);
+  //delay(250);
+
+  digitalWrite(hhkick, LOW);
+  delay(250);
+  RESET();
+  delay(tempo);
+  //delay(500);
+
+  digitalWrite(snare, LOW);
+  delay (250);
+  RESET();
+  delay(tempo);
+  //delay(500);
 }
 */
-}
+
 /*********************************************************************/
 /************************Sequence Functions***************************/
 /*********************************************************************/

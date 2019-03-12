@@ -44,6 +44,11 @@ short kickSensorReading  = LOW;
 short crashSensorReading = LOW;
 short tomSensorReading   = LOW;
 
+/***Variables used in the 'averageAnalogRead()' function***/
+float hihatSensorReading_Average = 0;
+float snareSensorReading_Average = 0;
+float kickSensorReading_Average = 0;
+
 const short threshold = 100; 
 
 void setup() {
@@ -52,11 +57,13 @@ void setup() {
   setupLEDpins();
   setupVibrationSensorPins();
   initializeLEDstrips(); 
-
-  hihat_snare();
 }
 
 void loop() {
+
+  hihat_kick();
+  delay(3000);
+  
   //hihat_kick();
   //hihat();
   //hihat_snare();
@@ -145,19 +152,21 @@ void kick() {
 void hihat_kick() {
   analogWrite(hihatREDPin, 255);
   analogWrite(kickREDPin, 255);
-  while( ((hihatSensorReading = analogRead(hihatSensorPin)) < threshold) && 
-  ((kickSensorReading = analogRead(kickSensorPin)) < threshold) ) { 
+  Serial.println("ready");
+  while( ((hihatSensorReading = analogRead(hihatSensorPin)) < threshold) && ((kickSensorReading = analogRead(kickSensorPin)) < threshold) ) { 
   }                                         //While hihat && kick below threshold, do nothing
-  if(((hihatSensorReading) > threshold) && ((kickSensorReading) > threshold)) {
-    hitConfirmation(hihatGREENPin, hihatREDPin);
-    hitConfirmation(kickGREENPin, kickREDPin);
+
+  averageAnalogRead_hihatkick();
+  
+  if(((hihatSensorReading_Average) > threshold) && ((kickSensorReading_Average) > threshold)) {
+    hitConfirmation_hihatkick(hihatGREENPin, hihatREDPin, kickGREENPin, kickREDPin);
   } else
-  if( hihatSensorReading >= threshold ) {    //If the hihat hit
+  if( hihatSensorReading >= threshold ) {    //If the hihat sensor was triggered
     hitConfirmation(hihatGREENPin, hihatREDPin);  
     while( analogRead(kickSensorPin) < threshold) { } //Do nothing until snare is hit
     hitConfirmation(kickGREENPin, kickREDPin);
   } else
-  if ( kickSensorReading >= threshold ) { //If the snare sensor was pushed
+  if ( kickSensorReading >= threshold ) { //If the kick sensor was triggered
     hitConfirmation(kickGREENPin, kickREDPin);
     while( analogRead(hihatSensorPin) < threshold) { } //Do nothing until hihat sensor is pushed
     hitConfirmation(hihatGREENPin, hihatREDPin);
@@ -169,21 +178,21 @@ void hihat_kick() {
 void hihat_snare() {
   analogWrite(hihatREDPin, 255);
   analogWrite(snareREDPin, 255);
+  Serial.println("ready");
   while( ((hihatSensorReading = analogRead(hihatSensorPin)) < threshold) && ((snareSensorReading = analogRead(snareSensorPin)) < threshold) ) {  
   }
   
-  averageAnalogRead();
+  averageAnalogRead_hihatsnare();
   
-  if( ( (hihatSensorReading) > threshold) && ( (snareSensorReading) > threshold) ) {
-    hitConfirmation(hihatGREENPin, hihatREDPin);
-    hitConfirmation(snareGREENPin, snareREDPin);
-  } else
-  if( hihatSensorReading >= threshold ) {    //If the hihat hit
+  if( ( (hihatSensorReading_Average) > threshold) && ( (snareSensorReading_Average) > threshold) ) {
+    hitConfirmation_hihatsnare(hihatGREENPin, hihatREDPin, snareGREENPin, snareREDPin);
+  } 
+  else if( hihatSensorReading >= threshold ) {    //If the hihat sensor was triggered
     hitConfirmation(hihatGREENPin, hihatREDPin); 
     while( (snareSensorReading = analogRead(snareSensorPin)) < threshold) { } //Do nothing until snare is hit
     hitConfirmation(snareGREENPin, snareREDPin);
   }
-  else if ( snareSensorReading >= threshold ) { //If the snare sensor was pushed
+  else if ( snareSensorReading >= threshold ) { //If the snare sensor was triggered
     hitConfirmation(snareGREENPin, snareREDPin); 
     while( analogRead(hihatSensorPin) < threshold) { } //Do nothing until hihat sensor is pushed
     hitConfirmation(hihatGREENPin, hihatREDPin);
@@ -212,6 +221,26 @@ void hitConfirmation(short greenPin, short redPin) {
     analogWrite(greenPin, 0);
 }
 
+void hitConfirmation_hihatkick(short hihatGREENPin, short hihatREDPin, short kickGREENPin, short kickREDPin) {
+    analogWrite(hihatREDPin, 0);
+    analogWrite(kickREDPin, 0);
+    analogWrite(hihatGREENPin, 255);
+    analogWrite(kickGREENPin, 255);
+    delay(125);
+    analogWrite(hihatGREENPin, 0);
+    analogWrite(kickGREENPin, 0);
+}
+
+void hitConfirmation_hihatsnare(short hihatGREENPin, short hihatREDPin, short snareGREENPin, short snareREDPin) {
+    analogWrite(hihatREDPin, 0);
+    analogWrite(snareREDPin, 0);
+    analogWrite(hihatGREENPin, 255);
+    analogWrite(snareGREENPin, 255);
+    delay(125);
+    analogWrite(hihatGREENPin, 0);
+    analogWrite(snareGREENPin, 0);
+}
+
 short doubleAnalogRead(short pin) {
   short reading = 0;
   reading = analogRead(pin);
@@ -222,37 +251,41 @@ short doubleAnalogRead(short pin) {
   return reading;  
 }
 
-void averageAnalogRead() {
+//Changes 'hihatSensorReading_Average' and 'snareSensorReading_Average'
+void averageAnalogRead_hihatsnare() {
   short n = 500;  //amount of times to read from both hihat and snare
   long t0;        //initial value of t
   long t;         //stores the amount of time it takes to finish the for loop
-  short n_hihat = n;    //used to average. n_hihat <= n. It will be decremented when sensor readings don't exceed the threshold
-  short n_snare = n;    //used to average. n_snare <= n. It will be decremented when sensor readings don't exceed the threshold
-  float hihatSensorReading_Average = 0;
-  float snareSensorReading_Average = 0;
+  short n_hihat = n;    //used to average. n_hihat <= n. It will be decremented by 1 when sensor readings don't exceed the threshold
+  short n_snare = n;    //used to average. n_snare <= n. It will be decremented by 1 when sensor readings don't exceed the threshold
+  hihatSensorReading_Average = 0;
+  snareSensorReading_Average = 0;
+  short hihatSensorReading_tmp = 0; //local variable. Don't change 'hihatSensorReading'
+  short snareSensorReading_tmp = 0; //local variable. Don't change 'snareSensorReading'
 
   Serial.println("Analog reading exceeded threshold");
   Serial.println("hihatSensorReading | snareSensorReading");
+  Serial.print("Readings when triggered: ");
   Serial.print(hihatSensorReading);
   Serial.print(" | ");
   Serial.println(snareSensorReading);
 
   t0 = micros();
   for (short i = 0; i < n; i++) {
-    hihatSensorReading = analogRead(hihatSensorPin);
-    snareSensorReading = analogRead(snareSensorPin);
-   if ( hihatSensorReading > threshold ) {
-    hihatSensorReading_Average = hihatSensorReading_Average + hihatSensorReading;
-   }
-   else {
-    n_hihat--;
-   }
-   if ( snareSensorReading > threshold ) {
-    snareSensorReading_Average = snareSensorReading_Average + snareSensorReading;
-   }
-   else {
-    n_snare--;
-   }
+     hihatSensorReading_tmp = analogRead(hihatSensorPin);
+     snareSensorReading_tmp = analogRead(snareSensorPin);
+     if ( hihatSensorReading_tmp > threshold ) {
+      hihatSensorReading_Average += hihatSensorReading_tmp;
+     }
+     else {
+      n_hihat--;
+     }
+     if ( snareSensorReading_tmp > threshold ) {
+      snareSensorReading_Average += snareSensorReading_tmp;
+     }
+     else {
+      n_snare--;
+     }
     /* 
     Serial.print(hihatSensorReading);
     Serial.print(" | ");
@@ -271,8 +304,8 @@ void averageAnalogRead() {
   Serial.print(n);
   Serial.print(" readings over ");
   Serial.println(threshold);
-  hihatSensorReading_Average = hihatSensorReading_Average / n_hihat;
-  snareSensorReading_Average = snareSensorReading_Average / n_snare;
+  hihatSensorReading_Average /= n_hihat;
+  snareSensorReading_Average /= n_snare;
   
   //time it takes to finish the for loop
   t = micros() - t0;
@@ -285,7 +318,72 @@ void averageAnalogRead() {
   Serial.println(" microseconds");
 }
 
+//Changes 'hihatSensorReading_Average' and 'kickSensorReading_Average'
+void averageAnalogRead_hihatkick() {
+  short n = 500;  //amount of times to read from both hihat and snare
+  long t0;        //initial value of t
+  long t;         //stores the amount of time it takes to finish the for loop
+  short n_hihat = n;    //used to average. n_hihat <= n. It will be decremented by 1 when sensor readings don't exceed the threshold
+  short n_kick = n;    //used to average. n_kick <= n. It will be decremented by 1 when sensor readings don't exceed the threshold
+  hihatSensorReading_Average = 0;
+  kickSensorReading_Average = 0;
+  short hihatSensorReading_tmp = 0; //local variable. Don't change 'hihatSensorReading'
+  short kickSensorReading_tmp = 0; //local variable. Don't change 'kickSensorReading'
 
+  Serial.println("Analog reading exceeded threshold");
+  Serial.println("hihatSensorReading | kickSensorReading");
+  Serial.print("Readings when triggered: ");
+  Serial.print(hihatSensorReading);
+  Serial.print(" | ");
+  Serial.println(kickSensorReading);
+
+  t0 = micros();
+  for (short i = 0; i < n; i++) {
+     hihatSensorReading_tmp = analogRead(hihatSensorPin);
+     kickSensorReading_tmp = analogRead(kickSensorPin);
+     if ( hihatSensorReading_tmp > threshold ) {
+      hihatSensorReading_Average += hihatSensorReading_tmp;
+     }
+     else {
+      n_hihat--;
+     }
+     if ( kickSensorReading_tmp > threshold ) {
+      kickSensorReading_Average += kickSensorReading_tmp;
+     }
+     else {
+      n_kick--;
+     }
+    /* 
+    Serial.print(hihatSensorReading);
+    Serial.print(" | ");
+    Serial.println(kickSensorReading);
+    */
+  }
+  
+  Serial.print(n_hihat);
+  Serial.print(" / ");
+  Serial.print(n);
+  Serial.print(" readings over ");
+  Serial.println(threshold);
+  
+  Serial.print(n_kick);
+  Serial.print(" / ");
+  Serial.print(n);
+  Serial.print(" readings over ");
+  Serial.println(threshold);
+  hihatSensorReading_Average /= n_hihat;
+  kickSensorReading_Average /= n_kick;
+  
+  //time it takes to finish the for loop
+  t = micros() - t0;
+  Serial.print("hihat_Average: ");
+  Serial.println(hihatSensorReading_Average);
+  Serial.print("kick_Average: ");
+  Serial.println(kickSensorReading_Average);
+  Serial.print("t: ");
+  Serial.print(t);
+  Serial.println(" microseconds");
+}
 
   
  

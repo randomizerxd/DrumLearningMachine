@@ -10,13 +10,13 @@ short volUp     = 34;            //set pin 34 to volume-up
 short volDown   = 35;            //set pin 35 to volume-down
 
 short tempo     = 400;           //316 = 190bpm; Inc = slower; Dec = faster (LIMIT: 350ms to 1500ms)
-short adj_tempo = tempo-250;     //adjusted tempo to take shorto account the file delay
-short eightTempo  = adj_tempo/2; //tempo used for beats with and
+short adj_tempo = tempo-250;     //adjusted tempo to account the file delay
+short eightTempo= adj_tempo/2;   //tempo used for beats with and
 short sixTempo  = andTempo/2;    //tempo used for beats with sixteenth notes
 
 void setup() {
   //setup code here, to run once:
-  Serial.begin(115200);   //use serial port
+  Serial.begin(115200);  //use serial port
   //Files on Audio FX SoundBoard
   //T00 = hihat
   //T01 = snare
@@ -36,7 +36,7 @@ void loop() {
   //rockBeat();
   //rockV2Beat();
   //discoBeat();
-  //bossaNova();
+  //bossaNova(); --boom ta boom boom ta
 
 }
 
@@ -56,26 +56,27 @@ void RESET(){
 }
 
   //Play part of Drumset
-void play4Sound(short part){
+void playSound(short part){
   digitalWrite(part, LOW);  //starts playback of file
   delay(250);               //plays file for the appropriate amount of time
   RESET();                  //stops playback of file
   delay(adj_tempo);         //moves on to next file for the appropriate tempo
 }
-
+/***********************************EXTRA************************************/
+  //Extra function for expanding amount of beats
 play8Sound(short part){
   digitalWrite(part, LOW);  //starts playback of file
   delay(250);               //plays file for the appropriate amount of time
   RESET();                  //stops playback of file
   delay(eightTempo);        //moves on to next file for the appropriate tempo  
 }
-
 play16Sound(short part){
   digitalWrite(part, LOW);  //starts playback of file
   delay(250);               //plays file for the appropriate amount of time
   RESET();                  //stops playback of file
   delay(sixTempo);         //moves on to next file for the appropriate tempo  
 }
+/***************************************************************************/
 
   //Volume Control
 void VolumeCtr(short button){
@@ -171,23 +172,10 @@ void rockYou(){
   playSound(0);
 }
 
-
-//               DEFAULT/TEST                         //
-
-void demo(){  
-  playSound(hhkick);
-  
-  playSound(hihat);
-  
-  playSound(hhsnare);
-
-  playSound(hihat);
-}
-
 /******************************************************/
 /*                  REGGAETON BEAT                    */
 /******************************************************/
-
+//Not working
 /*void reggaetonBeat(){
   short hlftempo = tempo/2;
   short hlftempadd = hlftempo + tempo;

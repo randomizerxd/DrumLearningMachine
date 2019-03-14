@@ -6,7 +6,8 @@ short Received=0;
 short ModeReceived = 0;
 short TempoReceived = 0; //tempo in bpm
 short BeatReceived = 0;
-short Back = 0;
+short Back = 0;           //for storing the back code
+short VolumeControl = 0;  //for storing the volume up or down code
 /* 
  *  Bluetooth protocol:
  *  App sends data to Arduino via bluetooth
@@ -493,7 +494,7 @@ void hihat_kick() {
 void hihat_snare() {
   analogWrite(hihatREDPin, 255);
   analogWrite(snareREDPin, 255);
-  while( ((hihatSensorReading = doubleAnalogRead(hihatSensorPin)) < threshold) && ((snareSensorReading = doubleAnalogRead(snareSensorPin)) < threshold) ) {  
+  while( ((hihatSensorReading = hihatSensorPin) < threshold) && ((snareSensorReading = snareSensorPin) < threshold) ) {  
     Serial.print(hihatSensorReading);
     Serial.print(" ");
     Serial.println(snareSensorReading);

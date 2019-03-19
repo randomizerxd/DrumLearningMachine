@@ -109,22 +109,22 @@ void loop() {
   {
     if (ModeReceived == DEMOMODE_CODE) //Demo
     {
-      if (BeatReceived == 1)
+      if (BeatReceived == BEAT1_CODE)
       {
         demo(1);  //rockBeat
       }
       else
-      if (BeatReceived == 2)
+      if (BeatReceived == BEAT2_CODE)
       {
         demo(2);  //rockBeat Version 2
       }
       else
-      if (BeatReceived == 3)
+      if (BeatReceived == BEAT3_CODE)
       {
         demo(3);  //Disco
       }
       else
-      if (BeatReceived == 4)
+      if (BeatReceived == BEAT4_CODE)
       {
         demo(4);  //We Will We Will Rock You
       }
@@ -144,6 +144,11 @@ void loop() {
       }
       else
       if (BeatReceived == BEAT3_CODE)
+      {
+        
+      }
+      else
+      if (BeatReceived == BEAT4_CODE)
       {
         
       }

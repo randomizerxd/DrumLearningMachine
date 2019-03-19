@@ -221,16 +221,6 @@ void hitConfirmation(short greenPin, short redPin) {
     analogWrite(greenPin, 0);
 }
 
-void hitConfirmation_hihatkick(short hihatGREENPin, short hihatREDPin, short kickGREENPin, short kickREDPin) {
-    analogWrite(hihatREDPin, 0);
-    analogWrite(kickREDPin, 0);
-    analogWrite(hihatGREENPin, 255);
-    analogWrite(kickGREENPin, 255);
-    delay(125);
-    analogWrite(hihatGREENPin, 0);
-    analogWrite(kickGREENPin, 0);
-}
-
 void hitConfirmation_hihatsnare(short hihatGREENPin, short hihatREDPin, short snareGREENPin, short snareREDPin) {
     analogWrite(hihatREDPin, 0);
     analogWrite(snareREDPin, 0);
@@ -241,14 +231,14 @@ void hitConfirmation_hihatsnare(short hihatGREENPin, short hihatREDPin, short sn
     analogWrite(snareGREENPin, 0);
 }
 
-short doubleAnalogRead(short pin) {
-  short reading = 0;
-  reading = analogRead(pin);
-  delayMicroseconds(6000);
-  reading = analogRead(pin);
-  delayMicroseconds(6000);
-
-  return reading;  
+void hitConfirmation_hihatkick(short hihatGREENPin, short hihatREDPin, short kickGREENPin, short kickREDPin) {
+    analogWrite(hihatREDPin, 0);
+    analogWrite(kickREDPin, 0);
+    analogWrite(hihatGREENPin, 255);
+    analogWrite(kickGREENPin, 255);
+    delay(125);
+    analogWrite(hihatGREENPin, 0);
+    analogWrite(kickGREENPin, 0);
 }
 
 //Changes 'hihatSensorReading_Average' and 'snareSensorReading_Average'

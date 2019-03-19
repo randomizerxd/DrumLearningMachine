@@ -213,7 +213,6 @@ void waitFor(bool hihat, bool snare, bool kick) {
   }
 }
 
-
 void hitConfirmation(short greenPin, short redPin) {
     analogWrite(redPin, 0);
     analogWrite(greenPin, 255);

@@ -630,8 +630,7 @@ void averageAnalogRead_hihatkick() {
 //Receive settings from App thru Bluetooth
 void BluetoothSettings()
 {
-  short count = 3;
-  while (count > 0)
+  for (int i = 3; i > 0; i--)
   {
     if(Serial.available()>0)
     {
@@ -650,11 +649,8 @@ void BluetoothSettings()
       {
         ModeReceived = Received;
       }
-
-      count = count - 1;
     }
   }
-  count = 3;
   Serial.println("BluetoothSettings Done");
 }
 

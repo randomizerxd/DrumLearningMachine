@@ -9,10 +9,10 @@ short hhsnare   = 32;            //set pin 32 to 'hihat' and 'snare' sound
 short volUp     = 34;            //set pin 34 to volume-up
 short volDown   = 35;            //set pin 35 to volume-down
 
-short tempo     = 400;           //316 = 190bpm; Inc = slower; Dec = faster (LIMIT: 350ms to 1500ms)
+short tempo     = 340;           //316 = 190bpm; Inc = slower; Dec = faster (LIMIT: 350ms to 1500ms)
 short adj_tempo = tempo-250;     //adjusted tempo to account the file delay
 short eightTempo= adj_tempo/2;   //tempo used for beats with and
-short sixTempo  = andTempo/2;    //tempo used for beats with sixteenth notes
+short sixTempo  = eightTempo/2;    //tempo used for beats with sixteenth notes
 
 void setup() {
   //setup code here, to run once:
@@ -32,9 +32,9 @@ void setup() {
 
 void loop() {
 
-  rockYou();    //we will - we will - rock you TA - BUM BUM TA
+  //rockYou();    //we will - we will - rock you TA - BUM BUM TA
   //rockBeat();
-  //rockV2Beat();
+  rockV2Beat();
   //discoBeat();
   //bossaNova(); --boom ta boom boom ta
 
@@ -64,13 +64,13 @@ void playSound(short part){
 }
 /***********************************EXTRA************************************/
   //Extra function for expanding amount of beats
-play8Sound(short part){
+void play8Sound(short part){
   digitalWrite(part, LOW);  //starts playback of file
   delay(250);               //plays file for the appropriate amount of time
   RESET();                  //stops playback of file
   delay(eightTempo);        //moves on to next file for the appropriate tempo  
 }
-play16Sound(short part){
+void play16Sound(short part){
   digitalWrite(part, LOW);  //starts playback of file
   delay(250);               //plays file for the appropriate amount of time
   RESET();                  //stops playback of file

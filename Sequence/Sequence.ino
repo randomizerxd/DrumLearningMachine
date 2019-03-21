@@ -52,7 +52,7 @@ float kickSensorReading_Average = 0;
 const short threshold = 100; 
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
 
   setupLEDpins();
   setupVibrationSensorPins();
@@ -61,7 +61,7 @@ void setup() {
 
 void loop() {
 
-  hihat_kick();
+  hihat_snare();
   delay(3000);
   
   //hihat_kick();
@@ -251,14 +251,14 @@ void averageAnalogRead_hihatsnare() {
   snareSensorReading_Average = 0;
   short hihatSensorReading_tmp = 0; //local variable. Don't change 'hihatSensorReading'
   short snareSensorReading_tmp = 0; //local variable. Don't change 'snareSensorReading'
-
+/*
   Serial.println("Analog reading exceeded threshold");
   Serial.println("hihatSensorReading | snareSensorReading");
   Serial.print("Readings when triggered: ");
   Serial.print(hihatSensorReading);
   Serial.print(" | ");
   Serial.println(snareSensorReading);
-
+*/
   t0 = micros();
   for (short i = 0; i < n; i++) {
      hihatSensorReading_tmp = analogRead(hihatSensorPin);
@@ -281,7 +281,7 @@ void averageAnalogRead_hihatsnare() {
     Serial.println(snareSensorReading);
     */
   }
-  
+  /*
   Serial.print(n_hihat);
   Serial.print(" / ");
   Serial.print(n);
@@ -292,19 +292,19 @@ void averageAnalogRead_hihatsnare() {
   Serial.print(" / ");
   Serial.print(n);
   Serial.print(" readings over ");
-  Serial.println(threshold);
+  Serial.println(threshold);*/
   hihatSensorReading_Average /= n_hihat;
   snareSensorReading_Average /= n_snare;
   
   //time it takes to finish the for loop
-  t = micros() - t0;
+  t = micros() - t0;/*
   Serial.print("hihat_Average: ");
   Serial.println(hihatSensorReading_Average);
   Serial.print("snare_Average: ");
   Serial.println(snareSensorReading_Average);
   Serial.print("t: ");
   Serial.print(t);
-  Serial.println(" microseconds");
+  Serial.println(" microseconds");*/
 }
 
 //Changes 'hihatSensorReading_Average' and 'kickSensorReading_Average'
@@ -318,14 +318,14 @@ void averageAnalogRead_hihatkick() {
   kickSensorReading_Average = 0;
   short hihatSensorReading_tmp = 0; //local variable. Don't change 'hihatSensorReading'
   short kickSensorReading_tmp = 0; //local variable. Don't change 'kickSensorReading'
-
+/*
   Serial.println("Analog reading exceeded threshold");
   Serial.println("hihatSensorReading | kickSensorReading");
   Serial.print("Readings when triggered: ");
   Serial.print(hihatSensorReading);
   Serial.print(" | ");
   Serial.println(kickSensorReading);
-
+*/
   t0 = micros();
   for (short i = 0; i < n; i++) {
      hihatSensorReading_tmp = analogRead(hihatSensorPin);
@@ -348,7 +348,7 @@ void averageAnalogRead_hihatkick() {
     Serial.println(kickSensorReading);
     */
   }
-  
+  /*
   Serial.print(n_hihat);
   Serial.print(" / ");
   Serial.print(n);
@@ -359,19 +359,19 @@ void averageAnalogRead_hihatkick() {
   Serial.print(" / ");
   Serial.print(n);
   Serial.print(" readings over ");
-  Serial.println(threshold);
+  Serial.println(threshold);*/
   hihatSensorReading_Average /= n_hihat;
   kickSensorReading_Average /= n_kick;
   
   //time it takes to finish the for loop
-  t = micros() - t0;
+  t = micros() - t0;/*
   Serial.print("hihat_Average: ");
   Serial.println(hihatSensorReading_Average);
   Serial.print("kick_Average: ");
   Serial.println(kickSensorReading_Average);
   Serial.print("t: ");
   Serial.print(t);
-  Serial.println(" microseconds");
+  Serial.println(" microseconds");*/
 }
 
   

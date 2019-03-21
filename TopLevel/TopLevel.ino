@@ -218,7 +218,7 @@ void initializeLEDstrips() {
   analogWrite(tomBLUEPin, 0);
 }
 /*********************************************************************/
-/**************************Demo Functions*****************************/
+/*******************Demo Start-Up Functions***************************/
 /*********************************************************************/
 void demo(short BEAT){
   DEMOsetup();
@@ -231,8 +231,8 @@ short DEMOsnare     = 30;            //set pin 30 to 'snare' sound
 short DEMOhhkick    = 31;            //set pin 31 to 'hihat' and 'kick' sound
 short DEMOhhsnare   = 32;            //set pin 32 to 'hihat' and 'snare' sound
 
-short volUp     = 34;            //set pin 34 to volume-up
-short volDown   = 35;            //set pin 35 to volume-down
+short volUp         = 34;            //set pin 34 to volume-up
+short volDown       = 35;            //set pin 35 to volume-down
 
 //Set tempo equal to the tempo received by the app
 short tempo         = TempoReceived; //Inc = slower & Dec = faster (LIMIT: 350ms to 1500ms)
@@ -274,11 +274,6 @@ void DEMOloop(short BEAT) {
   }
 }
 
-
-/*****************************************************/
-/*                DEMO_FUNCTIONS                     */
-/*****************************************************/
-
   //Initializing pins to 5V so they do NOT play sound
 void RESET(){
   digitalWrite(DEMOkick,    HIGH);
@@ -311,7 +306,7 @@ void play16Sound(short part){
   delay(sixTempo);         //moves on to next file for the appropriate tempo  
 }
 /***************************************************************************/
-
+//Needs to be tested/finished
 //Volume Control
 void VolumeCtr(short button){
   //Values that come through the app

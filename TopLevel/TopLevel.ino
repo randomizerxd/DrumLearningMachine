@@ -73,6 +73,11 @@ short kickSensorReading  = LOW;
 short crashSensorReading = LOW;
 short tomSensorReading   = LOW;
 
+/***Variables used in the 'averageAnalogRead()' function***/
+float hihatSensorReading_Average = 0;
+float snareSensorReading_Average = 0;
+float kickSensorReading_Average  = 0;
+
 const short threshold = 200;
 
 short BACK_CODE          = 201;

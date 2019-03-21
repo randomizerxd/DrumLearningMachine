@@ -2,12 +2,12 @@
 // Board: chipKIT Max32
 
 /***Set variables for BluetoothSettings***/  
-short Received=0;
-short ModeReceived = 0;
+short Received      = 0;
+short ModeReceived  = 0;
 short TempoReceived = 0; //tempo in bpm
-short BeatReceived = 0;
-short Back = 0;           //for storing the back code
-short VolumeControl = 0;  //for storing the volume up or down code
+short BeatReceived  = 0;
+short Back          = 0; //for storing the back code
+short VolumeControl = 0; //for storing the volume up or down code
 /* 
  *  Bluetooth protocol:
  *  App sends data to Arduino via bluetooth
@@ -30,7 +30,6 @@ short VolumeControl = 0;  //for storing the volume up or down code
  *    iii. Send a 212 when the Volume Up button has been pushed
  *  
  */
-short count = 3;
 
 //short tempo = 0; //tempo in ms ... 'tempo = 60000 / TempoReceived;'
 //short adj_tempo = 0; //tempo adjusted for 250ms delay ... 'adj_tempo = tempo - 250;'
@@ -163,7 +162,7 @@ void loop() {
 }
 
 /*********************************************************************/
-/**************************Setup Functions****************************/
+/************************* Setup Functions ***************************/
 /*********************************************************************/
 void setupLEDpins() {
   pinMode(hihatGREENPin, OUTPUT);
@@ -218,7 +217,7 @@ void initializeLEDstrips() {
   analogWrite(tomBLUEPin, 0);
 }
 /*********************************************************************/
-/*******************Demo Start-Up Functions***************************/
+/****************** Demo Start-Up Functions **************************/
 /*********************************************************************/
 void demo(short BEAT){
   DEMOsetup();
@@ -306,7 +305,7 @@ void play16Sound(short part){
   delay(sixTempo);         //moves on to next file for the appropriate tempo  
 }
 /***************************************************************************/
-//Needs to be tested/finished
+
 //Volume Control
 void VolumeCtr(short button){
   //Values that come through the app
@@ -436,7 +435,7 @@ void rockYou(){
 */
 
 /*********************************************************************/
-/************************Sequence Functions***************************/
+/*********************** Sequence Functions **************************/
 /*********************************************************************/
 void hihat() {
   analogWrite(hihatREDPin, 255);
@@ -617,15 +616,16 @@ void averageAnalogRead_hihatkick() {
 }
 
 /*********************************************************************/
-/***********************PlayAlong Functions***************************/
+/********************** PlayAlong Functions **************************/
 /*********************************************************************/
 
 /*********************************************************************/
-/***********************Bluetooth Functions***************************/
+/********************** Bluetooth Functions **************************/
 /*********************************************************************/
 //Receive settings from App thru Bluetooth
 void BluetoothSettings()
 {
+  short count = 3;
   while (count > 0)
   {
     if(Serial.available()>0)

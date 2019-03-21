@@ -6,11 +6,11 @@
 // has been struck. 
 
 /***Piezo Vibration Sensor Pin Numbers***/ 
-const short hihatSensorPin = A5;
-const short snareSensorPin = A4;
+const short hihatSensorPin = A1;
+const short snareSensorPin = A2;
 const short kickSensorPin  = A3;
-const short crashSensorPin = A2;
-const short tomSensorPin   = A1;
+const short crashSensorPin = A4;
+const short tomSensorPin   = A5;
 
 /***LED Strip Pin Numbers***/
 //Use PWM and analog pins//
@@ -143,7 +143,6 @@ void snare() {
 void kick() {
   analogWrite(kickREDPin, 255);
   while( analogRead(kickSensorPin) < threshold) { } //Do nothing until kick sensor passes threshold
-  analogWrite(kickREDPin, 0);
   hitConfirmation(kickGREENPin, kickREDPin);
   delay(1000);
 }
@@ -373,9 +372,3 @@ void averageAnalogRead_hihatkick() {
   Serial.print(t);
   Serial.println(" microseconds");*/
 }
-
-  
- 
-
-  
-  

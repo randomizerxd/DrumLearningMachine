@@ -80,15 +80,16 @@ float kickSensorReading_Average  = 0;
 
 const short threshold = 200;
 
-short BACK_CODE          = 201;
-short VOLUMEDOWN_CODE    = 211;
-short VOLUMEUP_CODE      = 212;
-short DEMOMODE_CODE      = 101;
-short SEQUENCEMODE_CODE  = 102;
-short PLAYALONGMODE_CODE = 103;
-short BEAT1_CODE         =   1;
-short BEAT2_CODE         =   2;
-short BEAT3_CODE         =   3;
+const short BACK_CODE          = 201;
+const short VOLUMEDOWN_CODE    = 211;
+const short VOLUMEUP_CODE      = 212;
+const short DEMOMODE_CODE      = 101;
+const short SEQUENCEMODE_CODE  = 102;
+const short PLAYALONGMODE_CODE = 103;
+const short BEAT1_CODE         =   1;
+const short BEAT2_CODE         =   2;
+const short BEAT3_CODE         =   3;
+const short BEAT4_CODE         =   3;
 
 
 void setup() {
@@ -548,8 +549,12 @@ void hitConfirmation_hihatkick(short hihatGREENPin, short hihatREDPin, short kic
     analogWrite(kickGREENPin, 0);
 }
 
-//Changes 'hihatSensorReading_Average' and 'snareSensorReading_Average'
-void averageAnalogRead_hihatsnare() {
+/*
+ * Changes:
+ *    hihatSensorReading_Average
+ *    snareSensorReading_Average
+ */
+ void averageAnalogRead_hihatsnare() {
   short n = 500;  //amount of times to read from both hihat and snare
   long t0;        //initial value of t
   long t;         //stores the amount of time it takes to finish the for loop
@@ -584,7 +589,11 @@ void averageAnalogRead_hihatsnare() {
   t = micros() - t0;
 }
 
-//Changes 'hihatSensorReading_Average' and 'kickSensorReading_Average'
+/*
+ * Changes:
+ *    hihatSensorReading_Average
+ *    kickSensorReading_Average
+ */
 void averageAnalogRead_hihatkick() {
   short n = 500;  //amount of times to read from both hihat and snare
   long t0;        //initial value of t
@@ -628,6 +637,12 @@ void averageAnalogRead_hihatkick() {
 /********************** Bluetooth Functions **************************/
 /*********************************************************************/
 //Receive settings from App thru Bluetooth
+/*
+ * Changes:
+ *    BeatReceived
+ *    TempoReceived
+ *    ModeReceived
+ */
 void BluetoothSettings()
 {
   for (int i = 3; i > 0; i--)

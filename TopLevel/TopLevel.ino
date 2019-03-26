@@ -713,8 +713,11 @@ void averageAnalogRead_hihatkick() {
  */
 void BluetoothSettings()
 {
-  for (int i = 3; i > 0; i--)
+  Serial.println("Entered BluetoothSettings");
+  short count = 3;
+  while ( count > 0 )
   {
+    Serial.println("Entered while loop");
     if(Serial.available()>0)
     {
       Back = 0;
@@ -723,15 +726,22 @@ void BluetoothSettings()
       if (count == 3)
       {
         BeatReceived = Received;
+        Serial.print("BeatReceived: ");
+        Serial.println(BeatReceived);
       }
       if (count == 2)
       {
         TempoReceived = Received;
+        Serial.print("TempoReceived: ");
+        Serial.println(TempoReceived);
       }
       if (count == 1)
       {
         ModeReceived = Received;
+        Serial.print("ModeReceived: ");
+        Serial.println(ModeReceived);
       }
+      count--;
     }
   }
   Serial.println("BluetoothSettings Done");

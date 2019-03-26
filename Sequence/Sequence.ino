@@ -49,10 +49,10 @@ float hihatSensorReading_Average = 0;
 float snareSensorReading_Average = 0;
 float kickSensorReading_Average  = 0;
 
-const short threshold = 100; 
+const short threshold = 125; 
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
 
   setupLEDpins();
   setupVibrationSensorPins();
@@ -60,9 +60,11 @@ void setup() {
 }
 
 void loop() {
-
+  
+  hihat_kick();
+  hihat();
   hihat_snare();
-  delay(3000);
+  hihat();
   
   //hihat_kick();
   //hihat();
@@ -129,21 +131,22 @@ void initializeLEDstrips() {
 void hihat() {
   analogWrite(hihatREDPin, 255);
   while( analogRead(hihatSensorPin) < threshold) { } //Do nothing until hihat sensor passes threshold
-  hitConfirmation(hihatGREENPin, hihatREDPin);
+  hitConfirmation_hihat();
   delay(1000);
 }
 
 void snare() {
-  analogWrite(snareREDPin, 255);
+  analogWrite(snareBLUEPin, 255);
   while( analogRead(snareSensorPin) < threshold) { } //Do nothing until snare sensor passes threshold
-  hitConfirmation(snareGREENPin, snareREDPin);
+  hitConfirmation_snare();
   delay(1000);
 }
 
 void kick() {
   analogWrite(kickREDPin, 255);
+  analogWrite(kickGREENPin, 128);
   while( analogRead(kickSensorPin) < threshold) { } //Do nothing until kick sensor passes threshold
-  hitConfirmation(kickGREENPin, kickREDPin);
+  hitConfirmation_kick();
   delay(1000);
 }
 
@@ -151,24 +154,24 @@ void kick() {
 void hihat_kick() {
   analogWrite(hihatREDPin, 255);
   analogWrite(kickREDPin, 255);
-  Serial.println("ready");
+  analogWrite(kickGREENPin, 128);
   while( ((hihatSensorReading = analogRead(hihatSensorPin)) < threshold) && ((kickSensorReading = analogRead(kickSensorPin)) < threshold) ) { 
   }                                         //While hihat && kick below threshold, do nothing
 
   averageAnalogRead_hihatkick();
   
   if(((hihatSensorReading_Average) > threshold) && ((kickSensorReading_Average) > threshold)) {
-    hitConfirmation_hihatkick(hihatGREENPin, hihatREDPin, kickGREENPin, kickREDPin);
+    hitConfirmation_hihatkick();
   } else
   if( hihatSensorReading >= threshold ) {    //If the hihat sensor was triggered
-    hitConfirmation(hihatGREENPin, hihatREDPin);  
+    hitConfirmation_hihat();  
     while( analogRead(kickSensorPin) < threshold) { } //Do nothing until snare is hit
-    hitConfirmation(kickGREENPin, kickREDPin);
+    hitConfirmation_kick();
   } else
   if ( kickSensorReading >= threshold ) { //If the kick sensor was triggered
-    hitConfirmation(kickGREENPin, kickREDPin);
+    hitConfirmation_kick();
     while( analogRead(hihatSensorPin) < threshold) { } //Do nothing until hihat sensor is pushed
-    hitConfirmation(hihatGREENPin, hihatREDPin);
+    hitConfirmation_hihat();
   }
   delay(1000); 
 }
@@ -176,25 +179,24 @@ void hihat_kick() {
 //This function turns on the lights on the hihat and snare and waits for the user to hit both of them
 void hihat_snare() {
   analogWrite(hihatREDPin, 255);
-  analogWrite(snareREDPin, 255);
-  Serial.println("ready");
+  analogWrite(snareBLUEPin, 255);
   while( ((hihatSensorReading = analogRead(hihatSensorPin)) < threshold) && ((snareSensorReading = analogRead(snareSensorPin)) < threshold) ) {  
   }
   
   averageAnalogRead_hihatsnare();
   
   if( ( (hihatSensorReading_Average) > threshold) && ( (snareSensorReading_Average) > threshold) ) {
-    hitConfirmation_hihatsnare(hihatGREENPin, hihatREDPin, snareGREENPin, snareREDPin);
+    hitConfirmation_hihatsnare();
   } 
   else if( hihatSensorReading >= threshold ) {    //If the hihat sensor was triggered
-    hitConfirmation(hihatGREENPin, hihatREDPin); 
+    hitConfirmation_hihat(); 
     while( (snareSensorReading = analogRead(snareSensorPin)) < threshold) { } //Do nothing until snare is hit
-    hitConfirmation(snareGREENPin, snareREDPin);
+    hitConfirmation_snare();
   }
   else if ( snareSensorReading >= threshold ) { //If the snare sensor was triggered
-    hitConfirmation(snareGREENPin, snareREDPin); 
+    hitConfirmation_snare(); 
     while( analogRead(hihatSensorPin) < threshold) { } //Do nothing until hihat sensor is pushed
-    hitConfirmation(hihatGREENPin, hihatREDPin);
+    hitConfirmation_hihat();
   }
   delay(1000); 
 }
@@ -212,16 +214,33 @@ void waitFor(bool hihat, bool snare, bool kick) {
   }
 }
 
-void hitConfirmation(short greenPin, short redPin) {
-    analogWrite(redPin, 0);
-    analogWrite(greenPin, 255);
+void hitConfirmation_hihat() {
+    analogWrite(hihatREDPin, 0);
+    analogWrite(hihatGREENPin, 255);
     delay(125);
-    analogWrite(greenPin, 0);
+    analogWrite(hihatGREENPin, 0);
 }
 
-void hitConfirmation_hihatsnare(short hihatGREENPin, short hihatREDPin, short snareGREENPin, short snareREDPin) {
+void hitConfirmation_snare() {
+    analogWrite(snareBLUEPin, 0);
+    analogWrite(snareGREENPin, 255);
+    delay(125);
+    analogWrite(snareGREENPin, 0);
+}
+
+void hitConfirmation_kick() {
+    analogWrite(kickREDPin, 0);
+    analogWrite(kickGREENPin, 0);
+    
+    analogWrite(kickGREENPin, 255);
+    delay(125);
+    analogWrite(kickGREENPin, 0);
+}
+
+void hitConfirmation_hihatsnare() {
     analogWrite(hihatREDPin, 0);
-    analogWrite(snareREDPin, 0);
+    analogWrite(snareBLUEPin, 0);
+    
     analogWrite(hihatGREENPin, 255);
     analogWrite(snareGREENPin, 255);
     delay(125);
@@ -229,9 +248,11 @@ void hitConfirmation_hihatsnare(short hihatGREENPin, short hihatREDPin, short sn
     analogWrite(snareGREENPin, 0);
 }
 
-void hitConfirmation_hihatkick(short hihatGREENPin, short hihatREDPin, short kickGREENPin, short kickREDPin) {
+void hitConfirmation_hihatkick() {
     analogWrite(hihatREDPin, 0);
     analogWrite(kickREDPin, 0);
+    analogWrite(kickBLUEPin, 0);
+    
     analogWrite(hihatGREENPin, 255);
     analogWrite(kickGREENPin, 255);
     delay(125);

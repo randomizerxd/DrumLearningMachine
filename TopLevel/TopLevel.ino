@@ -138,7 +138,7 @@ void loop() {
     {
       if (BeatReceived == BEAT1_CODE)
       {
-        sequence(1);  //rockBeat
+        //sequence(1);  //rockBeat
       }
       else
       if (BeatReceived == BEAT2_CODE)
@@ -335,14 +335,29 @@ void VolumeCtr(short button){
 /*                   o-------v----                    */
 /******************************************************/   
 
-void rockBeat(){  
+void rockBeat(){  //Setting LEDs to specific colors/pins
   playSound(DEMOhhkick);
-
+  analogWrite(hihatREDPin, 255);
+  analogWrite(kickREDPin, 255);
+  analogWrite(kickGREENPin, 128);
+  delay(125);
+  analogWrite(hihatREDPin, 0);
+  analogWrite(kickREDPin, 0);
+  analogWrite(kickGREENPin, 0);
   playSound(DEMOhihat);
-
+  analogWrite(hihatREDPin, 255);
+  delay(125);
+  analogWrite(hihatREDPin, 0);
   playSound(DEMOhhsnare);
-
+  analogWrite(hihatREDPin, 255);
+  analogWrite(snareBLUEPin, 255);
+  delay(125);
+  analogWrite(hihatREDPin, 0);
+  analogWrite(snareBLUEPin, 0);
   playSound(DEMOhihat);
+  analogWrite(hihatREDPin, 255);
+  delay(125);
+  analogWrite(hihatREDPin, 0);
 }
 
 /******************************************************/
@@ -354,20 +369,54 @@ void rockBeat(){
 
 void rockV2Beat(){  
   playSound(DEMOhhkick);
-
+  analogWrite(hihatREDPin, 255);
+  analogWrite(kickREDPin, 255);
+  analogWrite(kickGREENPin, 128);
+  delay(125);
+  analogWrite(hihatREDPin, 0);
+  analogWrite(kickREDPin, 0);
+  analogWrite(kickGREENPin, 0);
   playSound(DEMOhihat);
-
+  analogWrite(hihatREDPin, 255);
+  delay(125);
+  analogWrite(hihatREDPin, 0);
   playSound(DEMOhhsnare);
-
+  analogWrite(hihatREDPin, 255);
+  analogWrite(snareBLUEPin, 255);
+  delay(125);
+  analogWrite(hihatREDPin, 0);
+  analogWrite(snareBLUEPin, 0);
   playSound(DEMOhihat);
+  analogWrite(hihatREDPin, 255);
+  delay(125);
+  analogWrite(hihatREDPin, 0);
 //Second loop
   playSound(DEMOhhkick);
-
+  analogWrite(hihatREDPin, 255);
+  analogWrite(kickREDPin, 255);
+  analogWrite(kickGREENPin, 128);
+  delay(125);
+  analogWrite(hihatREDPin, 0);
+  analogWrite(kickREDPin, 0);
+  analogWrite(kickGREENPin, 0);
   playSound(DEMOhhkick);
-
+  analogWrite(hihatREDPin, 255);
+  analogWrite(kickREDPin, 255);
+  analogWrite(kickGREENPin, 128);
+  delay(125);
+  analogWrite(hihatREDPin, 0);
+  analogWrite(kickREDPin, 0);
+  analogWrite(kickGREENPin, 0);
   playSound(DEMOhhsnare);
-
+  analogWrite(hihatREDPin, 255);
+  analogWrite(snareBLUEPin, 255);
+  delay(125);
+  analogWrite(hihatREDPin, 0);
+  analogWrite(snareBLUEPin, 0);
   playSound(DEMOhihat);
+  analogWrite(hihatREDPin, 255);
+  delay(125);
+  analogWrite(hihatREDPin, 0);
 }
 
 /******************************************************/
@@ -379,12 +428,23 @@ void rockV2Beat(){
 
 void discoBeat(){
   playSound(DEMOkick);
-
+  analogWrite(kickREDPin, 255);
+  analogWrite(kickGREENPin, 255);
+  delay(125);
+  analogWrite(kickREDPin, 0);
+  analogWrite(kickGREENPin, 0);
   playSound(DEMOhihat);
-
+  analogWrite(hihatREDPin, 255);
+  delay(125);
+  analogWrite(hihatREDPin, 0);
   playSound(DEMOsnare);
-
+  analogWrite(snareBLUEPin, 255);
+  delay(125);
+  analogWrite(snareBLUEPin, 0);
   playSound(DEMOhihat);
+  analogWrite(hihatREDPin, 255);
+  delay(125);
+  analogWrite(hihatREDPin, 0);
 }
 
 /******************************************************/
@@ -396,11 +456,21 @@ void discoBeat(){
 
 void rockYou(){  
   playSound(DEMOkick);
-
+  analogWrite(kickREDPin, 255);
+  analogWrite(kickGREENPin, 255);
+  delay(125);
+  analogWrite(kickREDPin, 0);
+  analogWrite(kickGREENPin, 0);
   playSound(DEMOkick);
-
+  analogWrite(kickREDPin, 255);
+  analogWrite(kickGREENPin, 255);
+  delay(125);
+  analogWrite(kickREDPin, 0);
+  analogWrite(kickGREENPin, 0);
   playSound(DEMOsnare);
-
+  analogWrite(snareBLUEPin, 255);
+  delay(125);
+  analogWrite(snareBLUEPin, 0);
   playSound(0);
 }
 
@@ -643,8 +713,11 @@ void averageAnalogRead_hihatkick() {
  */
 void BluetoothSettings()
 {
-  for (int i = 3; i > 0; i--)
+  Serial.println("Entered BluetoothSettings");
+  short count = 3;
+  while ( count > 0 )
   {
+    Serial.println("Entered while loop");
     if(Serial.available()>0)
     {
       Back = 0;
@@ -653,15 +726,22 @@ void BluetoothSettings()
       if (count == 3)
       {
         BeatReceived = Received;
+        Serial.print("BeatReceived: ");
+        Serial.println(BeatReceived);
       }
       if (count == 2)
       {
         TempoReceived = Received;
+        Serial.print("TempoReceived: ");
+        Serial.println(TempoReceived);
       }
       if (count == 1)
       {
         ModeReceived = Received;
+        Serial.print("ModeReceived: ");
+        Serial.println(ModeReceived);
       }
+      count--;
     }
   }
   Serial.println("BluetoothSettings Done");

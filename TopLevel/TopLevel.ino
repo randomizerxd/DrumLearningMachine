@@ -42,9 +42,8 @@ const short crashSensorPin = A4;
 const short tomSensorPin   = A5;
 
 /***LED Strip Pin Numbers***/
-//Use PWM and analog pins//
+//Use PWM and analog pins
 //From left to right on the breadboard
-
 const short hihatGREENPin = 10;
 const short hihatREDPin   = 9;
 const short hihatBLUEPin  = 6;
@@ -64,7 +63,6 @@ const short crashBLUEPin  = A12;
 const short tomGREENPin   = A13;
 const short tomREDPin     = A14;
 const short tomBLUEPin    = A15;
-
 
 /***Variables to store the value read from the sensor pin***/
 short hihatSensorReading = LOW;
@@ -140,7 +138,7 @@ void loop() {
     {
       if (BeatReceived == BEAT1_CODE)
       {
-        snare();
+        sequence(1);  //rockBeat
       }
       else
       if (BeatReceived == BEAT2_CODE)
@@ -230,14 +228,14 @@ void demo(short BEAT){
   DEMOloop(BEAT);
  }
 //INITIALIZING PINS AND VARIABLES for DEMO
-short DEMOhihat     = 28;            //set pin 28 to 'hihat' sound
-short DEMOkick      = 29;            //set pin 29 to 'kick' sound
-short DEMOsnare     = 30;            //set pin 30 to 'snare' sound
-short DEMOhhkick    = 31;            //set pin 31 to 'hihat' and 'kick' sound
-short DEMOhhsnare   = 32;            //set pin 32 to 'hihat' and 'snare' sound
+short DEMOhihat     = 49;            //set pin 49 to 'hihat' sound
+short DEMOkick      = 50;            //set pin 50 to 'kick' sound
+short DEMOsnare     = 51;            //set pin 51 to 'snare' sound
+short DEMOhhkick    = 52;            //set pin 52 to 'hihat' and 'kick' sound
+short DEMOhhsnare   = 53;            //set pin 53 to 'hihat' and 'snare' sound
 
-short volUp         = 34;            //set pin 34 to volume-up
-short volDown       = 35;            //set pin 35 to volume-down
+short volUp         = 47;            //set pin 47 to volume-up
+short volDown       = 48;            //set pin 48 to volume-down
 
 //Set tempo equal to the tempo received by the app
 short tempo         = TempoReceived; //Inc = slower & Dec = faster (LIMIT: 350ms to 1500ms)

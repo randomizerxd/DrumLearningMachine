@@ -89,6 +89,26 @@ const short BEAT2_CODE         =   2;
 const short BEAT3_CODE         =   3;
 const short BEAT4_CODE         =   3;
 
+/**************************** DEMO VARIABLES *************************************/
+//INITIALIZING PINS AND VARIABLES for DEMO
+short DEMOhihat     = 49;            //set pin 49 to 'hihat' sound
+short DEMOkick      = 50;            //set pin 50 to 'kick' sound
+short DEMOsnare     = 51;            //set pin 51 to 'snare' sound
+short DEMOhhkick    = 52;            //set pin 52 to 'hihat' and 'kick' sound
+short DEMOhhsnare   = 53;            //set pin 53 to 'hihat' and 'snare' sound
+
+short volUp         = 47;            //set pin 47 to volume-up
+short volDown       = 48;            //set pin 48 to volume-down
+
+//Set tempo equal to the tempo received by the app
+short tempo         = TempoReceived; //Inc = slower & Dec = faster (LIMIT: 350ms to 1500ms)
+short adj_tempo     = tempo-250;     //adjusted tempo to account the file delay
+//EXTRA
+short eightTempo= adj_tempo/2;   //tempo used for beats with and
+short sixTempo  = eightTempo/2;    //tempo used for beats with sixteenth notes
+/*****************************************************************************/
+
+
 
 void setup() {
   Serial.begin(9600);
@@ -99,6 +119,7 @@ void setup() {
 
   ////Receive settings from App thru Bluetooth
   BluetoothSettings(); 
+  Serial.println("exiting setup");
 }
 
 void loop() {
@@ -131,7 +152,7 @@ void loop() {
       {
         demo(4);  //We Will We Will Rock You
       }
-      Bluetooth_CheckVolumeButton(); //might have to move this somewhere else to have better response time
+      //Bluetooth_CheckVolumeButton(); //might have to move this somewhere else to have better response time
     }
     else 
     if (ModeReceived == SEQUENCEMODE_CODE) //Sequence
@@ -227,26 +248,15 @@ void demo(short BEAT){
   DEMOsetup();
   DEMOloop(BEAT);
  }
-//INITIALIZING PINS AND VARIABLES for DEMO
-short DEMOhihat     = 49;            //set pin 49 to 'hihat' sound
-short DEMOkick      = 50;            //set pin 50 to 'kick' sound
-short DEMOsnare     = 51;            //set pin 51 to 'snare' sound
-short DEMOhhkick    = 52;            //set pin 52 to 'hihat' and 'kick' sound
-short DEMOhhsnare   = 53;            //set pin 53 to 'hihat' and 'snare' sound
 
-short volUp         = 47;            //set pin 47 to volume-up
-short volDown       = 48;            //set pin 48 to volume-down
-
-//Set tempo equal to the tempo received by the app
-short tempo         = TempoReceived; //Inc = slower & Dec = faster (LIMIT: 350ms to 1500ms)
-short adj_tempo     = tempo-250;     //adjusted tempo to account the file delay
-//EXTRA
-short eightTempo= adj_tempo/2;   //tempo used for beats with and
-short sixTempo  = eightTempo/2;    //tempo used for beats with sixteenth notes
 
 void DEMOsetup() {
-  //setup code here, to run once:
-  Serial.begin(115200);  //use serial port
+  
+  tempo         = 60000 / TempoReceived; //Inc = slower & Dec = faster (LIMIT: 350ms to 1500ms)
+  adj_tempo     = tempo-250;     //adjusted tempo to account the file delay
+  //EXTRA
+  eightTempo= adj_tempo/2;   //tempo used for beats with and
+  sixTempo  = eightTempo/2;    //tempo used for beats with sixteenth notes
   //Files on Audio FX SoundBoard
   //T00 = hihat
   //T01 = snare
@@ -293,6 +303,7 @@ void playSound(short part){
   delay(250);               //plays file for the appropriate amount of time
   RESET();                  //stops playback of file
   delay(adj_tempo);         //moves on to next file for the appropriate tempo
+
 }
 /***********************************EXTRA************************************/
   //Extra function for expanding amount of beats
@@ -711,13 +722,14 @@ void averageAnalogRead_hihatkick() {
  *    TempoReceived
  *    ModeReceived
  */
+ 
 void BluetoothSettings()
 {
-  Serial.println("Entered BluetoothSettings");
   short count = 3;
+  Serial.println("Entered BluetoothSettings");
+  
   while ( count > 0 )
   {
-    Serial.println("Entered while loop");
     if(Serial.available()>0)
     {
       Back = 0;
@@ -754,7 +766,6 @@ void Bluetooth_CheckBackButton()
     {
       Back = Serial.read();
       Serial.println("Back pressed");
-
     }
 }
 

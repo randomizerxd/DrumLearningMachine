@@ -87,7 +87,7 @@ const short PLAYALONGMODE_CODE = 103;
 const short BEAT1_CODE         =   1;
 const short BEAT2_CODE         =   2;
 const short BEAT3_CODE         =   3;
-const short BEAT4_CODE         =   3;
+const short BEAT4_CODE         =   4;
 
 /**************************** DEMO VARIABLES *************************************/
 //INITIALIZING PINS AND VARIABLES for DEMO
@@ -133,49 +133,13 @@ void loop() {
   {
     if (ModeReceived == DEMOMODE_CODE) //Demo
     {
-      if (BeatReceived == BEAT1_CODE)
-      {
-        demo(1);  //rockBeat
-      }
-      else
-      if (BeatReceived == BEAT2_CODE)
-      {
-        demo(2);  //rockBeat Version 2
-      }
-      else
-      if (BeatReceived == BEAT3_CODE)
-      {
-        demo(3);  //Disco
-      }
-      else
-      if (BeatReceived == BEAT4_CODE)
-      {
-        demo(4);  //We Will We Will Rock You
-      }
+      demo(BeatReceived);
       //Bluetooth_CheckVolumeButton(); //might have to move this somewhere else to have better response time
     }
     else 
     if (ModeReceived == SEQUENCEMODE_CODE) //Sequence
     {
-      if (BeatReceived == BEAT1_CODE)
-      {
-        //sequence(1);  //rockBeat
-      }
-      else
-      if (BeatReceived == BEAT2_CODE)
-      {
-        
-      }
-      else
-      if (BeatReceived == BEAT3_CODE)
-      {
-        
-      }
-      else
-      if (BeatReceived == BEAT4_CODE)
-      {
-        
-      }
+      sequence(BeatReceived);
     }
     else 
     if (ModeReceived == PLAYALONGMODE_CODE) // PlayAlong
@@ -273,16 +237,16 @@ void DEMOsetup() {
 //MAIN LOOP
 void DEMOloop(short BEAT) {
   //Choose beat depending on what the user chooses
-  if (BEAT == 1){
+  if (BEAT == BEAT1_CODE){
     rockBeat();
   } else
-  if (BEAT == 2){
+  if (BEAT == BEAT2_CODE){
     rockV2Beat();
   } else
-  if (BEAT == 3){
+  if (BEAT == BEAT3_CODE){
     discoBeat();
   } else
-  if (BEAT == 4){
+  if (BEAT == BEAT4_CODE){
     rockYou();
   }
 }

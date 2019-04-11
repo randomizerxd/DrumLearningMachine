@@ -44,18 +44,26 @@ short kickSensorReading  = LOW;
 short crashSensorReading = LOW;
 short tomSensorReading   = LOW;
 
-/***Variables used in the 'averageAnalogRead()' function***/
-float hihatSensorReading_Average = 0;
-float snareSensorReading_Average = 0;
-float kickSensorReading_Average  = 0;
-
-
 const short threshold_hihat = 100; 
 const short threshold_snare = 94; 
 const short threshold_kick = 130; 
 
+/***Variables used in the 'averageAnalogRead()' function***/
+short n = 500;  //amount of times to read from both hihat and snare
+long t0;        //initial value of t
+long t;         //stores the amount of time it takes to finish the for loop
+short n_hihat = n;    //used to average. n_hihat <= n. It will be decremented by 1 when sensor readings don't exceed the threshold
+short n_snare = n;    //used to average. n_snare <= n. It will be decremented by 1 when sensor readings don't exceed the threshold
+short n_kick = n;    //used to average. n_kick <= n. It will be decremented by 1 when sensor readings don't exceed the threshold
+float hihatSensorReading_Average = 0;
+float snareSensorReading_Average = 0;
+float kickSensorReading_Average  = 0;
+short hihatSensorReading_tmp = 0; //local variable. Don't change 'hihatSensorReading'
+short snareSensorReading_tmp = 0; //local variable. Don't change 'snareSensorReading'
+short kickSensorReading_tmp = 0; //local variable. Don't change 'kickSensorReading'
+
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
 
   setupLEDpins();
   setupVibrationSensorPins();
@@ -70,9 +78,13 @@ void loop() {
   
   
   hihat_kick();
+  delay(1000);
   hihat();
+  delay(1000);
   hihat_snare();
+  delay(1000);
   hihat();
+  delay(1000);
   }
 
 /*********************************************************************/
@@ -135,14 +147,12 @@ void hihat() {
   analogWrite(hihatREDPin, 255);
   while( analogRead(hihatSensorPin) < threshold_hihat) { } //Do nothing until hihat sensor passes threshold
   hitConfirmation_hihat();
-  delay(1000);
 }
 
 void snare() {
   analogWrite(snareBLUEPin, 255);
   while( analogRead(snareSensorPin) < threshold_snare) { } //Do nothing until snare sensor passes threshold
   hitConfirmation_snare();
-  delay(1000);
 }
 
 void kick() {
@@ -150,7 +160,6 @@ void kick() {
   analogWrite(kickGREENPin, 128);
   while( analogRead(kickSensorPin) < threshold_kick) { } //Do nothing until kick sensor passes threshold
   hitConfirmation_kick();
-  delay(1000);
 }
 
 //This function turns on the lights on the hihat and kick and waits for the user to hit both of them
@@ -176,7 +185,6 @@ void hihat_kick() {
     while( analogRead(hihatSensorPin) < threshold_hihat) { } //Do nothing until hihat sensor is pushed
     hitConfirmation_hihat();
   }
-  delay(1000); 
 }
 
 //This function turns on the lights on the hihat and snare and waits for the user to hit both of them
@@ -200,8 +208,7 @@ void hihat_snare() {
     hitConfirmation_snare(); 
     while( analogRead(hihatSensorPin) < threshold_hihat) { } //Do nothing until hihat sensor is pushed
     hitConfirmation_hihat();
-  }
-  delay(1000); 
+  } 
 }
 
 // Function to "take place" of the while loops in the functions above
@@ -265,15 +272,13 @@ void hitConfirmation_hihatkick() {
 
 //Changes 'hihatSensorReading_Average' and 'snareSensorReading_Average'
 void averageAnalogRead_hihatsnare() {
-  short n = 500;  //amount of times to read from both hihat and snare
-  long t0;        //initial value of t
-  long t;         //stores the amount of time it takes to finish the for loop
-  short n_hihat = n;    //used to average. n_hihat <= n. It will be decremented by 1 when sensor readings don't exceed the threshold
-  short n_snare = n;    //used to average. n_snare <= n. It will be decremented by 1 when sensor readings don't exceed the threshold
+  n = 500;  //amount of times to read from both hihat and snare
+  n_hihat = n;    //used to average. n_hihat <= n. It will be decremented by 1 when sensor readings don't exceed the threshold
+  n_snare = n;    //used to average. n_snare <= n. It will be decremented by 1 when sensor readings don't exceed the threshold
   hihatSensorReading_Average = 0;
   snareSensorReading_Average = 0;
-  short hihatSensorReading_tmp = 0; //local variable. Don't change 'hihatSensorReading'
-  short snareSensorReading_tmp = 0; //local variable. Don't change 'snareSensorReading'
+  hihatSensorReading_tmp = 0; //local variable. Don't change 'hihatSensorReading'
+  snareSensorReading_tmp = 0; //local variable. Don't change 'snareSensorReading'
 /*
   Serial.println("Analog reading exceeded threshold");
   Serial.println("hihatSensorReading | snareSensorReading");
@@ -332,15 +337,13 @@ void averageAnalogRead_hihatsnare() {
 
 //Changes 'hihatSensorReading_Average' and 'kickSensorReading_Average'
 void averageAnalogRead_hihatkick() {
-  short n = 500;  //amount of times to read from both hihat and snare
-  long t0;        //initial value of t
-  long t;         //stores the amount of time it takes to finish the for loop
-  short n_hihat = n;    //used to average. n_hihat <= n. It will be decremented by 1 when sensor readings don't exceed the threshold
-  short n_kick = n;    //used to average. n_kick <= n. It will be decremented by 1 when sensor readings don't exceed the threshold
+  n = 500;  //amount of times to read from both hihat and snare
+  n_hihat = n;    //used to average. n_hihat <= n. It will be decremented by 1 when sensor readings don't exceed the threshold
+  n_kick = n;    //used to average. n_kick <= n. It will be decremented by 1 when sensor readings don't exceed the threshold
   hihatSensorReading_Average = 0;
   kickSensorReading_Average = 0;
-  short hihatSensorReading_tmp = 0; //local variable. Don't change 'hihatSensorReading'
-  short kickSensorReading_tmp = 0; //local variable. Don't change 'kickSensorReading'
+  hihatSensorReading_tmp = 0; //local variable. Don't change 'hihatSensorReading'
+  kickSensorReading_tmp = 0; //local variable. Don't change 'kickSensorReading'
 /*
   Serial.println("Analog reading exceeded threshold");
   Serial.println("hihatSensorReading | kickSensorReading");

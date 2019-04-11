@@ -49,7 +49,10 @@ float hihatSensorReading_Average = 0;
 float snareSensorReading_Average = 0;
 float kickSensorReading_Average  = 0;
 
-const short threshold = 125; 
+
+const short threshold_hihat = 100; 
+const short threshold_snare = 94; 
+const short threshold_kick = 130; 
 
 void setup() {
   Serial.begin(115200);
@@ -60,16 +63,16 @@ void setup() {
 }
 
 void loop() {
+
+  //hihat();
+  //snare();
+  //kick();
+  
   
   hihat_kick();
   hihat();
   hihat_snare();
   hihat();
-  
-  //hihat_kick();
-  //hihat();
-  //hihat_snare();
-  //hihat();
   }
 
 /*********************************************************************/
@@ -130,14 +133,14 @@ void initializeLEDstrips() {
 
 void hihat() {
   analogWrite(hihatREDPin, 255);
-  while( analogRead(hihatSensorPin) < threshold) { } //Do nothing until hihat sensor passes threshold
+  while( analogRead(hihatSensorPin) < threshold_hihat) { } //Do nothing until hihat sensor passes threshold
   hitConfirmation_hihat();
   delay(1000);
 }
 
 void snare() {
   analogWrite(snareBLUEPin, 255);
-  while( analogRead(snareSensorPin) < threshold) { } //Do nothing until snare sensor passes threshold
+  while( analogRead(snareSensorPin) < threshold_snare) { } //Do nothing until snare sensor passes threshold
   hitConfirmation_snare();
   delay(1000);
 }
@@ -145,7 +148,7 @@ void snare() {
 void kick() {
   analogWrite(kickREDPin, 255);
   analogWrite(kickGREENPin, 128);
-  while( analogRead(kickSensorPin) < threshold) { } //Do nothing until kick sensor passes threshold
+  while( analogRead(kickSensorPin) < threshold_kick) { } //Do nothing until kick sensor passes threshold
   hitConfirmation_kick();
   delay(1000);
 }
@@ -155,22 +158,22 @@ void hihat_kick() {
   analogWrite(hihatREDPin, 255);
   analogWrite(kickREDPin, 255);
   analogWrite(kickGREENPin, 128);
-  while( ((hihatSensorReading = analogRead(hihatSensorPin)) < threshold) && ((kickSensorReading = analogRead(kickSensorPin)) < threshold) ) { 
+  while( ((hihatSensorReading = analogRead(hihatSensorPin)) < threshold_hihat) && ((kickSensorReading = analogRead(kickSensorPin)) < threshold_kick) ) { 
   }                                         //While hihat && kick below threshold, do nothing
 
   averageAnalogRead_hihatkick();
   
-  if(((hihatSensorReading_Average) > threshold) && ((kickSensorReading_Average) > threshold)) {
+  if(((hihatSensorReading_Average) > threshold_hihat) && ((kickSensorReading_Average) > threshold_kick)) {
     hitConfirmation_hihatkick();
   } else
-  if( hihatSensorReading >= threshold ) {    //If the hihat sensor was triggered
+  if( hihatSensorReading >= threshold_hihat ) {    //If the hihat sensor was triggered
     hitConfirmation_hihat();  
-    while( analogRead(kickSensorPin) < threshold) { } //Do nothing until snare is hit
+    while( analogRead(kickSensorPin) < threshold_kick) { } //Do nothing until snare is hit
     hitConfirmation_kick();
   } else
-  if ( kickSensorReading >= threshold ) { //If the kick sensor was triggered
+  if ( kickSensorReading >= threshold_kick ) { //If the kick sensor was triggered
     hitConfirmation_kick();
-    while( analogRead(hihatSensorPin) < threshold) { } //Do nothing until hihat sensor is pushed
+    while( analogRead(hihatSensorPin) < threshold_hihat) { } //Do nothing until hihat sensor is pushed
     hitConfirmation_hihat();
   }
   delay(1000); 
@@ -180,22 +183,22 @@ void hihat_kick() {
 void hihat_snare() {
   analogWrite(hihatREDPin, 255);
   analogWrite(snareBLUEPin, 255);
-  while( ((hihatSensorReading = analogRead(hihatSensorPin)) < threshold) && ((snareSensorReading = analogRead(snareSensorPin)) < threshold) ) {  
+  while( ((hihatSensorReading = analogRead(hihatSensorPin)) < threshold_hihat) && ((snareSensorReading = analogRead(snareSensorPin)) < threshold_snare) ) {  
   }
   
   averageAnalogRead_hihatsnare();
   
-  if( ( (hihatSensorReading_Average) > threshold) && ( (snareSensorReading_Average) > threshold) ) {
+  if( ( (hihatSensorReading_Average) > threshold_hihat) && ( (snareSensorReading_Average) > threshold_snare) ) {
     hitConfirmation_hihatsnare();
   } 
-  else if( hihatSensorReading >= threshold ) {    //If the hihat sensor was triggered
+  else if( hihatSensorReading >= threshold_hihat ) {    //If the hihat sensor was triggered
     hitConfirmation_hihat(); 
-    while( (snareSensorReading = analogRead(snareSensorPin)) < threshold) { } //Do nothing until snare is hit
+    while( (snareSensorReading = analogRead(snareSensorPin)) < threshold_snare) { } //Do nothing until snare is hit
     hitConfirmation_snare();
   }
-  else if ( snareSensorReading >= threshold ) { //If the snare sensor was triggered
+  else if ( snareSensorReading >= threshold_snare ) { //If the snare sensor was triggered
     hitConfirmation_snare(); 
-    while( analogRead(hihatSensorPin) < threshold) { } //Do nothing until hihat sensor is pushed
+    while( analogRead(hihatSensorPin) < threshold_hihat) { } //Do nothing until hihat sensor is pushed
     hitConfirmation_hihat();
   }
   delay(1000); 
@@ -283,13 +286,13 @@ void averageAnalogRead_hihatsnare() {
   for (short i = 0; i < n; i++) {
      hihatSensorReading_tmp = analogRead(hihatSensorPin);
      snareSensorReading_tmp = analogRead(snareSensorPin);
-     if ( hihatSensorReading_tmp > threshold ) {
+     if ( hihatSensorReading_tmp > threshold_hihat ) {
       hihatSensorReading_Average += hihatSensorReading_tmp;
      }
      else {
       n_hihat--;
      }
-     if ( snareSensorReading_tmp > threshold ) {
+     if ( snareSensorReading_tmp > threshold_snare ) {
       snareSensorReading_Average += snareSensorReading_tmp;
      }
      else {
@@ -350,13 +353,13 @@ void averageAnalogRead_hihatkick() {
   for (short i = 0; i < n; i++) {
      hihatSensorReading_tmp = analogRead(hihatSensorPin);
      kickSensorReading_tmp = analogRead(kickSensorPin);
-     if ( hihatSensorReading_tmp > threshold ) {
+     if ( hihatSensorReading_tmp > threshold_hihat ) {
       hihatSensorReading_Average += hihatSensorReading_tmp;
      }
      else {
       n_hihat--;
      }
-     if ( kickSensorReading_tmp > threshold ) {
+     if ( kickSensorReading_tmp > threshold_kick ) {
       kickSensorReading_Average += kickSensorReading_tmp;
      }
      else {

@@ -101,11 +101,11 @@ short volUp         = 47;            //set pin 47 to volume-up
 short volDown       = 48;            //set pin 48 to volume-down
 
 //Set tempo equal to the tempo received by the app
-short tempo         = TempoReceived; //Inc = slower & Dec = faster (LIMIT: 350ms to 1500ms)
-short adj_tempo     = tempo-250;     //adjusted tempo to account the file delay
+short tempo         = 0; //Inc = slower & Dec = faster (LIMIT: 350ms to 1500ms)
+short adj_tempo     = 0;     //adjusted tempo to account the file delay
 //EXTRA
-short eightTempo= adj_tempo/2;   //tempo used for beats with and
-short sixTempo  = eightTempo/2;    //tempo used for beats with sixteenth notes
+short eightTempo= 0;   //tempo used for beats with and
+short sixTempo  = 0;    //tempo used for beats with sixteenth notes
 /*****************************************************************************/
 
 
@@ -139,7 +139,7 @@ void loop() {
     else 
     if (ModeReceived == SEQUENCEMODE_CODE) //Sequence
     {
-      sequence(BeatReceived);
+      //sequence(BeatReceived);
     }
     else 
     if (ModeReceived == PLAYALONGMODE_CODE) // PlayAlong
@@ -258,6 +258,11 @@ void RESET(){
   digitalWrite(DEMOhihat,   HIGH);
   digitalWrite(DEMOhhkick,  HIGH);
   digitalWrite(DEMOhhsnare, HIGH);
+  analogWrite(hihatREDPin, 0);
+  analogWrite(kickREDPin, 0);
+  analogWrite(kickGREENPin, 0);
+  analogWrite(snareBLUEPin, 0);
+  
   //When values are set to 0, the sound will be played
 }
 
@@ -311,28 +316,20 @@ void VolumeCtr(short button){
 /******************************************************/   
 
 void rockBeat(){  //Setting LEDs to specific colors/pins
-  playSound(DEMOhhkick);
   analogWrite(hihatREDPin, 255);
   analogWrite(kickREDPin, 255);
   analogWrite(kickGREENPin, 128);
-  delay(125);
-  analogWrite(hihatREDPin, 0);
-  analogWrite(kickREDPin, 0);
-  analogWrite(kickGREENPin, 0);
-  playSound(DEMOhihat);
+  playSound(DEMOhhkick);
+
   analogWrite(hihatREDPin, 255);
-  delay(125);
-  analogWrite(hihatREDPin, 0);
+  playSound(DEMOhihat);
+
+  analogWrite(hihatREDPin, 255);
+  analogWrite(snareBLUEPin, 255);  
   playSound(DEMOhhsnare);
-  analogWrite(hihatREDPin, 255);
-  analogWrite(snareBLUEPin, 255);
-  delay(125);
-  analogWrite(hihatREDPin, 0);
-  analogWrite(snareBLUEPin, 0);
+
+  analogWrite(hihatREDPin, 255);  
   playSound(DEMOhihat);
-  analogWrite(hihatREDPin, 255);
-  delay(125);
-  analogWrite(hihatREDPin, 0);
 }
 
 /******************************************************/
@@ -343,55 +340,37 @@ void rockBeat(){  //Setting LEDs to specific colors/pins
 /******************************************************/
 
 void rockV2Beat(){  
-  playSound(DEMOhhkick);
   analogWrite(hihatREDPin, 255);
   analogWrite(kickREDPin, 255);
-  analogWrite(kickGREENPin, 128);
-  delay(125);
-  analogWrite(hihatREDPin, 0);
-  analogWrite(kickREDPin, 0);
-  analogWrite(kickGREENPin, 0);
-  playSound(DEMOhihat);
+  analogWrite(kickGREENPin, 128);  
+  playSound(DEMOhhkick);
+
   analogWrite(hihatREDPin, 255);
-  delay(125);
-  analogWrite(hihatREDPin, 0);
-  playSound(DEMOhhsnare);
+  playSound(DEMOhihat);
+
   analogWrite(hihatREDPin, 255);
   analogWrite(snareBLUEPin, 255);
-  delay(125);
-  analogWrite(hihatREDPin, 0);
-  analogWrite(snareBLUEPin, 0);
-  playSound(DEMOhihat);
+  playSound(DEMOhhsnare);
+
   analogWrite(hihatREDPin, 255);
-  delay(125);
-  analogWrite(hihatREDPin, 0);
+  playSound(DEMOhihat);
 //Second loop
-  playSound(DEMOhhkick);
   analogWrite(hihatREDPin, 255);
   analogWrite(kickREDPin, 255);
   analogWrite(kickGREENPin, 128);
-  delay(125);
-  analogWrite(hihatREDPin, 0);
-  analogWrite(kickREDPin, 0);
-  analogWrite(kickGREENPin, 0);
   playSound(DEMOhhkick);
+
   analogWrite(hihatREDPin, 255);
   analogWrite(kickREDPin, 255);
   analogWrite(kickGREENPin, 128);
-  delay(125);
-  analogWrite(hihatREDPin, 0);
-  analogWrite(kickREDPin, 0);
-  analogWrite(kickGREENPin, 0);
-  playSound(DEMOhhsnare);
+  playSound(DEMOhhkick);
+
   analogWrite(hihatREDPin, 255);
   analogWrite(snareBLUEPin, 255);
-  delay(125);
-  analogWrite(hihatREDPin, 0);
-  analogWrite(snareBLUEPin, 0);
-  playSound(DEMOhihat);
+  playSound(DEMOhhsnare);
+
   analogWrite(hihatREDPin, 255);
-  delay(125);
-  analogWrite(hihatREDPin, 0);
+  playSound(DEMOhihat);
 }
 
 /******************************************************/
@@ -402,24 +381,18 @@ void rockV2Beat(){
 /******************************************************/
 
 void discoBeat(){
-  playSound(DEMOkick);
   analogWrite(kickREDPin, 255);
   analogWrite(kickGREENPin, 255);
-  delay(125);
-  analogWrite(kickREDPin, 0);
-  analogWrite(kickGREENPin, 0);
-  playSound(DEMOhihat);
+  playSound(DEMOkick);
+
   analogWrite(hihatREDPin, 255);
-  delay(125);
-  analogWrite(hihatREDPin, 0);
-  playSound(DEMOsnare);
+  playSound(DEMOhihat);
+
   analogWrite(snareBLUEPin, 255);
-  delay(125);
-  analogWrite(snareBLUEPin, 0);
-  playSound(DEMOhihat);
+  playSound(DEMOsnare);
+
   analogWrite(hihatREDPin, 255);
-  delay(125);
-  analogWrite(hihatREDPin, 0);
+  playSound(DEMOhihat);
 }
 
 /******************************************************/
@@ -430,22 +403,17 @@ void discoBeat(){
 /******************************************************/
 
 void rockYou(){  
-  playSound(DEMOkick);
   analogWrite(kickREDPin, 255);
   analogWrite(kickGREENPin, 255);
-  delay(125);
-  analogWrite(kickREDPin, 0);
-  analogWrite(kickGREENPin, 0);
   playSound(DEMOkick);
+
   analogWrite(kickREDPin, 255);
   analogWrite(kickGREENPin, 255);
-  delay(125);
-  analogWrite(kickREDPin, 0);
-  analogWrite(kickGREENPin, 0);
-  playSound(DEMOsnare);
+  playSound(DEMOkick);
+
   analogWrite(snareBLUEPin, 255);
-  delay(125);
-  analogWrite(snareBLUEPin, 0);
+  playSound(DEMOsnare);
+
   playSound(0);
 }
 

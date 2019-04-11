@@ -1,13 +1,13 @@
 
 //INITIALIZING PINS AND VARIABLES
-short hihat     = 28;            //set pin 28 to 'hihat' sound
-short kick      = 29;            //set pin 29 to 'kick' sound
-short snare     = 30;            //set pin 30 to 'snare' sound
-short hhkick    = 31;            //set pin 31 to 'hihat' and 'kick' sound
-short hhsnare   = 32;            //set pin 32 to 'hihat' and 'snare' sound
+short hihat     = 49;            //set pin 28 to 'hihat' sound
+short kick      = 50;            //set pin 29 to 'kick' sound
+short snare     = 51;            //set pin 30 to 'snare' sound
+short hhkick    = 52;            //set pin 31 to 'hihat' and 'kick' sound
+short hhsnare   = 53;            //set pin 32 to 'hihat' and 'snare' sound
 
-short volUp     = 34;            //set pin 34 to volume-up
-short volDown   = 35;            //set pin 35 to volume-down
+short volUp     = 47;            //set pin 34 to volume-up
+short volDown   = 48;            //set pin 35 to volume-down
 
 short tempo     = 340;           //316 = 190bpm; Inc = slower; Dec = faster (LIMIT: 350ms to 1500ms)
 short adj_tempo = tempo-250;     //adjusted tempo to account the file delay
@@ -16,7 +16,7 @@ short sixTempo  = eightTempo/2;    //tempo used for beats with sixteenth notes
 
 void setup() {
   //setup code here, to run once:
-  Serial.begin(115200);  //use serial port
+  Serial.begin(9600);  //use serial port
   //Files on Audio FX SoundBoard
   //T00 = hihat
   //T01 = snare
@@ -33,8 +33,8 @@ void setup() {
 void loop() {
 
   //rockYou();    //we will - we will - rock you TA - BUM BUM TA
-  //rockBeat();
-  rockV2Beat();
+  rockBeat();
+  //rockV2Beat();
   //discoBeat();
   //bossaNova(); --boom ta boom boom ta
 

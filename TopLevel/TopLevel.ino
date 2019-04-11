@@ -239,20 +239,9 @@ void initializeLEDstrips() {
 void demo(short BEAT){
   DEMOsetup();
   DEMOloop(BEAT);
-<<<<<<< HEAD
 }
-=======
- }
-<<<<<<< HEAD
- 
-void DEMOsetup() {
-  tempo         = 60000 / TempoReceived; //Inc = slower & Dec = faster (LIMIT: 350ms to 1500ms)
-  adj_tempo     = tempo-250;     //adjusted tempo to account the file delay
-=======
->>>>>>> 1b6ed07a94a79843677738d0d21688693b5eb157
 
 void DEMOsetup() {
->>>>>>> 81e178b68a1cc632f1f4f07eb6ab3cdd47721659
   //EXTRA
   eightTempo= adj_tempo/2;   //tempo used for beats with and
   sixTempo  = eightTempo/2;    //tempo used for beats with sixteenth notes
@@ -298,7 +287,6 @@ void playSound(short part){
   delay(250);               //plays file for the appropriate amount of time
   RESET();                  //stops playback of file
   delay(adj_tempo);         //moves on to next file for the appropriate tempo
-
 }
 /***********************************EXTRA************************************/
   //Extra function for expanding amount of beats
@@ -328,19 +316,12 @@ void VolumeCtr(short button){
     volUp   = LOW;  
 }
 
-
-/******************************************************/
-/*        FUNCTIONS FOR THE DIFFERENT BEATS           */
-/******************************************************/
-
-
 /******************************************************/
 /*                     ROCK BEAT                      */
 /*                   1   2   3   4                    */
 /*                   x---x---x---x                    */
 /*                   o-------v----                    */
 /******************************************************/   
-
 void rockBeat(){  //Setting LEDs to specific colors/pins
   analogWrite(hihatREDPin, 255);
   analogWrite(kickREDPin, 255);
@@ -364,7 +345,6 @@ void rockBeat(){  //Setting LEDs to specific colors/pins
 /*                   x---x---x---x                    */
 /*                   o--(o)--v----                    */
 /******************************************************/
-
 void rockV2Beat(){  
   analogWrite(hihatREDPin, 255);
   analogWrite(kickREDPin, 255);
@@ -405,7 +385,6 @@ void rockV2Beat(){
 /*                   ----x-------x                    */
 /*                   o-------v----                    */
 /******************************************************/
-
 void discoBeat(){
   analogWrite(kickREDPin, 255);
   analogWrite(kickGREENPin, 255);
@@ -427,7 +406,6 @@ void discoBeat(){
 /*                   ----v-------v                    */
 /*                   o-o-----o-o--                    */
 /******************************************************/
-
 void rockYou(){  
   analogWrite(kickREDPin, 255);
   analogWrite(kickGREENPin, 255);
@@ -479,8 +457,6 @@ void rockYou(){
 
 /*********************************************************************/
 /*                         SEQUENCE MODE                             */             
-/*********************************************************************/
-/*********************** Sequence Functions **************************/
 /*********************************************************************/
 void sequence(short BEAT){
   SEQUENCEsetup();
@@ -708,7 +684,7 @@ void averageAnalogRead_hihatsnare() {
      else {
       n_hihat--;
      }
-     if ( snareSensorReading_tmp > threshold ) {
+     if ( snareSensorReading_tmp > threshold_snare ) {
       snareSensorReading_Average += snareSensorReading_tmp;
      }
      else {
@@ -740,13 +716,13 @@ void averageAnalogRead_hihatkick() {
   for (short i = 0; i < n; i++) {
      hihatSensorReading_tmp = analogRead(hihatSensorPin);
      kickSensorReading_tmp = analogRead(kickSensorPin);
-     if ( hihatSensorReading_tmp > threshold ) {
+     if ( hihatSensorReading_tmp > threshold_hihat ) {
       hihatSensorReading_Average += hihatSensorReading_tmp;
      }
      else {
       n_hihat--;
      }
-     if ( kickSensorReading_tmp > threshold ) {
+     if ( kickSensorReading_tmp > threshold_kick ) {
       kickSensorReading_Average += kickSensorReading_tmp;
      }
      else {

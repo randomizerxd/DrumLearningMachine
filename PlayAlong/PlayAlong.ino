@@ -43,6 +43,7 @@ void setup() {
 
   setupLEDpins();
   setupVibrationSensorPins();
+  setupFXPins();
   initializeLEDstrips();
 }
 
@@ -69,6 +70,11 @@ void loop() {
    *      iv. turn off light
    *      
    */
+
+   int HitCount;
+
+
+   
   
   //rockBeat();
   //discoBeat();
@@ -108,6 +114,19 @@ void setupVibrationSensorPins() {
   pinMode(tomSensorPin,   INPUT);
 }
 
+void setupFXPins(){
+    //Files on Audio FX SoundBoard
+  //T00 = hihat
+  //T01 = snare
+  //T02 = kick
+  //T03 = kick and hihat
+  pinMode(kickFXPin,    OUTPUT);
+  pinMode(snareFXPin,   OUTPUT);
+  pinMode(hihatFXPin,   OUTPUT);
+  pinMode(hhkickFXPin,  OUTPUT);
+  pinMode(hhsnareFXPin, OUTPUT);
+}
+
 void initializeLEDstrips() {
   //Initialize all LED strips to OFF
   analogWrite(hihatGREENPin, 0);
@@ -129,4 +148,140 @@ void initializeLEDstrips() {
   analogWrite(tomGREENPin, 0);
   analogWrite(tomREDPin, 0);
   analogWrite(tomBLUEPin, 0);
+}
+
+/******************************************************/
+/*        FUNCTIONS FOR THE DIFFERENT BEATS           */
+/******************************************************/
+
+
+/******************************************************/
+/*                     ROCK BEAT                      */
+/*                   1   2   3   4                    */
+/*                   x---x---x---x                    */
+/*                   o-------v----                    */
+/******************************************************/   
+
+void rockBeat(){  //Setting LEDs to specific colors/pins
+  analogWrite(hihatREDPin, 255);
+  analogWrite(kickREDPin, 255);
+  analogWrite(kickGREENPin, 128);
+  playSound(hhkickFXPin);
+
+  analogWrite(hihatREDPin, 255);
+  playSound(hihatFXPin);
+
+  analogWrite(hihatREDPin, 255);
+  analogWrite(snareBLUEPin, 255);  
+  playSound(hhsnareFXPin);
+
+  analogWrite(hihatREDPin, 255);  
+  playSound(hihatFXPin);
+}
+
+/******************************************************/
+/*                    ROCK V2 BEAT                    */
+/*                   1   2   3   4                    */
+/*                   x---x---x---x                    */
+/*                   o--(o)--v----                    */
+/******************************************************/
+
+void rockV2Beat(){  
+  analogWrite(hihatREDPin, 255);
+  analogWrite(kickREDPin, 255);
+  analogWrite(kickGREENPin, 128);  
+  playSound(hhkickFXPin);
+
+  analogWrite(hihatREDPin, 255);
+  playSound(hihatFXPin);
+
+  analogWrite(hihatREDPin, 255);
+  analogWrite(snareBLUEPin, 255);
+  playSound(hhsnareFXPin);
+
+  analogWrite(hihatREDPin, 255);
+  playSound(hihatFXPin);
+//Second loop
+  analogWrite(hihatREDPin, 255);
+  analogWrite(kickREDPin, 255);
+  analogWrite(kickGREENPin, 128);
+  playSound(hhkickFXPin);
+
+  analogWrite(hihatREDPin, 255);
+  analogWrite(kickREDPin, 255);
+  analogWrite(kickGREENPin, 128);
+  playSound(hhkickFXPin);
+
+  analogWrite(hihatREDPin, 255);
+  analogWrite(snareBLUEPin, 255);
+  playSound(hhsnareFXPin);
+
+  analogWrite(hihatREDPin, 255);
+  playSound(hihatFXPin);
+}
+
+/******************************************************/
+/*                    DISCO BEAT                      */
+/*                   1   2   3   4                    */
+/*                   ----x-------x                    */
+/*                   o-------v----                    */
+/******************************************************/
+
+void discoBeat(){
+  analogWrite(kickREDPin, 255);
+  analogWrite(kickGREENPin, 255);
+  playSound(kickFXPin);
+
+  analogWrite(hihatREDPin, 255);
+  playSound(hihatFXPin);
+
+  analogWrite(snareBLUEPin, 255);
+  playSound(snareFXPin);
+
+  analogWrite(hihatREDPin, 255);
+  playSound(hihatFXPin);
+}
+
+/******************************************************/
+/*                   ROCK-YOU BEAT                    */
+/*                   1 a 2 a 3 a 4                    */
+/*                   ----v-------v                    */
+/*                   o-o-----o-o--                    */
+/******************************************************/
+
+void rockYou(){  
+  analogWrite(kickREDPin, 255);
+  analogWrite(kickGREENPin, 255);
+  playSound(kickFXPin);
+
+  analogWrite(kickREDPin, 255);
+  analogWrite(kickGREENPin, 255);
+  playSound(kickFXPin);
+
+  analogWrite(snareBLUEPin, 255);
+  playSound(snareFXPin);
+
+  playSound(0);
+}
+
+/**********************************************************/
+/*           Check if Proper Hit Function                 */
+/**********************************************************/
+
+int checkCountHit(){
+  int countHit = 0;
+  int reading = 0;
+  int threshold = 10;
+  int start_time = millis();
+  int difference = start_time;
+  
+  while(difference < 100){
+   if (reading > threshold)
+      countHit++;
+    difference = micros() - start_time;
+  }
+  Serial.print("Difference in time: ");
+  Serial.print(difference);
+  
+  return CountHit;
 }

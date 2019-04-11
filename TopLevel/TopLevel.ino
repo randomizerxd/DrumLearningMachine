@@ -231,16 +231,28 @@ void initializeLEDstrips() {
   analogWrite(tomBLUEPin, 0);
 }
 
-
+/*********************************************************************/
+/*                         DEMO MODE                                  /
 /*********************************************************************/
 /****************** Demo Start-Up Functions **************************/
 /*********************************************************************/
 void demo(short BEAT){
   DEMOsetup();
   DEMOloop(BEAT);
+<<<<<<< HEAD
 }
+=======
+ }
+<<<<<<< HEAD
+ 
+void DEMOsetup() {
+  tempo         = 60000 / TempoReceived; //Inc = slower & Dec = faster (LIMIT: 350ms to 1500ms)
+  adj_tempo     = tempo-250;     //adjusted tempo to account the file delay
+=======
+>>>>>>> 1b6ed07a94a79843677738d0d21688693b5eb157
 
 void DEMOsetup() {
+>>>>>>> 81e178b68a1cc632f1f4f07eb6ab3cdd47721659
   //EXTRA
   eightTempo= adj_tempo/2;   //tempo used for beats with and
   sixTempo  = eightTempo/2;    //tempo used for beats with sixteenth notes
@@ -272,8 +284,8 @@ void RESET(){
   digitalWrite(hihatFXPin,   HIGH);
   digitalWrite(hhkickFXPin,  HIGH);
   digitalWrite(hhsnareFXPin, HIGH);
-  analogWrite(hihatREDPin, 0);
-  analogWrite(kickREDPin, 0);
+  analogWrite(hihatREDPin,  0);
+  analogWrite(kickREDPin,   0);
   analogWrite(kickGREENPin, 0);
   analogWrite(snareBLUEPin, 0);
   
@@ -465,6 +477,8 @@ void rockYou(){
 }
 */
 
+/*********************************************************************/
+/*                         SEQUENCE MODE                             */             
 /*********************************************************************/
 /*********************** Sequence Functions **************************/
 /*********************************************************************/
@@ -746,9 +760,21 @@ void averageAnalogRead_hihatkick() {
   t = micros() - t0;
 }
 
+
+/*********************************************************************/
+/*                        PLAYALONG MODE                             */
 /*********************************************************************/
 /********************** PlayAlong Functions **************************/
 /*********************************************************************/
+
+
+
+
+
+
+
+
+
 
 /*********************************************************************/
 /********************** Bluetooth Functions **************************/

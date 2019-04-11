@@ -31,9 +31,6 @@ short VolumeControl = 0; //for storing the volume up or down code
  *  
  */
 
-//short tempo = 0; //tempo in ms ... 'tempo = 60000 / TempoReceived;'
-//short adj_tempo = 0; //tempo adjusted for 250ms delay ... 'adj_tempo = tempo - 250;'
-
 /***Piezo Vibration Sensor Pin Numbers***/ 
 const short hihatSensorPin = A1;
 const short snareSensorPin = A2;
@@ -101,8 +98,8 @@ short volUp         = 47;            //set pin 47 to volume-up
 short volDown       = 48;            //set pin 48 to volume-down
 
 //Set tempo equal to the tempo received by the app
-short tempo         = 0; //Inc = slower & Dec = faster (LIMIT: 350ms to 1500ms)
-short adj_tempo     = 0;     //adjusted tempo to account the file delay
+short tempo     = 0; //Inc = slower & Dec = faster (LIMIT: 350ms to 1500ms)
+short adj_tempo = 0; //adjusted tempo to account the file delay
 //EXTRA
 short eightTempo= 0;   //tempo used for beats with and
 short sixTempo  = 0;    //tempo used for beats with sixteenth notes
@@ -119,12 +116,13 @@ void setup() {
   initializeLEDstrips();
 
   ////Receive settings from App thru Bluetooth
-  BluetoothSettings(); 
-  Serial.println("exiting setup");
+  BluetoothSettings();
+  
+  tempo = 60000 / TempoReceived; 
+  adj_tempo = tempo-250;     
 }
 
 void loop() {
-
   if (Back == BACK_CODE)
   {
     ////Receive settings from App thru Bluetooth
@@ -229,11 +227,7 @@ void demo(short BEAT){
   DEMOloop(BEAT);
  }
 
-
 void DEMOsetup() {
-  
-  tempo         = 60000 / TempoReceived; //Inc = slower & Dec = faster (LIMIT: 350ms to 1500ms)
-  adj_tempo     = tempo-250;     //adjusted tempo to account the file delay
   //EXTRA
   eightTempo= adj_tempo/2;   //tempo used for beats with and
   sixTempo  = eightTempo/2;    //tempo used for beats with sixteenth notes
@@ -661,7 +655,6 @@ void averageAnalogRead_hihatkick() {
  *    TempoReceived
  *    ModeReceived
  */
- 
 void BluetoothSettings()
 {
   short count = 3;

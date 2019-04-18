@@ -1,3 +1,9 @@
+/* DESCRIPTION of FUNCTION*/
+/* This function will play the beat SET amount of times, 
+ * the microcontroller will send the score (correct HITS - amount HITS/amount HITS)
+ * to the app and the app will display the score.
+ */
+
 /******************************************************/
 /*                     VARIABLES                      */
 /******************************************************/
@@ -60,17 +66,27 @@ const short threshold = 200;
 
 /***Variables for the FINAL SCORE***/
 int TIME = millis();
-int COUNT = 0;
-int tempo = 430;
+int count = 0;      //amount of time the part was properly played
+int tempo = 60000;
+int adj_tempo = tempo-250;
+int SET = 4;        //amount of times beat is play before giving a score
+int hit_amount = 0; //amount of hits
+int score = 0;
 
 void setup() {
   Serial.begin(9600);   //use serial port
 
   setupLEDpins();
   setupVibrationSensorPins();
-  setupFXPins();
+  //setupFXPins();
   initializeLEDstrips();
 }
+
+void hihat();
+void snare();
+void kick();
+void hihat_kick();
+void hihat_snare();
 
 void loop() {
 
@@ -95,13 +111,14 @@ void loop() {
    *      iv. turn off light
    *      
    */
-
-
-   
+  int BEAT = 1;
+  for (int i = 0; i < SET; i++){
+    if      (BEAT == 1) { rockBeat();   }
+    //else if (BEAT == 2) { rockV2Beat(); }
+    //else if (BEAT == 3) { discoBeat();  }
+    //else if (BEAT == 4) { rockYou();    }
+  }
   
-  //rockBeat();
-  //discoBeat();
-  //reggaetonBeat();
 }
 
 /*********************************************************************/
@@ -137,19 +154,6 @@ void setupVibrationSensorPins() {
   pinMode(tomSensorPin,   INPUT);
 }
 
-void setupFXPins(){
-    //Files on Audio FX SoundBoard
-  //T00 = hihat
-  //T01 = snare
-  //T02 = kick
-  //T03 = kick and hihat
-  pinMode(kickFXPin,    OUTPUT);
-  pinMode(snareFXPin,   OUTPUT);
-  pinMode(hihatFXPin,   OUTPUT);
-  pinMode(hhkickFXPin,  OUTPUT);
-  pinMode(hhsnareFXPin, OUTPUT);
-}
-
 void initializeLEDstrips() {
   //Initialize all LED strips to OFF
   analogWrite(hihatGREENPin, 0);
@@ -173,13 +177,23 @@ void initializeLEDstrips() {
   analogWrite(tomBLUEPin, 0);
 }
 
-//Play part of Drumset
-void startCheck(int count){
-  TIME = millis();  //start count for hits
-  //check reading
+  //Initializing pins to 5V so they do NOT play sound
+void RESET(){
+  analogWrite(hihatREDPin,  0);
+  analogWrite(kickREDPin,   0);
+  analogWrite(kickGREENPin, 0);
+  analogWrite(snareBLUEPin, 0);
+}
+
+void calcScore(int count){
+  /*  This function calculates score, adjusts tempo
+   *  so the beat is played at the proper rate, and 
+   *  and resets the lights to turn OFF
+   */
   delay(250);               //plays file for the appropriate amount of time
   RESET();                  //stops playback of file
   delay(adj_tempo);         //moves on to next file for the appropriate tempo
+  score = ((count - hit_amount)/hit_amount); //calculation
 }
 
 /******************************************************/
@@ -196,63 +210,183 @@ void startCheck(int count){
 
 void rockBeat(){  //Setting LEDs to specific colors/pins
   hihat_kick();
-  startCheck(COUNT);
+  calcScore(count);
+  hit_amount++;
 
   hihat();
-  startCheck(COUNT);
+  calcScore(count);
+  hit_amount++;
 
   hihat_snare(); 
-  startCheck(COUNT);
+  calcScore(count);
+  hit_amount++;
 
   hihat();  
-  startCheck(COUNT);
+  calcScore(count);
+  hit_amount++;
 }
+
+/******************************************************/
+/*                    ROCK V2 BEAT                    */
+/*                   1   2   3   4                    */
+/*                   x---x---x---x                    */
+/*                   o--(o)--v----                    */
+/******************************************************/
+
+void rockV2Beat(){
+  SET = SET/2;  //because the loop is already twice for this beat
+    
+  hihat_kick();
+  hit_amount++;
+  calcScore(count);
+
+  hihat();
+  hit_amount++;
+  calcScore(count);
+
+  hihat_snare();
+  hit_amount++;
+  calcScore(count);
+
+  hihat();
+  hit_amount++;
+  calcScore(count);
+//Second loop
+  hihat_kick();
+  hit_amount++;
+  calcScore(count);
+
+  hihat_kick();
+  hit_amount++;
+  calcScore(count);
+
+  hihat_snare();
+  hit_amount++;
+  calcScore(count);
+
+  hihat();
+  hit_amount++;
+  calcScore(count);
+}
+
+/******************************************************/
+/*                    DISCO BEAT                      */
+/*                   1   2   3   4                    */
+/*                   ----x-------x                    */
+/*                   o-------v----                    */
+/******************************************************/
+
+void discoBeat(){
+  kick();
+  hit_amount++;
+  calcScore(count);
+
+  hihat();
+  hit_amount++;
+  calcScore(count);
+
+  snare();
+  hit_amount++;
+  calcScore(count);
+
+  hihat();
+  hit_amount++;
+  calcScore(count);
+}
+
+/******************************************************/
+/*                   ROCK-YOU BEAT                    */
+/*                   1 a 2 a 3 a 4                    */
+/*                   ----v-------v                    */
+/*                   o-o-----o-o--                    */
+/******************************************************/
+
+void rockYou(){  
+  kick();
+  hit_amount++;
+  calcScore(count);
+
+  kick();
+  hit_amount++;
+  calcScore(count);
+
+  snare();
+  hit_amount++;
+  calcScore(count);
+
+  calcScore(count);
+}
+
 
 
 
 /* SEQUENCE CODE */
 /******************************************************/
 
-void hihat() {
+void hihat() { //done
   analogWrite(hihatREDPin, 255);
-  while( analogRead(hihatSensorPin) < threshold_hihat) { } //Do nothing until hihat sensor passes threshold
-  hitConfirmation_hihat();
+  TIME = millis();  //sets start time
+  int diffTime = 0;
+  int tmpCount = 0;
+  while(diffTime < tempo){
+    while( analogRead(hihatSensorPin) < threshold_hihat) { } //Do nothing until hihat sensor passes threshold
+    if( analogRead(hihatSensorPin) > threshold_hihat) { tmpCount++; }
+  }
+  if( tmpCount > 0){
+    count++;
+  }
 }
 
-void snare() {
+void snare(){ //done
   analogWrite(snareBLUEPin, 255);
-  while( analogRead(snareSensorPin) < threshold_snare) { } //Do nothing until snare sensor passes threshold
-  hitConfirmation_snare();
+  TIME = millis();  //sets start time
+  int diffTime = 0;
+  int tmpCount = 0;
+  while(diffTime < tempo){
+    while( analogRead(snareSensorPin) < threshold_snare) { } //Do nothing until snare sensor passes threshold
+    if(analogRead(snareSensorPin) > threshold_snare){ tmpCount++; } //if properly hit
+  }
+  if(tmpCount > 0){
+    count++;
+  }
 }
 
-void kick() {
+void kick() { //done
   analogWrite(kickREDPin, 255);
   analogWrite(kickGREENPin, 128);
-  while( analogRead(kickSensorPin) < threshold_kick) { } //Do nothing until kick sensor passes threshold
-  hitConfirmation_kick();
+  TIME = millis();  //dec of tmp variables
+  int diffTime = 0;
+  int tmpCount = 0;
+  while(diffTime < tempo){
+    while( analogRead(kickSensorPin) < threshold_kick) { } //Do nothing until kick sensor passes threshold
+    if( analogRead(kickSensorPin) > threshold_kick){ tmpCount++; }
+  }
+  if(tmpCount > 0){
+    count++;
+  }
 }
 
 //This function turns on the lights on the hihat and kick and waits for the user to hit both of them
-void hihat_kick() {
+void hihat_kick() { //done
   analogWrite(hihatREDPin, 255);
   analogWrite(kickREDPin, 255);
   analogWrite(kickGREENPin, 128);
   TIME = millis();
   int diffTime = 0;
   int tmpCount = 0;
-  while (diffTime < tempo){
-    if (((hihatSensorReading = analogRead(hihatSensorPin)) < threshold_hihat) && ((kickSensorReading = analogRead(kickSensorPin)) < threshold_kick)){
+  while (diffTime < tempo){ //before tempo (delay) is set to move to the next part
+    while (((hihatSensorReading = analogRead(hihatSensorPin)) < threshold_hihat) && ((kickSensorReading = analogRead(kickSensorPin)) < threshold_kick)){
       //do nothing if below threshold
     }
-    averageAnalogRead_hihatkick(); 
+    averageAnalogRead_hihatkick(); //receive average reading of hihat and kick (precision)
        
     if(((hihatSensorReading_Average) > threshold_hihat) && ((kickSensorReading_Average) > threshold_kick)) {
-      tmpCount++;
+      tmpCount++; //if they're both hit correctly, add 1 to the score.
     } 
     diffTime = millis() - TIME;
   }
   if (tmpCount > 0){
-    COUNT++;
+    count++;
   }
 }
 
@@ -263,25 +397,102 @@ void hihat_kick() {
 void hihat_snare() {
   analogWrite(hihatREDPin, 255);
   analogWrite(snareBLUEPin, 255);
-  while( ((hihatSensorReading = analogRead(hihatSensorPin)) < threshold_hihat) && ((snareSensorReading = analogRead(snareSensorPin)) < threshold_snare) ) {  
-  }
+  TIME = millis();
+  int diffTime = 0;
+  int tmpCount = 0;
+  while (diffTime < tempo){ //before tempo (delay) is set to move to the next part
+    while( ((hihatSensorReading = analogRead(hihatSensorPin)) < threshold_hihat) && ((snareSensorReading = analogRead(snareSensorPin)) < threshold_snare) ) {  
+    }
+    averageAnalogRead_hihatsnare();
   
-  averageAnalogRead_hihatsnare();
-  
-  if( ( (hihatSensorReading_Average) > threshold_hihat) && ( (snareSensorReading_Average) > threshold_snare) ) {
-    hitConfirmation_hihatsnare();
-  } 
-  else if( hihatSensorReading >= threshold_hihat ) {    //If the hihat sensor was triggered
-    hitConfirmation_hihat(); 
-    while( (snareSensorReading = analogRead(snareSensorPin)) < threshold_snare) { } //Do nothing until snare is hit
-    hitConfirmation_snare();
+    if( ( (hihatSensorReading_Average) > threshold_hihat) && ( (snareSensorReading_Average) > threshold_snare) ) {
+      tmpCount++;
+    } 
   }
-  else if ( snareSensorReading >= threshold_snare ) { //If the snare sensor was triggered
-    hitConfirmation_snare(); 
-    while( analogRead(hihatSensorPin) < threshold_hihat) { } //Do nothing until hihat sensor is pushed
-    hitConfirmation_hihat();
-  } 
+  if(tmpCount > 0){
+    count++;
+  }
 }
+
+
+
+/*
+ * Changes:
+ *    hihatSensorReading_Average
+ *    snareSensorReading_Average
+ */
+void averageAnalogRead_hihatsnare() {
+  n = 500;  //amount of times to read from both hihat and snare
+  n_hihat = n;    //used to average. n_hihat <= n. It will be decremented by 1 when sensor readings don't exceed the threshold
+  n_snare = n;    //used to average. n_snare <= n. It will be decremented by 1 when sensor readings don't exceed the threshold
+  hihatSensorReading_Average = 0;
+  snareSensorReading_Average = 0;
+  hihatSensorReading_tmp = 0; //local variable. Don't change 'hihatSensorReading'
+  snareSensorReading_tmp = 0; //local variable. Don't change 'snareSensorReading'
+
+  t0 = micros();
+  for (short i = 0; i < n; i++) {
+     hihatSensorReading_tmp = analogRead(hihatSensorPin);
+     snareSensorReading_tmp = analogRead(snareSensorPin);
+     if ( hihatSensorReading_tmp > threshold_hihat ) {
+      hihatSensorReading_Average += hihatSensorReading_tmp;
+     }
+     else {
+      n_hihat--;
+     }
+     if ( snareSensorReading_tmp > threshold_snare ) {
+      snareSensorReading_Average += snareSensorReading_tmp;
+     }
+     else {
+      n_snare--;
+     }
+  }
+  hihatSensorReading_Average /= n_hihat;
+  snareSensorReading_Average /= n_snare;
+  
+  //time it takes to finish the for loop
+  t = micros() - t0;
+}
+
+/*
+ * Changes:
+ *    hihatSensorReading_Average
+ *    kickSensorReading_Average
+ */
+void averageAnalogRead_hihatkick() {
+  n = 500;  //amount of times to read from both hihat and snare
+  n_hihat = n;    //used to average. n_hihat <= n. It will be decremented by 1 when sensor readings don't exceed the threshold
+  n_kick = n;    //used to average. n_kick <= n. It will be decremented by 1 when sensor readings don't exceed the threshold
+  hihatSensorReading_Average = 0;
+  kickSensorReading_Average = 0;
+  hihatSensorReading_tmp = 0; //local variable. Don't change 'hihatSensorReading'
+  kickSensorReading_tmp = 0; //local variable. Don't change 'kickSensorReading'
+
+  t0 = micros();
+  for (short i = 0; i < n; i++) {
+     hihatSensorReading_tmp = analogRead(hihatSensorPin);
+     kickSensorReading_tmp = analogRead(kickSensorPin);
+     if ( hihatSensorReading_tmp > threshold_hihat ) {
+      hihatSensorReading_Average += hihatSensorReading_tmp;
+     }
+     else {
+      n_hihat--;
+     }
+     if ( kickSensorReading_tmp > threshold_kick ) {
+      kickSensorReading_Average += kickSensorReading_tmp;
+     }
+     else {
+      n_kick--;
+     }
+  }
+  hihatSensorReading_Average /= n_hihat;
+  kickSensorReading_Average /= n_kick;
+  
+  //time it takes to finish the for loop
+  t = micros() - t0;
+}
+
+
 
 
 
@@ -290,7 +501,7 @@ void hihat_snare() {
 /**********************************************************/
 /*           Check if Proper Hit Function                 */
 /**********************************************************/
-
+/*
 int checkCountHit(int startTime, int CountHit){ //should pass in TIME
   int endTime = millis();
   int difference = endTime - startTime;
@@ -305,102 +516,4 @@ int checkCountHit(int startTime, int CountHit){ //should pass in TIME
   
   return CountHit;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-// down here for now
-
-/******************************************************/
-/*                    ROCK V2 BEAT                    */
-/*                   1   2   3   4                    */
-/*                   x---x---x---x                    */
-/*                   o--(o)--v----                    */
-/******************************************************/
-
-void rockV2Beat(){  
-  analogWrite(hihatREDPin, 255);
-  analogWrite(kickREDPin, 255);
-  analogWrite(kickGREENPin, 128);  
-  playSound(hhkickFXPin);
-
-  analogWrite(hihatREDPin, 255);
-  playSound(hihatFXPin);
-
-  analogWrite(hihatREDPin, 255);
-  analogWrite(snareBLUEPin, 255);
-  playSound(hhsnareFXPin);
-
-  analogWrite(hihatREDPin, 255);
-  playSound(hihatFXPin);
-//Second loop
-  analogWrite(hihatREDPin, 255);
-  analogWrite(kickREDPin, 255);
-  analogWrite(kickGREENPin, 128);
-  playSound(hhkickFXPin);
-
-  analogWrite(hihatREDPin, 255);
-  analogWrite(kickREDPin, 255);
-  analogWrite(kickGREENPin, 128);
-  playSound(hhkickFXPin);
-
-  analogWrite(hihatREDPin, 255);
-  analogWrite(snareBLUEPin, 255);
-  playSound(hhsnareFXPin);
-
-  analogWrite(hihatREDPin, 255);
-  playSound(hihatFXPin);
-}
-
-/******************************************************/
-/*                    DISCO BEAT                      */
-/*                   1   2   3   4                    */
-/*                   ----x-------x                    */
-/*                   o-------v----                    */
-/******************************************************/
-
-void discoBeat(){
-  analogWrite(kickREDPin, 255);
-  analogWrite(kickGREENPin, 255);
-  playSound(kickFXPin);
-
-  analogWrite(hihatREDPin, 255);
-  playSound(hihatFXPin);
-
-  analogWrite(snareBLUEPin, 255);
-  playSound(snareFXPin);
-
-  analogWrite(hihatREDPin, 255);
-  playSound(hihatFXPin);
-}
-
-/******************************************************/
-/*                   ROCK-YOU BEAT                    */
-/*                   1 a 2 a 3 a 4                    */
-/*                   ----v-------v                    */
-/*                   o-o-----o-o--                    */
-/******************************************************/
-
-void rockYou(){  
-  analogWrite(kickREDPin, 255);
-  analogWrite(kickGREENPin, 255);
-  playSound(kickFXPin);
-
-  analogWrite(kickREDPin, 255);
-  analogWrite(kickGREENPin, 255);
-  playSound(kickFXPin);
-
-  analogWrite(snareBLUEPin, 255);
-  playSound(snareFXPin);
-
-  playSound(0);
-}
+*/

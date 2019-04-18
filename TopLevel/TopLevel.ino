@@ -464,7 +464,7 @@ void sequence(short BEAT){
 }
 
 void SEQUENCEsetup() {
-
+  //Call reset?
 }
 
 //MAIN LOOP

@@ -129,10 +129,7 @@ void setup() {
   initializeLEDstrips();
 
   ////Receive settings from App thru Bluetooth
-  BluetoothSettings();
-  
-  tempo = 60000 / TempoReceived; 
-  adj_tempo = tempo-250;     
+  BluetoothSettings();   
 }
 
 void loop() {
@@ -151,7 +148,7 @@ void loop() {
     else 
     if (ModeReceived == SEQUENCEMODE_CODE) //Sequence
     {
-      //sequence(BeatReceived);
+      sequence(BeatReceived);
     }
     else 
     if (ModeReceived == PLAYALONGMODE_CODE) // PlayAlong
@@ -238,7 +235,7 @@ void initializeLEDstrips() {
 /*********************************************************************/
 void demo(short BEAT){
   DEMOsetup();
-  DEMOloop(BEAT);
+  DEMOplaybeat(BEAT);
 }
 
 void DEMOsetup() {
@@ -250,7 +247,7 @@ void DEMOsetup() {
 }
 
 //MAIN LOOP
-void DEMOloop(short BEAT) {
+void DEMOplaybeat(short BEAT) {
   //Choose beat depending on what the user chooses
   if (BEAT == BEAT1_CODE){
     rockBeat();
@@ -459,8 +456,11 @@ void rockYou(){
 /*                         SEQUENCE MODE                             */             
 /*********************************************************************/
 void sequence(short BEAT){
+  Serial.println("Entering sequence setup");
   SEQUENCEsetup();
-  SEQUENCEloop(BEAT);
+  Serial.println("Exiting sequence setup");
+  Serial.println("Entering sequence loop");
+  SEQUENCEplaybeat(BEAT);
 }
 
 void SEQUENCEsetup() {
@@ -468,10 +468,25 @@ void SEQUENCEsetup() {
 }
 
 //MAIN LOOP
-void SEQUENCEloop(short BEAT) {
+void SEQUENCEplaybeat(short BEAT) {
+  Serial.println("Entered sequence loop");
   //Choose beat depending on what the user chooses
   if (BEAT == BEAT1_CODE){
+    
+    Serial.println("Beat is Beat 1");
+    
+    Serial.println("Playing snare");
+    snare();
+    delay(tempo);
+
+    Serial.println("Playing hihat");
+    hihat();
+    delay(tempo);    
+    /*
+    Serial.println("Beat is Beat 1");
+    Serial.println("Playing rock beat");
     SEQUENCErockBeat();
+    */
   } else
   if (BEAT == BEAT2_CODE){
     SEQUENCErockV2Beat();
@@ -795,6 +810,8 @@ void BluetoothSettings()
       count--;
     }
   }
+  tempo = 60000 / TempoReceived; 
+  adj_tempo = tempo-250;  
   Serial.println("BluetoothSettings Done");
 }
 

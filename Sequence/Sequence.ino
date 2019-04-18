@@ -45,7 +45,7 @@ short crashSensorReading = LOW;
 short tomSensorReading   = LOW;
 
 const short threshold_hihat = 100; 
-const short threshold_snare = 94; 
+const short threshold_snare = 100;  //94
 const short threshold_kick = 130; 
 
 /***Variables used in the 'averageAnalogRead()' function***/

@@ -1,7 +1,7 @@
 /******************************************************/
 /*                     VARIABLES                      */
 /******************************************************/
-
+//additional comment
 /***Piezo Vibration Sensor Pin Numbers***/ 
 const int hihatSensorPin = A5;
 const int snareSensorPin = A4;

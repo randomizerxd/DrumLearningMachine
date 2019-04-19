@@ -68,9 +68,9 @@ short kickSensorReading  = LOW;
 short crashSensorReading = LOW;
 short tomSensorReading   = LOW;
 
-const short threshold_hihat = 100; 
-const short threshold_snare = 94; 
-const short threshold_kick = 130; 
+const short threshold_hihat = 140; 
+const short threshold_snare = 110; 
+const short threshold_kick = 150; 
 
 /***Variables used in the 'averageAnalogRead()' function***/
 short n = 500;  //amount of times to read from both hihat and snare
@@ -456,10 +456,7 @@ void rockYou(){
 /*                         SEQUENCE MODE                             */             
 /*********************************************************************/
 void sequence(short BEAT){
-  Serial.println("Entering sequence setup");
   SEQUENCEsetup();
-  Serial.println("Exiting sequence setup");
-  Serial.println("Entering sequence loop");
   SEQUENCEplaybeat(BEAT);
 }
 
@@ -469,10 +466,9 @@ void SEQUENCEsetup() {
 
 //MAIN LOOP
 void SEQUENCEplaybeat(short BEAT) {
-  Serial.println("Entered sequence loop");
   //Choose beat depending on what the user chooses
   if (BEAT == BEAT1_CODE){
-    
+    /*
     Serial.println("Beat is Beat 1");
     
     Serial.println("Playing snare");
@@ -481,12 +477,10 @@ void SEQUENCEplaybeat(short BEAT) {
 
     Serial.println("Playing hihat");
     hihat();
-    delay(tempo);    
-    /*
-    Serial.println("Beat is Beat 1");
-    Serial.println("Playing rock beat");
+    delay(tempo); 
+    */   
     SEQUENCErockBeat();
-    */
+    
   } else
   if (BEAT == BEAT2_CODE){
     SEQUENCErockV2Beat();

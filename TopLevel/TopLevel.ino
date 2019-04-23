@@ -117,8 +117,12 @@ short adj_tempo = 0; //adjusted tempo to account the file delay
 short eightTempo= 0;   //tempo used for beats with and
 short sixTempo  = 0;    //tempo used for beats with sixteenth notes
 /*****************************************************************************/
-
-
+/***Variables for the FINAL SCORE (PlayAlong)***/
+int TIME = millis();
+int count = 0;      //amount of time the part was properly played
+int SET = 4;        //amount of times beat is play before giving a score
+int hit_amount = 0; //amount of hits
+int score = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -153,7 +157,7 @@ void loop() {
     else 
     if (ModeReceived == PLAYALONGMODE_CODE) // PlayAlong
     {
-      
+      playalong(BeatReceived);
     }
     Bluetooth_CheckBackButton();
   }  
@@ -752,6 +756,255 @@ void averageAnalogRead_hihatkick() {
 /*********************************************************************/
 /********************** PlayAlong Functions **************************/
 /*********************************************************************/
+void playalong(short BEAT){
+  SET = 4;
+  playalongSTART(BEAT);
+}
+
+void playalongSTART(short BEAT){
+  //Choose beat depending on what the user chooses
+  if (BEAT == BEAT1_CODE){
+    rockBeat_PA();
+  } else
+  if (BEAT == BEAT2_CODE){
+    rockV2Beat_PA();
+  } else
+  if (BEAT == BEAT3_CODE){
+    discoBeat_PA();
+  } else
+  if (BEAT == BEAT4_CODE){
+    rockYou_PA();
+  }
+}
+
+void calcScore(int count){
+  /*  This function calculates score, adjusts tempo
+   *  so the beat is played at the proper rate, and 
+   *  and resets the lights to turn OFF
+   */
+  delay(250);               //plays file for the appropriate amount of time
+  RESET();                  //stops playback of file
+  delay(adj_tempo);         //moves on to next file for the appropriate tempo
+  score = (count/hit_amount); //calculation
+}
+
+/******************************************************/
+/*        FUNCTIONS FOR THE DIFFERENT BEATS           */
+/******************************************************/
+
+
+/******************************************************/
+/*                     ROCK BEAT                      */
+/*                   1   2   3   4                    */
+/*                   x---x---x---x                    */
+/*                   o-------v----                    */
+/******************************************************/   
+
+void rockBeat_PA(){  //Setting LEDs to specific colors/pins
+  hihat_kick_PA();
+  calcScore(count);
+  hit_amount++;
+
+  hihat_PA();
+  calcScore(count);
+  hit_amount++;
+
+  hihat_snare_PA(); 
+  calcScore(count);
+  hit_amount++;
+
+  hihat_PA();  
+  calcScore(count);
+  hit_amount++;
+}
+
+/******************************************************/
+/*                    ROCK V2 BEAT                    */
+/*                   1   2   3   4                    */
+/*                   x---x---x---x                    */
+/*                   o--(o)--v----                    */
+/******************************************************/
+
+void rockV2Beat_PA(){
+  SET = SET/2;  //because the loop is already twice for this beat
+    
+  hihat_kick_PA();
+  hit_amount++;
+  calcScore(count);
+
+  hihat_PA();
+  hit_amount++;
+  calcScore(count);
+
+  hihat_snare_PA();
+  hit_amount++;
+  calcScore(count);
+
+  hihat_PA();
+  hit_amount++;
+  calcScore(count);
+//Second loop
+  hihat_kick_PA();
+  hit_amount++;
+  calcScore(count);
+
+  hihat_kick_PA();
+  hit_amount++;
+  calcScore(count);
+
+  hihat_snare_PA();
+  hit_amount++;
+  calcScore(count);
+
+  hihat_PA();
+  hit_amount++;
+  calcScore(count);
+}
+
+/******************************************************/
+/*                    DISCO BEAT                      */
+/*                   1   2   3   4                    */
+/*                   ----x-------x                    */
+/*                   o-------v----                    */
+/******************************************************/
+
+void discoBeat_PA(){
+  kick_PA();
+  hit_amount++;
+  calcScore(count);
+
+  hihat_PA();
+  hit_amount++;
+  calcScore(count);
+
+  snare_PA();
+  hit_amount++;
+  calcScore(count);
+
+  hihat_PA();
+  hit_amount++;
+  calcScore(count);
+}
+
+/******************************************************/
+/*                   ROCK-YOU BEAT                    */
+/*                   1 a 2 a 3 a 4                    */
+/*                   ----v-------v                    */
+/*                   o-o-----o-o--                    */
+/******************************************************/
+
+void rockYou_PA(){  
+  kick_PA();
+  hit_amount++;
+  calcScore(count);
+
+  kick_PA();
+  hit_amount++;
+  calcScore(count);
+
+  snare_PA();
+  hit_amount++;
+  calcScore(count);
+
+  calcScore(count);
+}
+
+
+
+
+/* SEQUENCE CODE */
+/******************************************************/
+
+void hihat_PA() { //done
+  analogWrite(hihatREDPin, 255);
+  TIME = millis();  //sets start time
+  int diffTime = 0;
+  int tmpCount = 0;
+  while(diffTime < tempo){
+    while( analogRead(hihatSensorPin) < threshold_hihat) { } //Do nothing until hihat sensor passes threshold
+    if( analogRead(hihatSensorPin) > threshold_hihat) { tmpCount++; }
+  }
+  if( tmpCount > 0){
+    count++;
+  }
+}
+
+void snare_PA(){ //done
+  analogWrite(snareBLUEPin, 255);
+  TIME = millis();  //sets start time
+  int diffTime = 0;
+  int tmpCount = 0;
+  while(diffTime < tempo){
+    while( analogRead(snareSensorPin) < threshold_snare) { } //Do nothing until snare sensor passes threshold
+    if(analogRead(snareSensorPin) > threshold_snare){ tmpCount++; } //if properly hit
+  }
+  if(tmpCount > 0){
+    count++;
+  }
+}
+
+void kick_PA() { //done
+  analogWrite(kickREDPin, 255);
+  analogWrite(kickGREENPin, 128);
+  TIME = millis();  //dec of tmp variables
+  int diffTime = 0;
+  int tmpCount = 0;
+  while(diffTime < tempo){
+    while( analogRead(kickSensorPin) < threshold_kick) { } //Do nothing until kick sensor passes threshold
+    if( analogRead(kickSensorPin) > threshold_kick){ tmpCount++; }
+  }
+  if(tmpCount > 0){
+    count++;
+  }
+}
+
+//This function turns on the lights on the hihat and kick and waits for the user to hit both of them
+void hihat_kick_PA() { //done
+  analogWrite(hihatREDPin, 255);
+  analogWrite(kickREDPin, 255);
+  analogWrite(kickGREENPin, 128);
+  TIME = millis();
+  int diffTime = 0;
+  int tmpCount = 0;
+  while (diffTime < tempo){ //before tempo (delay) is set to move to the next part
+    while (((hihatSensorReading = analogRead(hihatSensorPin)) < threshold_hihat) && ((kickSensorReading = analogRead(kickSensorPin)) < threshold_kick)){
+      //do nothing if below threshold
+    }
+    averageAnalogRead_hihatkick(); //receive average reading of hihat and kick (precision)
+       
+    if(((hihatSensorReading_Average) > threshold_hihat) && ((kickSensorReading_Average) > threshold_kick)) {
+      tmpCount++; //if they're both hit correctly, add 1 to the score.
+    } 
+    diffTime = millis() - TIME;
+  }
+  if (tmpCount > 0){
+    count++;
+  }
+}
+
+
+  
+
+//This function turns on the lights on the hihat and snare and waits for the user to hit both of them
+void hihat_snare_PA() {
+  analogWrite(hihatREDPin, 255);
+  analogWrite(snareBLUEPin, 255);
+  TIME = millis();
+  int diffTime = 0;
+  int tmpCount = 0;
+  while (diffTime < tempo){ //before tempo (delay) is set to move to the next part
+    while( ((hihatSensorReading = analogRead(hihatSensorPin)) < threshold_hihat) && ((snareSensorReading = analogRead(snareSensorPin)) < threshold_snare) ) {  
+    }
+    averageAnalogRead_hihatsnare();
+  
+    if( ( (hihatSensorReading_Average) > threshold_hihat) && ( (snareSensorReading_Average) > threshold_snare) ) {
+      tmpCount++;
+    } 
+  }
+  if(tmpCount > 0){
+    count++;
+  }
+}
 
 
 

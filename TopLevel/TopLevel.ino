@@ -462,6 +462,7 @@ void sequence(short BEAT){
 
 void SEQUENCEsetup() {
   //Call reset?
+  tempo = tempo - 125;
 }
 
 //MAIN LOOP

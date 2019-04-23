@@ -763,6 +763,7 @@ void playalong(short BEAT){
 
 void playalongSTART(short BEAT){
   //Choose beat depending on what the user chooses
+  Serial.print("Entered PlayAlong Mode!");
   if (BEAT == BEAT1_CODE){
     rockBeat_PA();
   } else
@@ -782,10 +783,14 @@ void calcScore(int count){
    *  so the beat is played at the proper rate, and 
    *  and resets the lights to turn OFF
    */
-  delay(250);               //plays file for the appropriate amount of time
+  Serial.println("Starts Calculation!");
   RESET();                  //stops playback of file
-  delay(adj_tempo);         //moves on to next file for the appropriate tempo
-  score = (count/hit_amount); //calculation
+  hit_amount++;
+  Serial.println("Setting Score: ");
+  score = count / hit_amount; //calculation
+  Serial.println(score);
+  delay(tempo);
+  
 }
 
 /******************************************************/
@@ -801,21 +806,19 @@ void calcScore(int count){
 /******************************************************/   
 
 void rockBeat_PA(){  //Setting LEDs to specific colors/pins
+  Serial.println("Entered Rock Beat!");
   hihat_kick_PA();
   calcScore(count);
-  hit_amount++;
-
+  Serial.print("Hit Amount: ");
+  Serial.println(hit_amount);
   hihat_PA();
   calcScore(count);
-  hit_amount++;
 
   hihat_snare_PA(); 
   calcScore(count);
-  hit_amount++;
 
   hihat_PA();  
   calcScore(count);
-  hit_amount++;
 }
 
 /******************************************************/
@@ -829,35 +832,27 @@ void rockV2Beat_PA(){
   SET = SET/2;  //because the loop is already twice for this beat
     
   hihat_kick_PA();
-  hit_amount++;
   calcScore(count);
 
   hihat_PA();
-  hit_amount++;
   calcScore(count);
 
   hihat_snare_PA();
-  hit_amount++;
   calcScore(count);
 
   hihat_PA();
-  hit_amount++;
   calcScore(count);
 //Second loop
   hihat_kick_PA();
-  hit_amount++;
   calcScore(count);
 
   hihat_kick_PA();
-  hit_amount++;
   calcScore(count);
 
   hihat_snare_PA();
-  hit_amount++;
   calcScore(count);
 
   hihat_PA();
-  hit_amount++;
   calcScore(count);
 }
 
@@ -870,19 +865,15 @@ void rockV2Beat_PA(){
 
 void discoBeat_PA(){
   kick_PA();
-  hit_amount++;
   calcScore(count);
 
   hihat_PA();
-  hit_amount++;
   calcScore(count);
 
   snare_PA();
-  hit_amount++;
   calcScore(count);
 
   hihat_PA();
-  hit_amount++;
   calcScore(count);
 }
 
@@ -895,24 +886,19 @@ void discoBeat_PA(){
 
 void rockYou_PA(){  
   kick_PA();
-  hit_amount++;
   calcScore(count);
 
   kick_PA();
-  hit_amount++;
   calcScore(count);
 
   snare_PA();
-  hit_amount++;
   calcScore(count);
 
+  hit_amount--;    //this shouldn't be a hit
   calcScore(count);
 }
 
-
-
-
-/* SEQUENCE CODE */
+/* CODE FOR EACH PART OF DRUMSET */
 /******************************************************/
 
 void hihat_PA() { //done
@@ -921,8 +907,9 @@ void hihat_PA() { //done
   int diffTime = 0;
   int tmpCount = 0;
   while(diffTime < tempo){
-    while( analogRead(hihatSensorPin) < threshold_hihat) { } //Do nothing until hihat sensor passes threshold
+    if( analogRead(hihatSensorPin) < threshold_hihat) { } //Do nothing until hihat sensor passes threshold
     if( analogRead(hihatSensorPin) > threshold_hihat) { tmpCount++; }
+    diffTime = millis() - TIME;
   }
   if( tmpCount > 0){
     count++;
@@ -935,8 +922,9 @@ void snare_PA(){ //done
   int diffTime = 0;
   int tmpCount = 0;
   while(diffTime < tempo){
-    while( analogRead(snareSensorPin) < threshold_snare) { } //Do nothing until snare sensor passes threshold
+    if( analogRead(snareSensorPin) < threshold_snare) { } //Do nothing until snare sensor passes threshold
     if(analogRead(snareSensorPin) > threshold_snare){ tmpCount++; } //if properly hit
+    diffTime = millis() - TIME;
   }
   if(tmpCount > 0){
     count++;
@@ -950,8 +938,9 @@ void kick_PA() { //done
   int diffTime = 0;
   int tmpCount = 0;
   while(diffTime < tempo){
-    while( analogRead(kickSensorPin) < threshold_kick) { } //Do nothing until kick sensor passes threshold
+    if( analogRead(kickSensorPin) < threshold_kick) { } //Do nothing until kick sensor passes threshold
     if( analogRead(kickSensorPin) > threshold_kick){ tmpCount++; }
+    diffTime = millis() - TIME;
   }
   if(tmpCount > 0){
     count++;
@@ -967,7 +956,7 @@ void hihat_kick_PA() { //done
   int diffTime = 0;
   int tmpCount = 0;
   while (diffTime < tempo){ //before tempo (delay) is set to move to the next part
-    while (((hihatSensorReading = analogRead(hihatSensorPin)) < threshold_hihat) && ((kickSensorReading = analogRead(kickSensorPin)) < threshold_kick)){
+    if (((hihatSensorReading = analogRead(hihatSensorPin)) < threshold_hihat) && ((kickSensorReading = analogRead(kickSensorPin)) < threshold_kick)){
       //do nothing if below threshold
     }
     averageAnalogRead_hihatkick(); //receive average reading of hihat and kick (precision)
@@ -993,13 +982,14 @@ void hihat_snare_PA() {
   int diffTime = 0;
   int tmpCount = 0;
   while (diffTime < tempo){ //before tempo (delay) is set to move to the next part
-    while( ((hihatSensorReading = analogRead(hihatSensorPin)) < threshold_hihat) && ((snareSensorReading = analogRead(snareSensorPin)) < threshold_snare) ) {  
+    if( ((hihatSensorReading = analogRead(hihatSensorPin)) < threshold_hihat) && ((snareSensorReading = analogRead(snareSensorPin)) < threshold_snare) ) {  
     }
     averageAnalogRead_hihatsnare();
   
     if( ( (hihatSensorReading_Average) > threshold_hihat) && ( (snareSensorReading_Average) > threshold_snare) ) {
       tmpCount++;
     } 
+    diffTime = millis() - TIME;
   }
   if(tmpCount > 0){
     count++;

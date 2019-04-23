@@ -193,7 +193,7 @@ void calcScore(int count){
   delay(250);               //plays file for the appropriate amount of time
   RESET();                  //stops playback of file
   delay(adj_tempo);         //moves on to next file for the appropriate tempo
-  score = ((count - hit_amount)/hit_amount); //calculation
+  score = (count/hit_amount); //calculation
 }
 
 /******************************************************/
@@ -209,19 +209,19 @@ void calcScore(int count){
 /******************************************************/   
 
 void rockBeat(){  //Setting LEDs to specific colors/pins
-  hihat_kick();
+  hihat_kick_PA();
   calcScore(count);
   hit_amount++;
 
-  hihat();
+  hihat_PA();
   calcScore(count);
   hit_amount++;
 
-  hihat_snare(); 
+  hihat_snare_PA(); 
   calcScore(count);
   hit_amount++;
 
-  hihat();  
+  hihat_PA();  
   calcScore(count);
   hit_amount++;
 }
@@ -236,35 +236,35 @@ void rockBeat(){  //Setting LEDs to specific colors/pins
 void rockV2Beat(){
   SET = SET/2;  //because the loop is already twice for this beat
     
-  hihat_kick();
+  hihat_kick_PA();
   hit_amount++;
   calcScore(count);
 
-  hihat();
+  hihat_PA();
   hit_amount++;
   calcScore(count);
 
-  hihat_snare();
+  hihat_snare_PA();
   hit_amount++;
   calcScore(count);
 
-  hihat();
+  hihat_PA();
   hit_amount++;
   calcScore(count);
 //Second loop
-  hihat_kick();
+  hihat_kick_PA();
   hit_amount++;
   calcScore(count);
 
-  hihat_kick();
+  hihat_kick_PA();
   hit_amount++;
   calcScore(count);
 
-  hihat_snare();
+  hihat_snare_PA();
   hit_amount++;
   calcScore(count);
 
-  hihat();
+  hihat_PA();
   hit_amount++;
   calcScore(count);
 }
@@ -277,19 +277,19 @@ void rockV2Beat(){
 /******************************************************/
 
 void discoBeat(){
-  kick();
+  kick_PA();
   hit_amount++;
   calcScore(count);
 
-  hihat();
+  hihat_PA();
   hit_amount++;
   calcScore(count);
 
-  snare();
+  snare_PA();
   hit_amount++;
   calcScore(count);
 
-  hihat();
+  hihat_PA();
   hit_amount++;
   calcScore(count);
 }
@@ -302,15 +302,15 @@ void discoBeat(){
 /******************************************************/
 
 void rockYou(){  
-  kick();
+  kick_PA();
   hit_amount++;
   calcScore(count);
 
-  kick();
+  kick_PA();
   hit_amount++;
   calcScore(count);
 
-  snare();
+  snare_PA();
   hit_amount++;
   calcScore(count);
 
@@ -323,7 +323,7 @@ void rockYou(){
 /* SEQUENCE CODE */
 /******************************************************/
 
-void hihat() { //done
+void hihat_PA() { //done
   analogWrite(hihatREDPin, 255);
   TIME = millis();  //sets start time
   int diffTime = 0;
@@ -337,7 +337,7 @@ void hihat() { //done
   }
 }
 
-void snare(){ //done
+void snare_PA(){ //done
   analogWrite(snareBLUEPin, 255);
   TIME = millis();  //sets start time
   int diffTime = 0;
@@ -351,7 +351,7 @@ void snare(){ //done
   }
 }
 
-void kick() { //done
+void kick_PA() { //done
   analogWrite(kickREDPin, 255);
   analogWrite(kickGREENPin, 128);
   TIME = millis();  //dec of tmp variables
@@ -367,7 +367,7 @@ void kick() { //done
 }
 
 //This function turns on the lights on the hihat and kick and waits for the user to hit both of them
-void hihat_kick() { //done
+void hihat_kick_PA() { //done
   analogWrite(hihatREDPin, 255);
   analogWrite(kickREDPin, 255);
   analogWrite(kickGREENPin, 128);
@@ -394,7 +394,7 @@ void hihat_kick() { //done
   
 
 //This function turns on the lights on the hihat and snare and waits for the user to hit both of them
-void hihat_snare() {
+void hihat_snare_PA() {
   analogWrite(hihatREDPin, 255);
   analogWrite(snareBLUEPin, 255);
   TIME = millis();

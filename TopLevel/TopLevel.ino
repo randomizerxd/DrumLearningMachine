@@ -503,53 +503,34 @@ void SEQUENCEplaybeat(short BEAT) {
 /******************************************************/
 void SEQUENCErockBeat() {
   hihat_kick();
-  delay(tempo);
   hihat();
-  delay(tempo);
   hihat_snare();
-  delay(tempo);
   hihat();
-  delay(tempo);
 }
 
 void SEQUENCErockV2Beat() {
   hihat_kick();
-  delay(tempo);
   hihat();
-  delay(tempo);
   hihat_snare();
-  delay(tempo);
   hihat();
-  delay(tempo);
 
   hihat_kick();
-  delay(tempo);
   hihat_kick();
-  delay(tempo);
   hihat_snare();
-  delay(tempo);
   hihat();
-  delay(tempo);
 }
 
 void SEQUENCEdiscoBeat() {
   kick();
-  delay(tempo);
   hihat();
-  delay(tempo);
   snare();
-  delay(tempo);
   hihat();
-  delay(tempo);
 }
 
 void SEQUENCErockYou() {
   kick();
-  delay(tempo);
   kick();
-  delay(tempo);
   snare();
-  delay(tempo);
   //none
   delay(tempo);
 }
@@ -560,12 +541,14 @@ void hihat() {
   analogWrite(hihatREDPin, 255);
   while( analogRead(hihatSensorPin) < threshold_hihat) { } //Do nothing until hihat sensor passes threshold
   hitConfirmation_hihat();
+  delay(tempo);
 }
 
 void snare() {
   analogWrite(snareBLUEPin, 255);
   while( analogRead(snareSensorPin) < threshold_snare) { } //Do nothing until snare sensor passes threshold
   hitConfirmation_snare();
+  delay(tempo);
 }
 
 void kick() {
@@ -573,6 +556,7 @@ void kick() {
   analogWrite(kickGREENPin, 128);
   while( analogRead(kickSensorPin) < threshold_kick) { } //Do nothing until kick sensor passes threshold
   hitConfirmation_kick();
+  delay(tempo);
 }
 
 //This function turns on the lights on the hihat and kick and waits for the user to hit both of them
@@ -598,6 +582,7 @@ void hihat_kick() {
     while( analogRead(hihatSensorPin) < threshold_hihat) { } //Do nothing until hihat sensor is pushed
     hitConfirmation_hihat();
   }
+  delay(tempo);
 }
 
 //This function turns on the lights on the hihat and snare and waits for the user to hit both of them
@@ -621,7 +606,8 @@ void hihat_snare() {
     hitConfirmation_snare(); 
     while( analogRead(hihatSensorPin) < threshold_hihat) { } //Do nothing until hihat sensor is pushed
     hitConfirmation_hihat();
-  } 
+  }
+  delay(tempo);
 }
 
 /******************************************************/

@@ -893,7 +893,6 @@ void hihat_PA() { //done
   int diffTime = 0;
   int tmpCount = 0;
   while(diffTime < tempo){
-    if( analogRead(hihatSensorPin) < threshold_hihat) { } //Do nothing until hihat sensor passes threshold
     if( analogRead(hihatSensorPin) > threshold_hihat) { tmpCount++; }
     diffTime = millis() - TIME;
   }
@@ -908,7 +907,6 @@ void snare_PA(){ //done
   int diffTime = 0;
   int tmpCount = 0;
   while(diffTime < tempo){
-    if( analogRead(snareSensorPin) < threshold_snare) { } //Do nothing until snare sensor passes threshold
     if(analogRead(snareSensorPin) > threshold_snare){ tmpCount++; } //if properly hit
     diffTime = millis() - TIME;
   }
@@ -924,7 +922,6 @@ void kick_PA() { //done
   int diffTime = 0;
   int tmpCount = 0;
   while(diffTime < tempo){
-    if( analogRead(kickSensorPin) < threshold_kick) { } //Do nothing until kick sensor passes threshold
     if( analogRead(kickSensorPin) > threshold_kick){ tmpCount++; }
     diffTime = millis() - TIME;
   }
@@ -942,9 +939,6 @@ void hihat_kick_PA() { //done
   int diffTime = 0;
   int tmpCount = 0;
   while (diffTime < tempo){ //before tempo (delay) is set to move to the next part
-    if (((hihatSensorReading = analogRead(hihatSensorPin)) < threshold_hihat) && ((kickSensorReading = analogRead(kickSensorPin)) < threshold_kick)){
-      //do nothing if below threshold
-    }
     averageAnalogRead_hihatkick(); //receive average reading of hihat and kick (precision)
        
     if(((hihatSensorReading_Average) > threshold_hihat) && ((kickSensorReading_Average) > threshold_kick)) {
@@ -968,8 +962,6 @@ void hihat_snare_PA() {
   int diffTime = 0;
   int tmpCount = 0;
   while (diffTime < tempo){ //before tempo (delay) is set to move to the next part
-    if( ((hihatSensorReading = analogRead(hihatSensorPin)) < threshold_hihat) && ((snareSensorReading = analogRead(snareSensorPin)) < threshold_snare) ) {  
-    }
     averageAnalogRead_hihatsnare();
   
     if( ( (hihatSensorReading_Average) > threshold_hihat) && ( (snareSensorReading_Average) > threshold_snare) ) {

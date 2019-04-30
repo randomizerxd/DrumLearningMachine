@@ -963,35 +963,35 @@ void hihat_snare_PA() {
  */
 void BluetoothSettings()
 {
-  short count = 3;
+  short COUNT = 3;
   Serial.println("Entered BluetoothSettings");
   
-  while ( count > 0 )
+  while ( COUNT > 0 )
   {
     if(Serial.available()>0)
     {
       Back = 0;
       Received = Serial.read();
       
-      if (count == 3)
+      if (COUNT == 3)
       {
         BeatReceived = Received;
         Serial.print("BeatReceived: ");
         Serial.println(BeatReceived);
       }
-      if (count == 2)
+      if (COUNT == 2)
       {
         TempoReceived = Received;
         Serial.print("TempoReceived: ");
         Serial.println(TempoReceived);
       }
-      if (count == 1)
+      if (COUNT == 1)
       {
         ModeReceived = Received;
         Serial.print("ModeReceived: ");
         Serial.println(ModeReceived);
       }
-      count--;
+      COUNT--;
     }
   }
   tempo = 60000 / TempoReceived; 

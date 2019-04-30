@@ -1,6 +1,9 @@
 // TopLevel
 // Board: chipKIT Max32
 
+#include <SoftwareSerial.h>
+SoftwareSerial portOne(19,18); //RX1 and TX1
+
 /***Set variables for BluetoothSettings***/  
 short Received      = 0;
 short ModeReceived  = 0;
@@ -126,6 +129,10 @@ int score = 0;
 
 void setup() {
   Serial.begin(9600);
+  while (!Serial) {
+    // might need this
+  }
+  portOne.begin(9600);
 
   setupLEDpins();
   setupVibrationSensorPins();
@@ -720,8 +727,8 @@ void playalong(short BEAT){
   while(Serial.available() == 0){
     //stay still displaying the values until back is pressed
     Serial.println("Inside while loop");
-    Serial.println(hit_amount);
-    Serial.println(count);
+    portOne.println(hit_amount);
+    portOne.println(count);
     Serial.print("Finished sending values to app");
     delay(1000);
   }
@@ -968,28 +975,31 @@ void BluetoothSettings()
   
   while ( COUNT > 0 )
   {
-    if(Serial.available()>0)
+    if(portOne.available()>0)
     {
       Back = 0;
-      Received = Serial.read();
+      Received = portOne.read();
       
       if (COUNT == 3)
       {
         BeatReceived = Received;
         Serial.print("BeatReceived: ");
         Serial.println(BeatReceived);
+        portOne.println(BeatReceived);
       }
       if (COUNT == 2)
       {
         TempoReceived = Received;
         Serial.print("TempoReceived: ");
         Serial.println(TempoReceived);
+        portOne.println(TempoReceived);
       }
       if (COUNT == 1)
       {
         ModeReceived = Received;
         Serial.print("ModeReceived: ");
         Serial.println(ModeReceived);
+        portOne.println(ModeReceived);
       }
       COUNT--;
     }
@@ -1002,18 +1012,18 @@ void BluetoothSettings()
 void Bluetooth_CheckBackButton()
 {
   //Serial.println("Back Checked");
-  if(Serial.available() > 0)
+  if(portOne.available() > 0)
     {
-      Back = Serial.read();
+      Back = portOne.read();
       Serial.println("Back pressed");
     }
 }
 
 void Bluetooth_CheckVolumeButton()
 {
-  if(Serial.available() > 0)
+  if(portOne.available() > 0)
     {
-      VolumeControl = Serial.read();
+      VolumeControl = portOne.read();
       if (VolumeControl == VOLUMEDOWN_CODE) 
       {
         Serial.println("Volume down pressed");

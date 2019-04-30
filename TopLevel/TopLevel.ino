@@ -233,9 +233,9 @@ void initializeLEDstrips() {
 }
 
 /***********************************************************************************************************************************/
+
 /*                         DEMO MODE                                  **************************************************************/
-/***********************************************************************************************************************************/
-/****************** Demo Start-Up Functions ****************************************************************************************/
+
 /***********************************************************************************************************************************/
 void demo(short BEAT){
   DEMOsetup();
@@ -423,7 +423,9 @@ void rockYou(){
 }
 
 /***********************************************************************************************************************************/
-/*                         SEQUENCE MODE                             ***************************************************************/             
+
+/*                         SEQUENCE MODE                             ***************************************************************/ 
+            
 /***********************************************************************************************************************************/
 void sequence(short BEAT){
   SEQUENCEsetup();
@@ -704,13 +706,25 @@ void averageAnalogRead_hihatkick() {
 
 
 /************************************************************************************************************************************/
+
 /*                        PLAYALONG MODE                             ****************************************************************/
+
 /************************************************************************************************************************************/
 void playalong(short BEAT){
   SET = 4;
   hit_amount = 0;
   count = 0;
   playalongSTART(BEAT);
+  //insert code to stop loop
+  RESET();
+  while(Serial.available() == 0){
+    //stay still displaying the values until back is pressed
+    Serial.println("Inside while loop");
+    Serial.println(hit_amount);
+    Serial.println(count);
+    Serial.print("Finished sending values to app");
+    delay(1000);
+  }
 }
 
 void playalongSTART(short BEAT){
@@ -744,7 +758,7 @@ void playalongSTART(short BEAT){
 /******************************************************/   
 
 void rockBeat_PA(){  //Setting LEDs to specific colors/pins
-  //for(int i = 0; i < SET; i++){
+  for(int i = 0; i < SET; i++){
     Serial.println("Entered Rock Beat!");
     hihat_kick_PA();
     Serial.print("Hit Amount: ");
@@ -754,7 +768,7 @@ void rockBeat_PA(){  //Setting LEDs to specific colors/pins
     hihat_snare_PA(); 
   
     hihat_PA();  
-  //}
+  }
 }
 
 /******************************************************/
@@ -832,7 +846,7 @@ void hihat_PA() {
   TIME = millis();  //sets start time
   int diffTime = 0;
   int tmpCount = 0;
-  while(diffTime < tempo){
+  while(diffTime < adj_tempo){ //tempo-250
     if( analogRead(hihatSensorPin) > threshold_hihat) { tmpCount++; }
     diffTime = millis() - TIME;
   }
@@ -840,7 +854,7 @@ void hihat_PA() {
   if( tmpCount > 0){
     count++;
   }
-  delay(tempo);
+  delay(250);
 }
 
 void snare_PA(){
@@ -849,7 +863,7 @@ void snare_PA(){
   TIME = millis();  //sets start time
   int diffTime = 0;
   int tmpCount = 0;
-  while(diffTime < tempo){
+  while(diffTime < adj_tempo){
     if(analogRead(snareSensorPin) > threshold_snare){ tmpCount++; } //if properly hit
     diffTime = millis() - TIME;
   }
@@ -857,7 +871,7 @@ void snare_PA(){
   if(tmpCount > 0){
     count++;
   }
-  delay(tempo);
+  delay(250);
 }
 
 void kick_PA() { 
@@ -867,7 +881,7 @@ void kick_PA() {
   TIME = millis();  //dec of tmp variables
   int diffTime = 0;
   int tmpCount = 0;
-  while(diffTime < tempo){
+  while(diffTime < adj_tempo){
     if( analogRead(kickSensorPin) > threshold_kick){ tmpCount++; }
     diffTime = millis() - TIME;
   }
@@ -875,7 +889,7 @@ void kick_PA() {
   if(tmpCount > 0){
     count++;
   }
-  delay(tempo);
+  delay(250);
 }
 
 //This function turns on the lights on the hihat and kick and detects if user hits it correctly
@@ -887,7 +901,7 @@ void hihat_kick_PA() {
   TIME = millis();
   int diffTime = 0;
   int tmpCount = 0;
-  while (diffTime < tempo){ //before tempo (delay) is set to move to the next part
+  while (diffTime < adj_tempo){ //before tempo (delay) is set to move to the next part
     averageAnalogRead_hihatkick(); //receive average reading of hihat and kick (precision)
        
     if(((hihatSensorReading_Average) > threshold_hihat) && ((kickSensorReading_Average) > threshold_kick)) {
@@ -899,7 +913,7 @@ void hihat_kick_PA() {
   if (tmpCount > 0){
     count++;
   }
-  delay(tempo);
+  delay(250);
 }
 
 
@@ -913,7 +927,7 @@ void hihat_snare_PA() {
   TIME = millis();
   int diffTime = 0;
   int tmpCount = 0;
-  while (diffTime < tempo){ //before tempo (delay) is set to move to the next part
+  while (diffTime < adj_tempo){ //before tempo (delay) is set to move to the next part
     averageAnalogRead_hihatsnare();
   
     if( ( (hihatSensorReading_Average) > threshold_hihat) && ( (snareSensorReading_Average) > threshold_snare) ) {
@@ -925,7 +939,7 @@ void hihat_snare_PA() {
   if(tmpCount > 0){
     count++;
   }
-  delay(tempo);
+  delay(250);
 }
 
 

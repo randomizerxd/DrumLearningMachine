@@ -71,9 +71,9 @@ short kickSensorReading  = LOW;
 short crashSensorReading = LOW;
 short tomSensorReading   = LOW;
 
-const short threshold_hihat = 140; 
-const short threshold_snare = 110; 
-const short threshold_kick = 150; 
+const short threshold_hihat = 100; 
+const short threshold_snare = 90; 
+const short threshold_kick = 100; 
 
 /***Variables used in the 'averageAnalogRead()' function***/
 short n = 500;  //amount of times to read from both hihat and snare
@@ -116,6 +116,7 @@ short volDown       = 48;            //set pin 48 to volume-down
 //Set tempo equal to the tempo received by the app
 short tempo     = 0; //Inc = slower & Dec = faster (LIMIT: 350ms to 1500ms)
 short adj_tempo = 0; //adjusted tempo to account the file delay
+short tmp_tempo = 0;
 //EXTRA
 short eightTempo= 0;   //tempo used for beats with and
 short sixTempo  = 0;    //tempo used for beats with sixteenth notes
@@ -161,7 +162,7 @@ void loop() {
     {
       sequence(BeatReceived);
     }
-    else 
+    else
     if (ModeReceived == PLAYALONG_CODE) // PlayAlong
     {
       playalong(BeatReceived);
@@ -421,7 +422,7 @@ void sequence(short BEAT){
 
 void SEQUENCEsetup() {
   //Call reset?
-  tempo = tempo - 125;
+  int tmp_tempo = tempo - 125;
 }
 
 //MAIN LOOP
@@ -487,7 +488,7 @@ void SEQUENCErockYou() {
   kick();
   snare();
   //none
-  delay(tempo);
+  delay(tmp_tempo);
 }
 
 /******************************************************/
@@ -496,22 +497,24 @@ void hihat() {
   analogWrite(hihatREDPin, 255);
   while( analogRead(hihatSensorPin) < threshold_hihat) { } //Do nothing until hihat sensor passes threshold
   hitConfirmation_hihat();
-  delay(tempo);
+  delay(tmp_tempo);
 }
 
 void snare() {
   analogWrite(snareBLUEPin, 255);
   while( analogRead(snareSensorPin) < threshold_snare) { } //Do nothing until snare sensor passes threshold
   hitConfirmation_snare();
-  delay(tempo);
+  delay(tmp_tempo);
 }
 
 void kick() {
   analogWrite(kickREDPin, 255);
   analogWrite(kickGREENPin, 128);
-  while( analogRead(kickSensorPin) < threshold_kick) { } //Do nothing until kick sensor passes threshold
+  int randy = 0;
+  while( randy = analogRead(kickSensorPin) < threshold_kick) { } //Do nothing until kick sensor passes threshold
+  Serial.println(randy);
   hitConfirmation_kick();
-  delay(tempo);
+  delay(tmp_tempo);
 }
 
 //This function turns on the lights on the hihat and kick and waits for the user to hit both of them
@@ -537,7 +540,7 @@ void hihat_kick() {
     while( analogRead(hihatSensorPin) < threshold_hihat) { } //Do nothing until hihat sensor is pushed
     hitConfirmation_hihat();
   }
-  delay(tempo);
+  delay(tmp_tempo);
 }
 
 //This function turns on the lights on the hihat and snare and waits for the user to hit both of them
@@ -562,7 +565,7 @@ void hihat_snare() {
     while( analogRead(hihatSensorPin) < threshold_hihat) { } //Do nothing until hihat sensor is pushed
     hitConfirmation_hihat();
   }
-  delay(tempo);
+  delay(tmp_tempo);
 }
 
 /******************************************************/
@@ -976,6 +979,7 @@ void BluetoothSettings()
   }
   tempo = 60000 / TempoReceived; 
   adj_tempo = tempo-250;  
+  tmp_tempo = tempo - 125;
   Serial.println("BluetoothSettings Done");
 }
 

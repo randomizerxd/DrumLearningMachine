@@ -724,13 +724,16 @@ void playalong(short BEAT){
   playalongSTART(BEAT);
   //insert code to stop loop
   RESET();
-  while(Serial.available() == 0){
-    //stay still displaying the values until back is pressed
-    Serial.println("Inside while loop");
+  //send values
     portOne.println(hit_amount);
     portOne.println(count);
     Serial.print("Finished sending values to app");
-    delay(1000);
+  while(portOne.available() == 0){
+    //do nothing until back is pressed
+    Bluetooth_CheckBackButton();
+    if (Back == BACK_CODE) {
+      break;
+    }
   }
 }
 
@@ -795,7 +798,7 @@ void rockV2Beat_PA(){
     hihat_snare_PA();
   
     hihat_PA();
-  //Second loop
+    //Second loop
     hihat_kick_PA();
   
     hihat_kick_PA();
@@ -923,9 +926,6 @@ void hihat_kick_PA() {
   delay(250);
 }
 
-
-  
-
 //This function turns on the lights on the hihat and snare and waits for the user to hit both of them
 void hihat_snare_PA() {
   hit_amount++;
@@ -948,15 +948,6 @@ void hihat_snare_PA() {
   }
   delay(250);
 }
-
-
-
-
-
-
-
-
-
 
 /*********************************************************************/
 /********************** Bluetooth Functions **************************/
@@ -1009,6 +1000,10 @@ void BluetoothSettings()
   Serial.println("BluetoothSettings Done");
 }
 
+/*
+ * Changes:
+ *    Back
+ */
 void Bluetooth_CheckBackButton()
 {
   //Serial.println("Back Checked");

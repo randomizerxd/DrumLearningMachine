@@ -94,9 +94,9 @@ const short threshold = 200;
 const short BACK_CODE          = 201;
 const short VOLUMEDOWN_CODE    = 211;
 const short VOLUMEUP_CODE      = 212;
-const short DEMOMODE_CODE      = 101;
-const short SEQUENCEMODE_CODE  = 102;
-const short PLAYALONGMODE_CODE = 103;
+const short DEMO_CODE      = 101;
+const short SEQUENCE_CODE  = 102;
+const short PLAYALONG_CODE = 103;
 const short BEAT1_CODE         =   1;
 const short BEAT2_CODE         =   2;
 const short BEAT3_CODE         =   3;
@@ -151,18 +151,18 @@ void loop() {
   }
   else
   {
-    if (ModeReceived == DEMOMODE_CODE) //Demo
+    if (ModeReceived == DEMO_CODE) //Demo
     {
       demo(BeatReceived);
       //Bluetooth_CheckVolumeButton(); //might have to move this somewhere else to have better response time
     }
     else 
-    if (ModeReceived == SEQUENCEMODE_CODE) //Sequence
+    if (ModeReceived == SEQUENCE_CODE) //Sequence
     {
       sequence(BeatReceived);
     }
     else 
-    if (ModeReceived == PLAYALONGMODE_CODE) // PlayAlong
+    if (ModeReceived == PLAYALONG_CODE) // PlayAlong
     {
       playalong(BeatReceived);
     }

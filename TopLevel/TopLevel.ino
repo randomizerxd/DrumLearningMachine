@@ -105,8 +105,8 @@ const short BEAT4_CODE         =   4;
 /******************************* VARIABLES *************************************/
 //INITIALIZING PINS AND VARIABLES
 short hihatFXPin     = 49;            //set pin 49 to 'hihat' sound
-short kickFXPin      = 50;            //set pin 50 to 'kick' sound
-short snareFXPin     = 51;            //set pin 51 to 'snare' sound
+short snareFXPin     = 50;            //set pin 50 to 'snare' sound
+short kickFXPin      = 51;            //set pin 51 to 'kick' sound
 short hhkickFXPin    = 52;            //set pin 52 to 'hihat' and 'kick' sound
 short hhsnareFXPin   = 53;            //set pin 53 to 'hihat' and 'snare' sound
 

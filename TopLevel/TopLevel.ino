@@ -291,11 +291,6 @@ void playSound(short part){
   delay(adj_tempo);         //moves on to next file for the appropriate tempo
 }
 
-
-/******************************************************/
-/*        FUNCTIONS FOR THE DIFFERENT BEATS           */
-/******************************************************/
-
 /******************************************************/
 /*                     ROCK BEAT                      */
 /*                   1   2   3   4                    */

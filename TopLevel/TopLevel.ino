@@ -10,7 +10,7 @@ short ModeReceived  = 0;
 short TempoReceived = 0; //tempo in bpm
 short BeatReceived  = 0;
 short Back          = 0; //for storing the back code
-short VolumeControl = 0; //for storing the volume up or down code
+
 /* 
  *  Bluetooth protocol:
  *  App sends data to Arduino via bluetooth
@@ -26,12 +26,9 @@ short VolumeControl = 0; //for storing the volume up or down code
  *  iii. The Mode value received from the app will be:
  *    101 for Demo, 102 for Sequence, and 103 for PlayAlong
  *  
- *  The second screen currently contains a 'back' button and volume control buttons (up and down) for the Demo mode only
+ *  The second screen currently contains a 'back' button
  *  The second screen sends data in the following manner:
  *    i.   Send a 201 when the Back button has been pushed
- *    ii.  Send a 211 when the Volume Down button has been pushed
- *    iii. Send a 212 when the Volume Up button has been pushed
- *  
  */
 
 /***Piezo Vibration Sensor Pin Numbers***/ 
@@ -92,8 +89,6 @@ short kickSensorReading_tmp = 0; //local variable. Don't change 'kickSensorReadi
 const short threshold = 200;
 
 const short BACK_CODE          = 201;
-const short VOLUMEDOWN_CODE    = 211;
-const short VOLUMEUP_CODE      = 212;
 const short DEMO_CODE      = 101;
 const short SEQUENCE_CODE  = 102;
 const short PLAYALONG_CODE = 103;
@@ -109,9 +104,6 @@ short kickFXPin      = 50;            //set pin 50 to 'kick' sound
 short snareFXPin     = 51;            //set pin 51 to 'snare' sound
 short hhkickFXPin    = 52;            //set pin 52 to 'hihat' and 'kick' sound
 short hhsnareFXPin   = 53;            //set pin 53 to 'hihat' and 'snare' sound
-
-short volUp         = 47;            //set pin 47 to volume-up
-short volDown       = 48;            //set pin 48 to volume-down
 
 //Set tempo equal to the tempo received by the app
 short tempo     = 0; //Inc = slower & Dec = faster (LIMIT: 350ms to 1500ms)
@@ -154,7 +146,6 @@ void loop() {
     if (ModeReceived == DEMO_CODE) //Demo
     {
       demo(BeatReceived);
-      //Bluetooth_CheckVolumeButton(); //might have to move this somewhere else to have better response time
     }
     else 
     if (ModeReceived == SEQUENCE_CODE) //Sequence
@@ -167,7 +158,7 @@ void loop() {
       playalong(BeatReceived);
     }
     Bluetooth_CheckBackButton();
-  }  
+  }
 }
 
 /*********************************************************************/
@@ -311,18 +302,6 @@ void play16Sound(short part){
   delay(sixTempo);         //moves on to next file for the appropriate tempo  
 }
 /***************************************************************************/
-
-//Volume Control
-void VolumeCtr(short button){
-  //Values that come through the app
-  short downButton = 0; //(-)
-  short upButton   = 1; //(+)
-
-  if (button == downButton)
-    volDown = LOW;
-  if (button == upButton)
-    volUp   = LOW;  
-}
 
 /******************************************************/
 /*                     ROCK BEAT                      */
@@ -1011,21 +990,5 @@ void Bluetooth_CheckBackButton()
     {
       Back = portOne.read();
       Serial.println("Back pressed");
-    }
-}
-
-void Bluetooth_CheckVolumeButton()
-{
-  if(portOne.available() > 0)
-    {
-      VolumeControl = portOne.read();
-      if (VolumeControl == VOLUMEDOWN_CODE) 
-      {
-        Serial.println("Volume down pressed");
-      }
-      else if (VolumeControl == VOLUMEUP_CODE)
-      {
-        Serial.println("Volume up pressed");
-      }
     }
 }

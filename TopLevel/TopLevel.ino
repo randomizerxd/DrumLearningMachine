@@ -725,9 +725,9 @@ void playalong(short BEAT){
   //insert code to stop loop
   RESET();
   //send values
-    portOne.println(hit_amount);
-    portOne.println(count);
-    Serial.print("Finished sending values to app");
+  portOne.println(hit_amount);
+  portOne.println(count);
+  Serial.print("Finished sending values to app");
   while(portOne.available() == 0){
     //do nothing until back is pressed
     Bluetooth_CheckBackButton();

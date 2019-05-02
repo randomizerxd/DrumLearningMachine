@@ -244,17 +244,18 @@ void initializeLEDstrips() {
 /*                         DEMO MODE                                  **************************************************************/
 
 /***********************************************************************************************************************************/
+/*
+ * in this mode the lights will play at the submitted tempo and display
+ * what playing the drumset, with the leds, will look like
+ */
 void demo(short BEAT){
   DEMOsetup();
   DEMOplaybeat(BEAT);
 }
 
 void DEMOsetup() {
-  //EXTRA
-  eightTempo= adj_tempo/2;   //tempo used for beats with and
-  sixTempo  = eightTempo/2;    //tempo used for beats with sixteenth notes
-
-  RESET(); //clean start, all equal to Vdd so there is no sound
+  //clean start, all equal to Vdd so there is no sound
+  RESET(); 
 }
 
 //MAIN LOOP
@@ -276,17 +277,18 @@ void DEMOplaybeat(short BEAT) {
 
   //Initializing pins to 5V so they do NOT play sound
 void RESET(){
+  //sound pins set to HIGH
+  //When values are set to 0, the sound will be played
   digitalWrite(kickFXPin,    HIGH);
   digitalWrite(snareFXPin,   HIGH);
   digitalWrite(hihatFXPin,   HIGH);
   digitalWrite(hhkickFXPin,  HIGH);
   digitalWrite(hhsnareFXPin, HIGH);
+  //led pins set to 0
   analogWrite(hihatREDPin,  0);
   analogWrite(kickREDPin,   0);
   analogWrite(kickGREENPin, 0);
   analogWrite(snareBLUEPin, 0);
-  
-  //When values are set to 0, the sound will be played
 }
 
 //Play part of Drumset
@@ -296,33 +298,11 @@ void playSound(short part){
   RESET();                  //stops playback of file
   delay(adj_tempo);         //moves on to next file for the appropriate tempo
 }
-/***********************************EXTRA************************************/
-  //Extra function for expanding amount of beats
-void play8Sound(short part){
-  digitalWrite(part, LOW);  //starts playback of file
-  delay(250);               //plays file for the appropriate amount of time
-  RESET();                  //stops playback of file
-  delay(eightTempo);        //moves on to next file for the appropriate tempo  
-}
-void play16Sound(short part){
-  digitalWrite(part, LOW);  //starts playback of file
-  delay(250);               //plays file for the appropriate amount of time
-  RESET();                  //stops playback of file
-  delay(sixTempo);         //moves on to next file for the appropriate tempo  
-}
-/***************************************************************************/
 
-//Volume Control
-void VolumeCtr(short button){
-  //Values that come through the app
-  short downButton = 0; //(-)
-  short upButton   = 1; //(+)
 
-  if (button == downButton)
-    volDown = LOW;
-  if (button == upButton)
-    volUp   = LOW;  
-}
+/******************************************************/
+/*        FUNCTIONS FOR THE DIFFERENT BEATS           */
+/******************************************************/
 
 /******************************************************/
 /*                     ROCK BEAT                      */
@@ -330,7 +310,7 @@ void VolumeCtr(short button){
 /*                   x---x---x---x                    */
 /*                   o-------v----                    */
 /******************************************************/   
-void rockBeat(){  //Setting LEDs to specific colors/pins
+void rockBeat(){  //Setting LEDs to specific colors/pins and playing sound
   analogWrite(hihatREDPin, 255);
   analogWrite(kickREDPin, 255);
   analogWrite(kickGREENPin, 128);
@@ -758,7 +738,6 @@ void playalongSTART(short BEAT){
 /******************************************************/
 /*        FUNCTIONS FOR THE DIFFERENT BEATS           */
 /******************************************************/
-
 
 /******************************************************/
 /*                     ROCK BEAT                      */

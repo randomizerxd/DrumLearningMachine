@@ -69,13 +69,13 @@ short crashSensorReading = LOW;
 short tomSensorReading   = LOW;
 
 const short threshold_hihat = 100; 
-const short threshold_snare = 90; 
-const short threshold_kick = 100; 
+const short threshold_snare = 92; 
+const short threshold_kick = 95; 
 
 /***Variables used in the 'averageAnalogRead()' function***/
 short n = 500;  //amount of times to read from both hihat and snare
-long t0;        //initial value of t
-long t;         //stores the amount of time it takes to finish the for loop
+long  t0;        //initial value of t
+long  t;         //stores the amount of time it takes to finish the for loop
 short n_hihat = n;    //used to average. n_hihat <= n. It will be decremented by 1 when sensor readings don't exceed the threshold
 short n_snare = n;    //used to average. n_snare <= n. It will be decremented by 1 when sensor readings don't exceed the threshold
 short n_kick = n;    //used to average. n_kick <= n. It will be decremented by 1 when sensor readings don't exceed the threshold

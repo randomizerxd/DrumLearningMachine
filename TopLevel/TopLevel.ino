@@ -696,7 +696,6 @@ void playalong(short BEAT){
   //send values
   portOne.println(hit_amount);
   portOne.println(count);
-  Serial.print("Finished sending values to app");
   while(portOne.available() == 0){
     //do nothing until back is pressed
     Bluetooth_CheckBackButton();
@@ -708,7 +707,6 @@ void playalong(short BEAT){
 
 void playalongSTART(short BEAT){
   //Choose beat depending on what the user chooses
-  Serial.print("Entered PlayAlong Mode!");
   if (BEAT == BEAT1_CODE){
     rockBeat_PA();
   } else
@@ -736,11 +734,14 @@ void playalongSTART(short BEAT){
 /******************************************************/   
 
 void rockBeat_PA(){  //Setting LEDs to specific colors/pins
-  for(int i = 0; i < SET; i++){
-    Serial.println("Entered Rock Beat!");
+  for(int i = 0; i < SET; i++){ //Gives the user 4 tries before giving score
+    /*
+     * The following functions play sound WITHOUT waiting
+     * for the user and detects whether the user hits it 
+     * at the right time (correctly)
+     */
     hihat_kick_PA();
-    Serial.print("Hit Amount: ");
-    Serial.println(hit_amount);
+    
     hihat_PA();
   
     hihat_snare_PA(); 

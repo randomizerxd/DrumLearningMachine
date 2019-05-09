@@ -508,8 +508,8 @@ void hihat_kick() {
   analogWrite(hihatREDPin, 255);
   analogWrite(kickREDPin, 255);
   analogWrite(kickGREENPin, 128);
-  while( ((hihatSensorReading = analogRead(hihatSensorPin)) < threshold_hihat) && ((kickSensorReading = analogRead(kickSensorPin)) < threshold_kick) ) { 
-  }                                         //While hihat && kick below threshold, do nothing
+  while( ((hihatSensorReading = analogRead(hihatSensorPin)) < threshold_hihat) && 
+  ((kickSensorReading = analogRead(kickSensorPin)) < threshold_kick) ){ }//While hihat && kick below threshold, do nothing
 
   averageAnalogRead_hihatkick();
   

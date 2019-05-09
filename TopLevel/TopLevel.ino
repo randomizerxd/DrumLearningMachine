@@ -69,8 +69,8 @@ short crashSensorReading = LOW;
 short tomSensorReading   = LOW;
 
 const short threshold_hihat = 100; 
-const short threshold_snare = 92; 
-const short threshold_kick = 95; 
+const short threshold_snare = 90; 
+const short threshold_kick  = 95; 
 
 /***Variables used in the 'averageAnalogRead()' function***/
 short n = 500;  //amount of times to read from both hihat and snare
@@ -88,7 +88,7 @@ short kickSensorReading_tmp = 0; //local variable. Don't change 'kickSensorReadi
 
 const short threshold = 200;
 
-const short BACK_CODE          = 201;
+const short BACK_CODE      = 201;
 const short DEMO_CODE      = 101;
 const short SEQUENCE_CODE  = 102;
 const short PLAYALONG_CODE = 103;
@@ -287,7 +287,7 @@ void RESET(){
 void playSound(short part){
   digitalWrite(part, LOW);  //starts playback of file
   delay(250);               //plays file for the appropriate amount of time
-  RESET();                  //stops playback of file
+  RESET();                  //stops playback of file and turns off LEDs
   delay(adj_tempo);         //moves on to next file for the appropriate tempo
 }
 

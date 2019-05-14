@@ -707,6 +707,7 @@ void playalong(short BEAT){
 
 void playalongSTART(short BEAT){
   //Choose beat depending on what the user chooses
+  delay(3000);            //Delay to give user time to prepare to start
   if (BEAT == BEAT1_CODE){
     rockBeat_PA();
   } else
